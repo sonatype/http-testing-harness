@@ -18,12 +18,13 @@ import static org.junit.Assert.*;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
-import org.sonatype.tests.jetty.server.api.ServerProvider;
-import org.sonatype.tests.jetty.server.api.SuiteConfiguration;
-import org.sonatype.tests.jetty.server.api.SuiteConfigurator;
+import org.junit.runner.RunWith;
+import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
+import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
 import org.sonatype.tests.jetty.server.behaviour.Redirect;
 import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
+import org.sonatype.tests.server.api.ServerProvider;
 
 import com.ning.http.client.MaxRedirectException;
 import com.ning.http.client.Response;
@@ -32,14 +33,10 @@ import com.ning.http.client.Response;
  * @author Benjamin Hanzelmann
  *
  */
+@RunWith( ConfigurationRunner.class )
 public abstract class RedirectTestSuite
-    extends SuiteConfiguration
+    extends AsyncSuiteConfiguration
 {
-
-    public RedirectTestSuite( SuiteConfigurator configurator )
-    {
-        super( configurator );
-    }
 
     @Test( expected = MaxRedirectException.class )
     public void testTooManyRedirects()
@@ -49,6 +46,7 @@ public abstract class RedirectTestSuite
         try
         {
             executeGet( url );
+            fail( "expected error" );
         }
         catch ( ExecutionException e )
         {

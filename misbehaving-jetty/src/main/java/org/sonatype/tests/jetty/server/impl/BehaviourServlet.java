@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.tests.jetty.server.api.Behaviour;
-import org.sonatype.tests.jetty.server.api.TestServlet;
+import org.sonatype.tests.server.api.Behaviour;
+import org.sonatype.tests.server.api.TestServlet;
 
 /**
  * @author Benjamin Hanzelmann

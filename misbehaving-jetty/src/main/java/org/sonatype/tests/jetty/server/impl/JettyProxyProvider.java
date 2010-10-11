@@ -18,7 +18,7 @@ import java.net.URL;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
-import org.sonatype.tests.jetty.server.api.ServerProvider;
+import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

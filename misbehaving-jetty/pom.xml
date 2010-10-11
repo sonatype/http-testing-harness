@@ -53,5 +53,10 @@
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>org.sonatype.jetty-test-case</groupId>
+    	<artifactId>tests-api</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

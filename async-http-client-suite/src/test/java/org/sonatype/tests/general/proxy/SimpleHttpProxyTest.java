@@ -13,74 +13,25 @@ package org.sonatype.tests.general.proxy;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import org.sonatype.tests.jetty.server.api.ServerProvider;
-import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
-import org.sonatype.tests.jetty.server.suites.SimpleTestSuite;
-import org.sonatype.tests.jetty.server.util.DefaultSuiteConfigurator;
+import org.junit.runner.RunWith;
+import org.sonatype.tests.jetty.runner.ConfigurationRunner;
+import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
 
-import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.ProxyServer;
 
 /**
  * @author Benjamin Hanzelmann
  */
+@RunWith( ConfigurationRunner.class )
+@Configurators( HttpProxyConfigurator.class )
 public class SimpleHttpProxyTest
-    extends SimpleTestSuite
+    extends org.sonatype.tests.custom.SimpleGetTest
 {
-
-    /**
-     * @author Benjamin Hanzelmann
-     */
-    public static class HttpProxyConfigurator
-        extends DefaultSuiteConfigurator
+    @Override
+    protected Builder settings( Builder rb )
     {
-        private JettyProxyProvider provider;
-    
-        public HttpProxyConfigurator()
-        {
-            try
-            {
-                ServerProvider realServer = new JettyServerProvider();
-                realServer.setPort( 8887 );
-                provider = new JettyProxyProvider( realServer );
-            }
-            catch ( Exception e )
-            {
-                throw new IllegalStateException( e );
-            }
-        }
-    
-        @Override
-        public AsyncHttpClient newConnector()
-        {
-            super.builder().setProxyServer( new ProxyServer( "localhost", provider.getPort() )
-            {
-
-                @Override
-                public int getPort()
-                {
-                    return provider.getPort();
-                }
-
-            } );
-            return super.newConnector();
-        }
-    
-        @Override
-        public ServerProvider provider()
-        {
-            return provider;
-        }
-    
-    }
-
-    /**
-     * @param configurator
-     */
-    public SimpleHttpProxyTest()
-    {
-        super( new HttpProxyConfigurator() );
+        return super.settings( rb ).setProxyServer( new ProxyServer( "localhost", provider().getPort() ) );
     }
 
 }

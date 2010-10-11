@@ -13,7 +13,7 @@ package org.sonatype.tests.jetty.server.api;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import org.sonatype.tests.jetty.server.api.ServerProvider;
+import org.sonatype.tests.server.api.ServerProvider;
 
 import com.ning.http.client.AsyncHttpClient;
 

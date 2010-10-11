@@ -1,0 +1,4 @@
+org.sonatype.tests.jetty.server.configurations.BasicAuthSuiteConfigurator
+org.sonatype.tests.jetty.server.configurations.BasicAuthSslSuiteConfigurator
+org.sonatype.tests.jetty.server.configurations.DigestAuthSuiteConfigurator
+org.sonatype.tests.jetty.server.configurations.DigestAuthSslSuiteConfigurator

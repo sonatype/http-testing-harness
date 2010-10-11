@@ -29,9 +29,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sonatype.tests.jetty.server.api.ServerProvider;
 import org.sonatype.tests.jetty.server.behaviour.Content;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
+import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

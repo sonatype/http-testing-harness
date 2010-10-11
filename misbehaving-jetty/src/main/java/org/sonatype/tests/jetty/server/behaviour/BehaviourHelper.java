@@ -3,7 +3,7 @@ package org.sonatype.tests.jetty.server.behaviour;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.sonatype.tests.jetty.server.api.Behaviour;
+import org.sonatype.tests.server.api.Behaviour;
 
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.

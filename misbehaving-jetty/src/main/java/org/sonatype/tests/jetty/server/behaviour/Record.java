@@ -20,7 +20,7 @@ import java.util.Queue;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.jetty.server.api.Behaviour;
+import org.sonatype.tests.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann

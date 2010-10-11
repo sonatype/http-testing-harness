@@ -1,0 +1,2 @@
+org.sonatype.tests.jetty.server.configurations.DefaultSuiteConfigurator
+org.sonatype.tests.jetty.server.configurations.SslSuiteConfigurator

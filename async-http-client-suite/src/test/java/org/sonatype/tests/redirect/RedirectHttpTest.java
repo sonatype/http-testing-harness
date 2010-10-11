@@ -14,7 +14,6 @@ package org.sonatype.tests.redirect;
  */
 
 import org.sonatype.tests.jetty.server.suites.RedirectTestSuite;
-import org.sonatype.tests.jetty.server.util.DefaultSuiteConfigurator;
 
 /**
  * @author Benjamin Hanzelmann
@@ -22,13 +21,5 @@ import org.sonatype.tests.jetty.server.util.DefaultSuiteConfigurator;
 public class RedirectHttpTest
     extends RedirectTestSuite
 {
-
-    /**
-     * @param configurator
-     */
-    public RedirectHttpTest()
-    {
-        super( new DefaultSuiteConfigurator() );
-    }
 
 }

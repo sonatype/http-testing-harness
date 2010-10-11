@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.jetty.server.api.TestServlet;
+import org.sonatype.tests.server.api.TestServlet;
 
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
