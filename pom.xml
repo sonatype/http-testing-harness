@@ -130,6 +130,7 @@
     	<module>async-http-client-suite</module>
     	<module>junit-runner</module>
     	<module>tests-api</module>
+    	<module>async-repo-connector-suite</module>
     </modules>
 
 </project>
