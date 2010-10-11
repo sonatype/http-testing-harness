@@ -16,6 +16,8 @@ package org.sonatype.tests.jetty.server.impl;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.servlet.Filter;
+
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.sonatype.tests.server.api.ServerProvider;
@@ -119,6 +121,11 @@ public class JettyProxyProvider
     public void setRealServer( ServerProvider real )
     {
         this.real = real;
+    }
+
+    @Override
+    public void addFilter( String pathSpec, Filter filter )
+    {
     }
 
 }

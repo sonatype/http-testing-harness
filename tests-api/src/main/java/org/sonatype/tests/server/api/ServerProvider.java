@@ -3,6 +3,8 @@ package org.sonatype.tests.server.api;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.servlet.Filter;
+
 public interface ServerProvider
 {
 
@@ -59,4 +61,6 @@ public interface ServerProvider
      * Add the given user and password to the servers security realm.
      */
     void addUser( String user, String password );
+
+    void addFilter( String pathSpec, Filter filter );
 }
