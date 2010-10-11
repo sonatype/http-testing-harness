@@ -13,12 +13,22 @@ package org.sonatype.tests.general.proxy;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
+import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
+import org.sonatype.tests.server.api.ServerProvider;
 
+import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.ProxyServer;
+import com.ning.http.client.Realm;
+import com.ning.http.client.Response;
 
 /**
  * @author Benjamin Hanzelmann
@@ -26,12 +36,116 @@ import com.ning.http.client.ProxyServer;
 @RunWith( ConfigurationRunner.class )
 @Configurators( HttpProxyConfigurator.class )
 public class SimpleHttpProxyTest
-    extends org.sonatype.tests.custom.SimpleGetTest
+    extends AsyncSuiteConfiguration
 {
+
+    protected ServerProvider realServer;
+
+    @Override
+    @Before
+    public void before()
+        throws Exception
+    {
+        super.before();
+        realServer = ( (JettyProxyProvider) provider() ).getRealServer();
+    }
+
     @Override
     protected Builder settings( Builder rb )
     {
         return super.settings( rb ).setProxyServer( new ProxyServer( "localhost", provider().getPort() ) );
     }
 
+    @Test
+    public void testGet()
+        throws Exception
+    {
+        String url = url( "content", "something" );
+        BoundRequestBuilder get = client().prepareGet( url );
+        Response response = execute( get );
+        System.err.println( response.getHeaders() );
+        assertEquals( 200, response.getStatusCode() );
+        assertEquals( "something", response.getResponseBody() );
+    }
+
+    @Test
+    public void testHead()
+        throws Exception
+    {
+        String url = url( "content", "something" );
+        BoundRequestBuilder get = client().prepareHead( url );
+        Response response = execute( get );
+        assertEquals( "", response.getResponseBody() );
+        assertEquals( 200, response.getStatusCode() );
+    }
+
+    @Test
+    public void testBasicAuthBehindProxy()
+        throws Exception
+    {
+        authServer( "BASIC" );
+
+        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
+
+        BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
+        rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "p" ).setUsePreemptiveAuth( false ).build() );
+        Response response = execute( rb );
+
+        assertEquals( "something", response.getResponseBody() );
+    }
+
+    @Test
+    public void testDigestAuthBehindProxy()
+        throws Exception
+    {
+        authServer( "DIGEST" );
+
+        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
+
+        BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
+        rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "p" ).setUsePreemptiveAuth( false ).build() );
+        Response response = execute( rb );
+
+        assertEquals( "something", response.getResponseBody() );
+    }
+
+    @Test
+    public void testBasicAuthFailBehindProxy()
+        throws Exception
+    {
+        authServer( "BASIC" );
+
+        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
+
+        BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
+        rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "wrong" ).setUsePreemptiveAuth( false ).build() );
+        Response response = execute( rb );
+
+        assertEquals( 401, response.getStatusCode() );
+    }
+
+    @Test
+    public void testDigestAuthFailBehindProxy()
+        throws Exception
+    {
+        authServer( "DIGEST" );
+
+        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
+
+        BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
+        rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "wrong" ).setUsePreemptiveAuth( false ).build() );
+        Response response = execute( rb );
+
+        assertEquals( 401, response.getStatusCode() );
+    }
+
+    private void authServer( String method )
+        throws Exception
+    {
+        realServer.stop();
+        realServer.initServer();
+        realServer.addAuthentication( "/*", method );
+        realServer.addUser( "u", "p" );
+        realServer.start();
+    }
 }

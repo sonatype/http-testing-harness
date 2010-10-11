@@ -98,6 +98,7 @@ public class BehaviourServlet
     protected void doHead( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
+        logger.debug( "head" );
         behave( req, resp );
     }
 

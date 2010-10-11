@@ -35,8 +35,6 @@ public class JettyProxyProvider
 
     private String user;
 
-    private boolean useAuth;
-
     public JettyProxyProvider( ServerProvider real )
         throws Exception
     {
@@ -49,7 +47,6 @@ public class JettyProxyProvider
         this( realServer );
         this.user = user;
         this.password = pw;
-        this.useAuth = true;
     }
 
     @Override
@@ -87,7 +84,7 @@ public class JettyProxyProvider
 
         initWebappContext( server );
 
-        addServlet( new ProxyTestServlet() );
+        addServlet( new ProxyTestServlet( user, password ) );
 
     }
 
@@ -112,6 +109,16 @@ public class JettyProxyProvider
     @Override
     public void addUser( String user, String password )
     {
+    }
+
+    public ServerProvider getRealServer()
+    {
+        return real;
+    }
+
+    public void setRealServer( ServerProvider real )
+    {
+        this.real = real;
     }
 
 }

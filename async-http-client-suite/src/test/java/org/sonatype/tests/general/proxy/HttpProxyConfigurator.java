@@ -18,7 +18,6 @@ public class HttpProxyConfigurator
         try
         {
             ServerProvider realServer = new JettyServerProvider();
-            realServer.setPort( 8887 );
             provider = new JettyProxyProvider( realServer );
         }
         catch ( Exception e )

@@ -44,10 +44,4 @@ public class HeadTest
         assertEquals( "", response.getResponseBody() );
     }
 
-    private Response execute( BoundRequestBuilder rb )
-        throws Exception
-    {
-        return requestSettings( rb ).execute().get();
-    }
-
 }

@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AssertingAsyncHandler;
@@ -108,6 +107,11 @@ public class SimpleGetTest
         assertTrue( "real delta: " + ( end - begin ), end - begin >= 1500 );
     }
 
+    /**
+     * Fails for Authentication needed...
+     * 
+     * @throws Exception
+     */
     @Test
     public void testTruncate()
         throws Exception
@@ -134,6 +138,11 @@ public class SimpleGetTest
         }
     }
 
+    /**
+     * Fails for authenticated.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testRedirect()
         throws Exception
@@ -145,7 +154,6 @@ public class SimpleGetTest
     }
 
     @Test
-    @Ignore
     public void testPutLargeFile()
         throws Exception
     {

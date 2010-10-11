@@ -19,7 +19,6 @@ public class HttpProxyAuthConfigurator
         try
         {
             ServerProvider realServer = new JettyServerProvider();
-            realServer.setPort( 8887 );
             provider = new JettyProxyProvider( realServer, "puser", "password" );
         }
         catch ( Exception e )

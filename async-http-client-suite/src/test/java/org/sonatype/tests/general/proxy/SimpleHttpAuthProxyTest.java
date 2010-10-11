@@ -4,6 +4,9 @@ import org.junit.runner.RunWith;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
 
+import com.ning.http.client.AsyncHttpClientConfig.Builder;
+import com.ning.http.client.ProxyServer;
+
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -25,8 +28,14 @@ import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
 @RunWith( ConfigurationRunner.class )
 @Configurators( HttpProxyAuthConfigurator.class )
 public class SimpleHttpAuthProxyTest
-    extends org.sonatype.tests.custom.SimpleGetTest
+    extends SimpleHttpProxyTest
 {
 
+    @Override
+    protected Builder settings( Builder rb )
+    {
+        return super.settings( rb ).setProxyServer( new ProxyServer( "localhost", provider().getPort(), "puser",
+                                                                     "password" ) );
+    }
 
 }

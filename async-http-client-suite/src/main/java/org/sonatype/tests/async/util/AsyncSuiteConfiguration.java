@@ -81,4 +81,10 @@ public class AsyncSuiteConfiguration
         realm = realmbuilder.build();
     }
 
+    protected Response execute( BoundRequestBuilder rb )
+        throws Exception
+    {
+        return requestSettings( rb ).execute().get();
+    }
+
 }

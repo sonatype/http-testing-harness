@@ -33,15 +33,25 @@ public class Content
     {
         String path = request.getPathInfo().substring( 1 );
         String content = path;
-        BehaviourHelper.setContent( content, ctx );
+        if ( "GET".equals( request.getMethod() ) )
+        {
+            BehaviourHelper.setContent( content, ctx );
+        }
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
         String content = (String) ctx.get( Behaviour.Keys.CONTENT );
-        response.setContentLength( content.getBytes( "UTF-8" ).length );
-        response.getWriter().write( content );
+        if ( "GET".equals( request.getMethod() ) )
+        {
+            response.setContentLength( content.getBytes( "UTF-8" ).length );
+            response.getWriter().write( content );
+        }
+        else
+        {
+            response.getWriter().close();
+        }
         return true;
     }
 

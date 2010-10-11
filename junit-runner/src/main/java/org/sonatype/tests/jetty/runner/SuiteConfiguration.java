@@ -19,6 +19,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class SuiteConfiguration
 
     private SuiteConfigurator configurator;
 
-    private ServerProvider provider;
+    private static ServerProvider provider;
 
     public void setConfigurator( SuiteConfigurator configurator )
     {
@@ -52,12 +53,19 @@ public class SuiteConfiguration
         {
             this.provider = configurator.provider();
             doClassInit = false;
+            provider.start();
         }
-        provider.start();
     }
 
     @After
     public void after()
+        throws Exception
+    {
+        // provider.stop();
+    }
+
+    @AfterClass
+    public static void afterClass()
         throws Exception
     {
         provider.stop();
