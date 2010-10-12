@@ -13,11 +13,6 @@ package org.sonatype.tests.async.connector;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import static org.junit.Assert.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,31 +46,4 @@ public class DeployTest
         assertExpectations();
     }
 
-    @Test
-    public void testArtifactFileUpload()
-        throws Exception
-    {
-        provider().addBehaviour( "/*", new FileServer() );
-    
-        Artifact artifact = artifact( "artifact" );
-        List<ArtifactUpload> uploads = Arrays.asList( new ArtifactUpload( artifact, artifact.getFile() ) );
-        connector().put( uploads, null );
-    
-        URL url = new URL( url( "repo", "gid", "aid", "version", "aid-version-classifier.extension.sha1" ) );
-        InputStream in = url.openStream();
-
-        int count = -1;
-        byte[] b = new byte[16000];
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        while ( ( count = in.read( b ) ) != -1 )
-        {
-            out.write( b, 0, count );
-        }
-        out.close();
-        byte[] readBytes = out.toByteArray();
-        assertArrayEquals( sha1( "artifact" ).getBytes( "UTF-8" ), readBytes );
-
-        // addExpectation( "gid/aid/version/aid-version-classifier.extension.sha1", sha1( "artifact" ) );
-        // addExpectation( "gid/aid/version/aid-version-classifier.extension.md5", md5( "artifact" ) );
-    }
 }

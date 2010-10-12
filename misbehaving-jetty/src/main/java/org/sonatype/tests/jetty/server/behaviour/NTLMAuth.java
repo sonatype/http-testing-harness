@@ -98,7 +98,7 @@ public class NTLMAuth
         String password = "password";
         String host = "test";
         String domain = "Test Server";
-        return false;
+        return true;
     }
 
     /**

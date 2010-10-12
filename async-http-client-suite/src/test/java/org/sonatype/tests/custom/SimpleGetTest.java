@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AssertingAsyncHandler;
@@ -154,6 +155,7 @@ public class SimpleGetTest
     }
 
     @Test
+    @Ignore( "takes too long for rapid development" )
     public void testPutLargeFile()
         throws Exception
     {

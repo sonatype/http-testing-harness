@@ -31,7 +31,7 @@ import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
  * @author Benjamin Hanzelmann
  *
  */
-public class AetherDefaultTests
+public class AetherDefaultTest
     extends ConnectorTestSuite
 {
 
@@ -78,7 +78,7 @@ public class AetherDefaultTests
     /**
      * @param setup
      */
-    public AetherDefaultTests()
+    public AetherDefaultTest()
     {
         super( new JettyConnectorTestSetup() );
     }

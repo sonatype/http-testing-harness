@@ -54,7 +54,7 @@ public class NTLMTest
         rb.setRealm( realm );
         Response response = execute( rb );
 
-        assertEquals( "foo", response.getResponseBody() );
+        assertEquals( "test", response.getResponseBody() );
     }
 
 }
