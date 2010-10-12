@@ -13,6 +13,7 @@ package org.sonatype.tests.jetty.server.behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +36,21 @@ public class Debug
     public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
+        logger.debug( "context path " + request.getContextPath() );
+        logger.debug( "path info " + request.getPathInfo() );
+        Enumeration headerNames = request.getHeaderNames();
+        while ( headerNames.hasMoreElements() )
+        {
+            String element = headerNames.nextElement().toString();
+            logger.debug( element + ": " + request.getHeader( element ) );
+        }
 
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        logger.trace( request.getContextPath() );
-        logger.trace( request.getPathInfo() );
+
         return true;
     }
 

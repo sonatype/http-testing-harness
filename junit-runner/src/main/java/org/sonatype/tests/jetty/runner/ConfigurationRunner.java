@@ -181,6 +181,10 @@ public class ConfigurationRunner
                     classes.add( cls );
                 }
             }
+            if ( classes.isEmpty() )
+            {
+                throw new IllegalStateException( "Cannot find default configurator list" );
+            }
             return classes;
         }
         catch ( Throwable t )

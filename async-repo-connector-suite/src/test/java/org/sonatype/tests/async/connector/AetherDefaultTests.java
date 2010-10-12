@@ -50,10 +50,6 @@ public class AetherDefaultTests
             return new RemoteRepository( "jetty-repo", "default", provider.getUrl().toString() + "/repo" );
         }
 
-        /*
-         * (non-Javadoc)
-         * @see org.sonatype.aether.test.util.connector.suite.ConnectorTestSetup#factory()
-         */
         public RepositoryConnectorFactory factory()
         {
             return new AsyncRepositoryConnectorFactory( NullLogger.INSTANCE, new TestFileProcessor() );

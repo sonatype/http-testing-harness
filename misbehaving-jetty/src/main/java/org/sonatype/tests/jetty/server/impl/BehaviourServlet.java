@@ -81,7 +81,6 @@ public class BehaviourServlet
             {
                 b.prepare( req, resp, ctx );
             }
-            resp.setCharacterEncoding( "UTF-8" );
             for ( Behaviour b : behaviour )
             {
                 b.execute( req, resp, ctx );

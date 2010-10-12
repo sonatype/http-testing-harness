@@ -46,7 +46,14 @@ public class Content
         if ( "GET".equals( request.getMethod() ) )
         {
             response.setContentLength( content.getBytes( "UTF-8" ).length );
-            response.getWriter().write( content );
+            try
+            {
+                response.getOutputStream().write( content.getBytes( "UTF-8" ) );
+            }
+            catch ( IllegalStateException e )
+            {
+                response.getWriter().write( content );
+            }
         }
         else
         {
