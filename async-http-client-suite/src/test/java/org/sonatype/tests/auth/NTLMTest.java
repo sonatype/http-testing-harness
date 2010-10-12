@@ -43,7 +43,7 @@ public class NTLMTest
         throws Exception
     {
         provider().stop();
-        provider().addBehaviour( "/*", new NTLMAuth(), new Content() );
+        provider().addBehaviour( "/content/*", new NTLMAuth(), new Content() );
         provider().start();
 
         AsyncHttpClient c = new AsyncHttpClient( new NettyAsyncHttpProvider( builder().build() ), builder().build() );

@@ -1,6 +1,5 @@
-package org.sonatype.tests.general.proxy;
+package org.sonatype.tests.jetty.server.configurations;
 
-import org.sonatype.tests.jetty.server.configurations.DefaultSuiteConfigurator;
 import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
 import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
 import org.sonatype.tests.server.api.ServerProvider;

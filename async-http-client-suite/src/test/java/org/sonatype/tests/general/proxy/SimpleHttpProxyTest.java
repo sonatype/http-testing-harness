@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
+import org.sonatype.tests.jetty.server.configurations.HttpProxyConfigurator;
 import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
 import org.sonatype.tests.server.api.ServerProvider;
 

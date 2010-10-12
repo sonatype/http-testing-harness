@@ -30,12 +30,11 @@ import org.sonatype.tests.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Expect
     implements Behaviour
 {
-    
+
     private static Logger logger = LoggerFactory.getLogger( Expect.class );
 
     private Map<String, byte[]> expectations = new HashMap<String, byte[]>();
@@ -56,25 +55,29 @@ public class Expect
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String path = request.getPathInfo().substring( 1 );
-        ServletInputStream in = request.getInputStream();
-
-        int count;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] b = new byte[16000];
-        while ( ( count = in.read( b ) ) != -1 )
+        if ( "PUT".equals( request.getMethod() ) )
         {
-            out.write( b, 0, count );
+            String path = request.getPathInfo().substring( 1 );
+            ServletInputStream in = request.getInputStream();
+
+            int count;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] b = new byte[16000];
+            while ( ( count = in.read( b ) ) != -1 )
+            {
+                out.write( b, 0, count );
+            }
+
+            out.close();
+            byte[] ba = out.toByteArray();
+
+            logger.debug( "expected length: " + request.getContentLength() );
+            logger.debug( path + ": " + Arrays.toString( ba ) );
+            seen.put( path, ba );
+
+            return false;
         }
-
-        byte[] ba = out.toByteArray();
-
-        out.close();
-        
-        logger.debug( path + ": " + Arrays.toString( ba ) );
-        seen.put( path, ba );
-
-        return false;
+        return true;
     }
 
     public byte[] seenBytes( String path )

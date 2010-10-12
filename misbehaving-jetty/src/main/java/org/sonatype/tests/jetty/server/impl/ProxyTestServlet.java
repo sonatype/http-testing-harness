@@ -56,25 +56,19 @@ public class ProxyTestServlet
     }
 
     @Override
-    public void handleConnect( HttpServletRequest request, HttpServletResponse response )
-        throws IOException
-    {
-
-        super.handleConnect( request, response );
-    }
-
-    @Override
     public void service( ServletRequest request, ServletResponse res )
         throws ServletException, IOException
     {
+        HttpServletRequest req = (HttpServletRequest) request;
+        logger.debug( req.getPathInfo() );
         if ( principal != null )
         {
-            String header = ( (HttpServletRequest) request ).getHeader( "Proxy-Authorization" );
+            String header = req.getHeader( "Proxy-Authorization" );
             HttpServletResponse response = (HttpServletResponse) res;
             if ( header == null )
             {
                 response.setStatus( HttpServletResponse.SC_PROXY_AUTHENTICATION_REQUIRED );
-                response.addHeader( "Proxy-Authenticate", "Basic realm=\"Squid proxy-caching web server\"" );
+                response.addHeader( "Proxy-Authenticate", "Basic realm=\"Test Server\"" );
                 response.sendError( HttpServletResponse.SC_PROXY_AUTHENTICATION_REQUIRED );
                 return;
             }
@@ -82,6 +76,7 @@ public class ProxyTestServlet
             {
                 String data = header.substring( "BASIC ".length() );
                 data = new String( new Base64Encoder().decode( data ) );
+                logger.debug( data );
                 String[] creds = data.split( ":" );
 
                 if ( !creds[0].equals( principal ) || !creds[1].equals( password ) )
@@ -93,5 +88,6 @@ public class ProxyTestServlet
 
         super.service( request, res );
     }
+
 
 }
