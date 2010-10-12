@@ -14,6 +14,11 @@ package org.sonatype.tests.async.connector;
  */
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -33,11 +38,11 @@ import org.sonatype.aether.test.util.TestFileUtils;
 import org.sonatype.aether.test.util.impl.StubArtifact;
 import org.sonatype.aether.test.util.impl.StubMetadata;
 import org.sonatype.aether.transfer.NoRepositoryConnectorException;
+import org.sonatype.tests.async.connector.behaviour.Upload;
 import org.sonatype.tests.jetty.runner.SuiteConfiguration;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class AsyncConnectorSuiteConfiguration
     extends SuiteConfiguration
@@ -56,6 +61,8 @@ public class AsyncConnectorSuiteConfiguration
     private Metadata metadata;
 
     protected RecordingTransferListener transferListener;
+
+    private List<Upload> expectations = new LinkedList<Upload>();
 
     @Override
     @Before
@@ -112,6 +119,61 @@ public class AsyncConnectorSuiteConfiguration
         throws IOException
     {
         return artifact().setFile( TestFileUtils.createTempFile( content ) );
+    }
+
+    protected String md5( String string )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        String algo = "MD5";
+        return digest( string, algo );
+    }
+
+    private String digest( String string, String algo )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        MessageDigest digest = MessageDigest.getInstance( algo );
+        byte[] bytes = digest.digest( string.getBytes( "UTF-8" ) );
+        StringBuilder buffer = new StringBuilder( 64 );
+    
+        for ( int i = 0; i < bytes.length; i++ )
+        {
+            int b = bytes[i] & 0xFF;
+            if ( b < 0x10 )
+            {
+                buffer.append( '0' );
+            }
+            buffer.append( Integer.toHexString( b ) );
+        }
+        return buffer.toString();
+    }
+
+    protected String sha1( String string )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        return digest( string, "SHA-1" );
+    }
+
+    protected void assertExpectations()
+    {
+        for ( Upload u : expectations )
+        {
+            u.assertContent();
+        }
+    }
+
+    protected Upload addExpectation( String path, String content )
+        throws Exception
+    {
+        byte[] bytes = content.getBytes( "UTF-8" );
+        return addExpectation( path, bytes );
+    }
+
+    private Upload addExpectation( String path, byte[] content )
+    {
+        Upload upload = new Upload( content );
+        provider().addBehaviour( "repo/" + path, upload );
+        expectations.add( upload );
+        return upload;
     }
 
 }

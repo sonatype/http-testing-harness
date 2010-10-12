@@ -17,19 +17,14 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.spi.connector.ArtifactUpload;
-import org.sonatype.tests.async.connector.behaviour.Upload;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 
 /**
@@ -39,8 +34,6 @@ import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 public class DeployTest
     extends AsyncConnectorSuiteConfiguration
 {
-
-    private List<Upload> expectations = new LinkedList<Upload>();
 
     @Test
     public void testArtifactUpload()
@@ -56,61 +49,6 @@ public class DeployTest
         connector().put( uploads, null );
 
         assertExpectations();
-    }
-
-    private String md5( String string )
-        throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        String algo = "MD5";
-        return digest( string, algo );
-    }
-
-    private String digest( String string, String algo )
-        throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        MessageDigest digest = MessageDigest.getInstance( algo );
-        byte[] bytes = digest.digest( string.getBytes( "UTF-8" ) );
-        StringBuilder buffer = new StringBuilder( 64 );
-
-        for ( int i = 0; i < bytes.length; i++ )
-        {
-            int b = bytes[i] & 0xFF;
-            if ( b < 0x10 )
-            {
-                buffer.append( '0' );
-            }
-            buffer.append( Integer.toHexString( b ) );
-        }
-        return buffer.toString();
-    }
-
-    private String sha1( String string )
-        throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        return digest( string, "SHA-1" );
-    }
-
-    private void assertExpectations()
-    {
-        for ( Upload u : expectations )
-        {
-            u.assertContent();
-        }
-    }
-
-    private Upload addExpectation( String path, String content )
-        throws Exception
-    {
-        byte[] bytes = content.getBytes( "UTF-8" );
-        return addExpectation( path, bytes );
-    }
-
-    private Upload addExpectation( String path, byte[] content )
-    {
-        Upload upload = new Upload( content );
-        provider().addBehaviour( "repo/" + path, upload );
-        expectations.add( upload );
-        return upload;
     }
 
     @Test
