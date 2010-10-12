@@ -15,7 +15,6 @@ package org.sonatype.tests.jetty.runner;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.junit.After;
@@ -51,7 +50,7 @@ public class SuiteConfiguration
     {
         if ( doClassInit )
         {
-            this.provider = configurator.provider();
+            provider = configurator.provider();
             doClassInit = false;
             configureProvider( provider );
             provider.start();
@@ -96,7 +95,7 @@ public class SuiteConfiguration
 
     protected ServerProvider provider()
     {
-        return this.provider;
+        return provider;
     }
 
     protected String url( String path, String... parts )
@@ -119,18 +118,6 @@ public class SuiteConfiguration
             throw new IllegalArgumentException( e );
         }
 
-    }
-
-    private String decode( String string )
-    {
-        try
-        {
-            return URLDecoder.decode( string, "UTF-8" );
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            throw new IllegalArgumentException( e );
-        }
     }
 
 }

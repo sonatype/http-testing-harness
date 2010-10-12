@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-	<groupId>org.sonatype.forge</groupId>
-	<artifactId>forge-parent</artifactId>
-	<version>6</version>
+	<groupId>com.sonatype</groupId>
+	<artifactId>sonatype</artifactId>
+	<version>8</version>
     </parent>
 
-    <groupId>org.sonatype.jetty-test-case</groupId>
+    <groupId>org.sonatype.http-test-case</groupId>
     <version>0.1-SNAPSHOT</version>
-    <artifactId>jetty-test-case-parent</artifactId>
+    <artifactId>http-test-case-parent</artifactId>
     <packaging>pom</packaging>
 
-    <name>jetty-test-case Parent Module</name>
+    <name>http-test-case Parent Module</name>
     <url>http://sonatype.org</url>
     <description>
 	The parent and aggregator for the http connector test case.
@@ -130,7 +130,6 @@
     	<module>async-http-client-suite</module>
     	<module>junit-runner</module>
     	<module>tests-api</module>
-    	<module>async-repo-connector-suite</module>
     </modules>
 
 </project>

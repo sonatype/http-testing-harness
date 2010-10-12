@@ -36,11 +36,10 @@ public class HeadTest
     public void testSimple()
         throws Exception
     {
-
         BoundRequestBuilder rb = client().prepareHead( url( "content", "something" ) );
         Response response = execute( rb );
         assertEquals( 200, response.getStatusCode() );
-        assertEquals( "9", response.getHeader( "Content-Length" ) );
+        assertEquals( "0", response.getHeader( "Content-Length" ) );
         assertEquals( "", response.getResponseBody() );
     }
 
