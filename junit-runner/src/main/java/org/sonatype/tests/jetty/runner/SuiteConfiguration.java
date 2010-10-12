@@ -53,8 +53,14 @@ public class SuiteConfiguration
         {
             this.provider = configurator.provider();
             doClassInit = false;
+            configureProvider( provider );
             provider.start();
         }
+    }
+
+
+    protected void configureProvider( ServerProvider provider )
+    {
     }
 
     @After

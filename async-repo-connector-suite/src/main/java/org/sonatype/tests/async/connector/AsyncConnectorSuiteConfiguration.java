@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.connector.async.AsyncRepositoryConnectorFactory;
-import org.sonatype.aether.metadata.Metadata;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.spi.connector.RepositoryConnector;
 import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
@@ -36,10 +35,11 @@ import org.sonatype.aether.test.impl.TestFileProcessor;
 import org.sonatype.aether.test.impl.TestRepositorySystemSession;
 import org.sonatype.aether.test.util.TestFileUtils;
 import org.sonatype.aether.test.util.impl.StubArtifact;
-import org.sonatype.aether.test.util.impl.StubMetadata;
 import org.sonatype.aether.transfer.NoRepositoryConnectorException;
 import org.sonatype.tests.async.connector.behaviour.Upload;
 import org.sonatype.tests.jetty.runner.SuiteConfiguration;
+import org.sonatype.tests.jetty.server.behaviour.Expect;
+import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
@@ -58,11 +58,13 @@ public class AsyncConnectorSuiteConfiguration
 
     private Artifact artifact;
 
-    private Metadata metadata;
+    // private Metadata metadata;
 
     protected RecordingTransferListener transferListener;
 
     private List<Upload> expectations = new LinkedList<Upload>();
+
+    protected Expect expect;
 
     @Override
     @Before
@@ -76,11 +78,13 @@ public class AsyncConnectorSuiteConfiguration
         this.repository = new RemoteRepository( "async-test-repo", "default", url( "repo" ) );
         
         this.artifact = new StubArtifact( "gid", "aid", "classifier", "extension", "version", null );
-        this.metadata =
-            new StubMetadata( "gid", "aid", "version", "maven-metadata.xml", Metadata.Nature.RELEASE_OR_SNAPSHOT, null );
+        // this.metadata =
+        // new StubMetadata( "gid", "aid", "version", "maven-metadata.xml", Metadata.Nature.RELEASE_OR_SNAPSHOT, null );
 
         transferListener = new RecordingTransferListener();
         session.setTransferListener( transferListener );
+
+
     }
 
     protected RepositoryConnectorFactory factory()
@@ -155,25 +159,28 @@ public class AsyncConnectorSuiteConfiguration
 
     protected void assertExpectations()
     {
-        for ( Upload u : expectations )
-        {
-            u.assertContent();
-        }
+        expect.assertExpectations();
     }
 
-    protected Upload addExpectation( String path, String content )
+    protected Expect addExpectation( String path, String content )
         throws Exception
     {
         byte[] bytes = content.getBytes( "UTF-8" );
         return addExpectation( path, bytes );
     }
 
-    private Upload addExpectation( String path, byte[] content )
+    private Expect addExpectation( String path, byte[] content )
     {
-        Upload upload = new Upload( content );
-        provider().addBehaviour( "repo/" + path, upload );
-        expectations.add( upload );
-        return upload;
+        expect.addExpectation( path, content );
+        return expect;
+    }
+
+    @Override
+    protected void configureProvider( ServerProvider provider )
+    {
+        super.configureProvider( provider );
+        expect = new Expect();
+        provider.addBehaviour( "/repo", expect );
     }
 
 }

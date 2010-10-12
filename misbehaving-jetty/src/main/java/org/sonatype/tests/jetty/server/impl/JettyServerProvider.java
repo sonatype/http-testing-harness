@@ -187,6 +187,17 @@ public class JettyServerProvider
 
     public void addServlet( TestServlet servlet )
     {
+        if ( webappContext == null )
+        {
+            try
+            {
+                initServer();
+            }
+            catch ( Exception e )
+            {
+                throw new IllegalStateException( e );
+            }
+        }
         webappContext.getServletHandler().addServletWithMapping( new ServletHolder( servlet ), servlet.getPath() );
     }
 
