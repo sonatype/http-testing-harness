@@ -57,6 +57,10 @@ public class Provide
         if ( "GET".equals( request.getMethod() ) )
         {
             byte[] ba = db.get( path );
+            if ( ba == null )
+            {
+                ba = new byte[0];
+            }
 
             logger.debug( "sending " + Arrays.toString( ba ) );
 
