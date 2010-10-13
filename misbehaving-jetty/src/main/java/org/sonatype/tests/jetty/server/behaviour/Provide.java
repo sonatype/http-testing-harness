@@ -37,6 +37,8 @@ public class Provide
 
     private Map<String, byte[]> db = new HashMap<String, byte[]>();
 
+    private int latency = -1;
+
     public void addPath( String path, byte[] content )
     {
         this.db.put( path, content );
@@ -68,13 +70,26 @@ public class Provide
             response.setContentLength( ba.length );
 
             ServletOutputStream out = response.getOutputStream();
-            out.write( ba );
+            for ( int i = 0; i < ba.length; i++ )
+            {
+                out.write( ba[i] );
+                if ( latency != -1 )
+                {
+                    Thread.sleep( latency );
+                }
+            }
             out.close();
             logger.debug( "sent " + Arrays.toString( ba ) );
             return false;
         }
 
         return true;
+    }
+
+    public void setLatency( int i )
+    {
+        this.latency = i;
+
     }
 
 }
