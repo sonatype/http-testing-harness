@@ -50,4 +50,43 @@ class ConfiguratorMethod
         return getName();
     }
 
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ( ( configurator == null ) ? 0 : configurator.hashCode() );
+        return result;
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
+        {
+            return true;
+        }
+        if ( !super.equals( obj ) )
+        {
+            return false;
+        }
+        if ( getClass() != obj.getClass() )
+        {
+            return false;
+        }
+        ConfiguratorMethod other = (ConfiguratorMethod) obj;
+        if ( configurator == null )
+        {
+            if ( other.configurator != null )
+            {
+                return false;
+            }
+        }
+        else if ( !configurator.equals( other.configurator ) )
+        {
+            return false;
+        }
+        return true;
+    }
+
 }
