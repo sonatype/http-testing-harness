@@ -23,7 +23,7 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>org.sonatype.jetty-test-case</groupId>
+  		<groupId>org.sonatype.http-test-case</groupId>
   		<artifactId>tests-api</artifactId>
   		<version>0.1-SNAPSHOT</version>
   		<type>jar</type>
