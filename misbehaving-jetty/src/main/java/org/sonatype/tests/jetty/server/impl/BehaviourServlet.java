@@ -43,7 +43,6 @@ public class BehaviourServlet
 
     public BehaviourServlet( String pathspec, Behaviour[] behaviour )
     {
-        logger.debug( "new BehaviourServlet(" + pathspec + ", " + Arrays.toString( behaviour ) + ")" );
         this.spec = pathspec;
         this.behaviour = behaviour;
     }
@@ -65,7 +64,6 @@ public class BehaviourServlet
     protected void doGet( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        logger.debug( "get" );
         behave( req, resp );
     }
 
@@ -73,7 +71,7 @@ public class BehaviourServlet
     private void behave( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException
     {
-        logger.debug( "behaving: " + req.getPathInfo() );
+        logger.debug( "behaving: " + req.getPathInfo() + ", " + Arrays.toString( behaviour ) );
         try
         {
             Map<Object, Object> ctx = new HashMap<Object, Object>();
@@ -97,7 +95,6 @@ public class BehaviourServlet
     protected void doHead( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        logger.debug( "head" );
         behave( req, resp );
     }
 
@@ -105,7 +102,6 @@ public class BehaviourServlet
     protected void doPost( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        logger.debug( "post" );
         behave( req, resp );
     }
 
@@ -113,7 +109,6 @@ public class BehaviourServlet
     protected void doPut( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        logger.debug( "put" );
         behave( req, resp );
     }
 
