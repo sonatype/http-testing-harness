@@ -28,8 +28,8 @@ public interface Behaviour
     /**
      * Prepare the execution of the Behaviour (e.g. extract information from path).
      */
-    void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception;
+    // void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    // throws Exception;
 
     /**
      * Execute the Behaviour (e.g. send data, redirect, sleep, ...).

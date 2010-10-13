@@ -22,7 +22,6 @@ import org.sonatype.tests.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Pause
     implements Behaviour
@@ -40,7 +39,7 @@ public class Pause
         this.pause = pause;
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
     {
         if ( pause == -1 )
         {
@@ -48,11 +47,6 @@ public class Pause
             String[] split = path.split( "/", 2 );
             pause = Integer.valueOf( split[0] ).intValue();
         }
-
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-    {
         try
         {
             Thread.sleep( pause );

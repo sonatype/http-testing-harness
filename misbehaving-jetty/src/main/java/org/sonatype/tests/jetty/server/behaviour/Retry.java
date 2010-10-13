@@ -45,7 +45,8 @@ public class Retry
         this.retry = retry;
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+        throws Exception
     {
         if ( retry == -1 )
         {
@@ -54,11 +55,6 @@ public class Retry
             retry = Integer.valueOf( split[0] ).intValue();
         }
         counter += 1;
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
         if ( counter < retry )
         {
             response.sendError( error );

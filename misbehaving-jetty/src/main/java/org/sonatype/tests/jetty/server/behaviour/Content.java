@@ -31,20 +31,21 @@ public class Content
     public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String path = request.getPathInfo().substring( 1 );
-        String content = path;
-        if ( "GET".equals( request.getMethod() ) )
-        {
-            BehaviourHelper.setContent( content, ctx );
-        }
+
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String content = (String) ctx.get( Behaviour.Keys.CONTENT );
+        String path = request.getPathInfo().substring( 1 );
+        String content = path;
         if ( "GET".equals( request.getMethod() ) )
         {
+            if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
+            {
+                content = ctx.get( Behaviour.Keys.CONTENT ).toString();
+            }
+
             response.setContentLength( content.getBytes( "UTF-8" ).length );
             try
             {
@@ -59,7 +60,7 @@ public class Content
         {
             response.getWriter().close();
         }
-        return true;
+        return false;
     }
 
 }

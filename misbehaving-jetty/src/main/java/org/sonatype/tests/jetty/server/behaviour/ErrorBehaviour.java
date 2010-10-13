@@ -38,16 +38,11 @@ public class ErrorBehaviour
         this.msg = msg;
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        response.sendError( error, msg );
-
-    }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
+        response.sendError( error, msg );
 
         return false;
 

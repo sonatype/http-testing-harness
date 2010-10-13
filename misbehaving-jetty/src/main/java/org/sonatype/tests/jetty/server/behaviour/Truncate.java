@@ -43,28 +43,19 @@ public class Truncate
         this.count = count;
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
         String path = request.getPathInfo().substring( 1 );
+        String msg = null;
         if ( count == -1 )
         {
             String[] split = path.split( "/", 2 );
             count = Integer.valueOf( split[0] ).intValue();
-            String msg = split[1].substring( 0, count );
-            logger.debug( "Setting truncated msg: " + msg );
-            ctx.put( Behaviour.Keys.TRUNCATE_MSG, msg );
+            msg = split[1].substring( 0, count );
         }
-        BehaviourHelper.setContent( path, ctx );
-        int l = path.getBytes( "UTF-8" ).length;
-        logger.debug( "Setting truncate content length: " + l );
-        response.setContentLength( l );
-    }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        String msg = (String) ctx.get( Behaviour.Keys.TRUNCATE_MSG );
+        response.setContentLength( path.getBytes( "UTF-8" ).length );
         if ( msg != null )
         {
             response.getWriter().write( msg );
@@ -75,6 +66,5 @@ public class Truncate
         }
         return false;
     }
-
 
 }

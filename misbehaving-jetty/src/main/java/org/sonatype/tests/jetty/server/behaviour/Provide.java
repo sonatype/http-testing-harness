@@ -44,12 +44,6 @@ public class Provide
         this.db.put( path, content );
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-
-    }
-
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {

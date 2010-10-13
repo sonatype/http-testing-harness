@@ -32,7 +32,7 @@ public class Deliver
 
     private File file;
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
         if ( file == null )
@@ -40,11 +40,6 @@ public class Deliver
             String path = BehaviourHelper.content( request.getPathInfo() );
             file = new File( path );
         }
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
         ServletOutputStream out = response.getOutputStream();
         FileInputStream in = null;
         try

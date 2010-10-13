@@ -77,10 +77,6 @@ public class BehaviourServlet
             Map<Object, Object> ctx = new HashMap<Object, Object>();
             for ( Behaviour b : behaviour )
             {
-                b.prepare( req, resp, ctx );
-            }
-            for ( Behaviour b : behaviour )
-            {
                 b.execute( req, resp, ctx );
                 resp.flushBuffer();
             }

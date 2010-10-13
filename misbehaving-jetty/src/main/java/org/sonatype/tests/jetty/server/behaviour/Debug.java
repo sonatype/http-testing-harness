@@ -33,7 +33,7 @@ public class Debug
 
     private static Logger logger = LoggerFactory.getLogger( Debug.class );
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
         logger.debug( "context path " + request.getContextPath() );
@@ -44,12 +44,6 @@ public class Debug
             String element = headerNames.nextElement().toString();
             logger.debug( element + ": " + request.getHeader( element ) );
         }
-
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
 
         return true;
     }

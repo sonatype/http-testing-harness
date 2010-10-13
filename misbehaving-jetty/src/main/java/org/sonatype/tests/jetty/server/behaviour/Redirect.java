@@ -55,26 +55,6 @@ public class Redirect
         this.target = url;
     }
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( target != null )
-        {
-            return;
-        }
-        if ( count == -1 )
-        {
-            count = Integer.valueOf( firstPart( request.getPathInfo() ) );
-            content = content( request.getPathInfo() );
-            System.err.println( "saving content: " + content );
-        }
-        else if ( content == null )
-        {
-            content = request.getPathInfo();
-        }
-
-    }
-
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
@@ -84,6 +64,17 @@ public class Redirect
             response.sendRedirect( target );
             return false;
         }
+        if ( count == -1 )
+        {
+            count = Integer.valueOf( firstPart( request.getPathInfo() ) );
+            // save original content for last redirect
+            content = content( request.getPathInfo() );
+        }
+        else if ( content == null )
+        {
+            content = request.getPathInfo();
+        }
+
         if ( redirectCount < count )
         {
             System.err.println( "Redirecting... " + redirectCount );
@@ -91,7 +82,7 @@ public class Redirect
             response.sendRedirect( String.valueOf( ++redirectCount ) );
             return false;
         }
-        System.err.println( "setting saved content: " + content );
+
         setContent( content, ctx );
 
         count = -1;

@@ -34,6 +34,8 @@ import org.sonatype.tests.server.api.Behaviour;
 import com.thoughtworks.xstream.core.util.Base64Encoder;
 
 /**
+ * Incomplete, last step is not validated.
+ * 
  * @author Benjamin Hanzelmann
  */
 public class NTLMAuth
@@ -44,20 +46,6 @@ public class NTLMAuth
     private boolean authorized;
 
     private int state;
-
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-    }
-
-    /**
-     * @param authHeader
-     */
-    private boolean check( String authHeader )
-    {
-
-        return false;
-    }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
