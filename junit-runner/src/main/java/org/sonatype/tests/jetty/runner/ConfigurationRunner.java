@@ -77,7 +77,7 @@ public class ConfigurationRunner
     @Inherited
     public @interface ConfiguratorList
     {
-        public String value();
+        public String[] value();
     }
 
     @Override
@@ -149,36 +149,38 @@ public class ConfigurationRunner
 
     /**
      * Load list of configurators from all resources named "SuiteConfigurtor.list". (One full class name per line.)
-     * 
-     * @throws InitializationError
      */
     private void initDefaultConfiguratorClasses()
     {
         defaultConfiguratorClasses = getConfiguratorClasses( "DefaultSuiteConfigurator.list" );
     }
 
-    private List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( String list )
+    private List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( String... lists )
     {
         List<Class<? extends SuiteConfigurator>> classes = new LinkedList<Class<? extends SuiteConfigurator>>();
 
         BufferedReader in = null;
         try
         {
-            Enumeration<URL> resources = getClass().getClassLoader().getResources( list );
-            while ( resources.hasMoreElements() )
+            for ( String list : lists )
             {
-                URL url = resources.nextElement();
-                in = new BufferedReader( new InputStreamReader( url.openStream() ) );
-                String clsName;
-                while ( ( clsName = in.readLine() ) != null )
+
+                Enumeration<URL> resources = getClass().getClassLoader().getResources( list );
+                while ( resources.hasMoreElements() )
                 {
-                    System.err.println( "using " + clsName + " as configurator." );
+                    URL url = resources.nextElement();
+                    in = new BufferedReader( new InputStreamReader( url.openStream() ) );
+                    String clsName;
+                    while ( ( clsName = in.readLine() ) != null )
+                    {
+                        System.err.println( "using " + clsName + " as configurator." );
 
-                    @SuppressWarnings( "unchecked" )
-                    Class<? extends SuiteConfigurator> cls =
-                        (Class<? extends SuiteConfigurator>) getClass().getClassLoader().loadClass( clsName );
+                        @SuppressWarnings( "unchecked" )
+                        Class<? extends SuiteConfigurator> cls =
+                            (Class<? extends SuiteConfigurator>) getClass().getClassLoader().loadClass( clsName );
 
-                    classes.add( cls );
+                        classes.add( cls );
+                    }
                 }
             }
             if ( classes.isEmpty() )

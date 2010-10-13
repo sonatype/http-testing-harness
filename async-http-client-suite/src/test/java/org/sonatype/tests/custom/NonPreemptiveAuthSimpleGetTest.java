@@ -29,7 +29,7 @@ import com.ning.http.client.AsyncHttpClientConfig.Builder;
  *
  */
 @RunWith( ConfigurationRunner.class )
-@ConfiguratorList( "AuthSuiteConfigurator.list" )
+@ConfiguratorList( { "DefaultSuiteConfigurator.list", "AuthSuiteConfigurator.list" } )
 public class NonPreemptiveAuthSimpleGetTest
     extends SimpleGetTest
 {
