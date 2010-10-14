@@ -22,11 +22,34 @@ import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.junit.Assert;
 
 public class FileUtil
 {
+
+    private static final File TMP = new File( System.getProperty( "java.io.tmpdir" ), "http-tests-"
+        + UUID.randomUUID().toString().substring( 0, 8 ) );
+
+    static
+    {
+        Runtime.getRuntime().addShutdownHook( new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    delete( TMP );
+                }
+                catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        } );
+    }
 
     public static File createTempFile( String contents )
         throws IOException
@@ -34,13 +57,11 @@ public class FileUtil
         return createTempFile( contents.getBytes( "UTF-8" ), 1 );
     }
 
-    public static File createTempFile( byte[] pattern, long repeat )
+    public static File createTempFile( byte[] pattern, int repeat )
         throws IOException
     {
-
-        File tmpFile = null;
-        tmpFile = File.createTempFile( FileUtil.class.getName(), ".data" );
-
+        mkdirs( TMP );
+        File tmpFile = File.createTempFile( "tmpfile-", ".data", TMP );
         write( pattern, repeat, tmpFile );
 
         return tmpFile;
@@ -60,7 +81,7 @@ public class FileUtil
         }
     }
 
-    public static void write( byte[] pattern, long repeat, File file )
+    public static void write( byte[] pattern, int repeat, File file )
         throws IOException
     {
         file.deleteOnExit();
@@ -200,6 +221,36 @@ public class FileUtil
             msg = msg.substring( 0, 10 ) + "...";
         }
         Assert.assertArrayEquals( "content was '" + msg + "'\n", expected.getBytes( "UTF-8" ), content );
+    }
+
+    public static boolean mkdirs( File directory )
+    {
+        if ( directory == null )
+        {
+            return false;
+        }
+
+        if ( directory.exists() )
+        {
+            return false;
+        }
+        if ( directory.mkdir() )
+        {
+            return true;
+        }
+
+        File canonDir = null;
+        try
+        {
+            canonDir = directory.getCanonicalFile();
+        }
+        catch ( IOException e )
+        {
+            return false;
+        }
+
+        File parentDir = canonDir.getParentFile();
+        return ( parentDir != null && ( mkdirs( parentDir ) || parentDir.exists() ) && canonDir.mkdir() );
     }
 
 }
