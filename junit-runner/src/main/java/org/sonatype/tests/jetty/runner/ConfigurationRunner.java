@@ -36,7 +36,24 @@ import org.junit.runners.model.Statement;
 import org.sonatype.tests.runner.api.SuiteConfigurator;
 
 /**
+ * Junit4 test runner supporting multiple server configurations for the test class. This runner can only execute tests
+ * from classes that extend/implement {@link DefaultSuiteConfiguration} or {@link DefaultSuiteConfiguration}.
+ * <p>
+ * The runner provides annotations to configure the used configurations.
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators} takes {@link SuiteConfigurator} classes and
+ * uses them to run every test method. Every entry in
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList} will be loaded as a resource. The runner
+ * expects every line of the resource to be the class name of a SuiteConfigurator.
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.IgnoreConfigurators} may be used to to ignore
+ * configurators from the list.
+ * <p>
+ * If none of the annotations are present, the runner tries to load a default list (
+ * <code>DefaultSuiteConfigurators.list</code>).
+ * 
  * @author Benjamin Hanzelmann
+ * @see SuiteConfigurator
+ * @see DefaultSuiteConfiguration
+ * @see DefaultSuiteConfiguration
  */
 public class ConfigurationRunner
     extends BlockJUnit4ClassRunner
@@ -56,6 +73,12 @@ public class ConfigurationRunner
         }
     }
 
+    /**
+     * The annotation to set used configurators directly.
+     * 
+     * @author Benjamin Hanzelmann
+     * @see SuiteConfigurator
+     */
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.TYPE )
     @Inherited
@@ -64,6 +87,12 @@ public class ConfigurationRunner
         public Class<? extends SuiteConfigurator>[] value();
     }
 
+    /**
+     * This annotation may be used to filter a configurator list.
+     * 
+     * @author Benjamin Hanzelmann
+     * @see ConfiguratorList
+     */
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.TYPE )
     @Inherited
@@ -72,6 +101,12 @@ public class ConfigurationRunner
         public Class<? extends SuiteConfigurator>[] value();
     }
 
+    /**
+     * This annotation may be used to set a list of configurators. It loads the given resources and expects the file to
+     * contain the class names of configurators, one per line.
+     * 
+     * @author Benjamin Hanzelmann
+     */
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.TYPE )
     @Inherited
@@ -148,7 +183,7 @@ public class ConfigurationRunner
     }
 
     /**
-     * Load list of configurators from all resources named "SuiteConfigurtor.list". (One full class name per line.)
+     * Load list of configurators from all resources named "SuiteConfigurator.list". (One full class name per line.)
      */
     private void initDefaultConfiguratorClasses()
     {
@@ -164,7 +199,6 @@ public class ConfigurationRunner
         {
             for ( String list : lists )
             {
-
                 Enumeration<URL> resources = getClass().getClassLoader().getResources( list );
                 while ( resources.hasMoreElements() )
                 {
@@ -192,7 +226,6 @@ public class ConfigurationRunner
         catch ( Throwable t )
         {
             throw new RuntimeException( t );
-
         }
         finally
         {
