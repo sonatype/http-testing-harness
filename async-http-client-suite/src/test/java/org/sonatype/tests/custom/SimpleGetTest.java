@@ -170,8 +170,7 @@ public class SimpleGetTest
             long heapSize = Runtime.getRuntime().maxMemory();
             long repeats = ( heapSize / bytes.length ) + 1;
             logger.debug( "creating file of size ~" + heapSize );
-            largeFile = FileUtil.createTempFile( bytes, repeats );
-            logger.debug( "created file of size " + largeFile.length() );
+            largeFile = FileUtil.createTempFile( bytes, (int) repeats );
             
             Builder cfg = new Builder();
             cfg.setIdleConnectionTimeoutInMs( (int) heapSize );
