@@ -22,13 +22,15 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonatype.tests.runner.api.SuiteConfiguration;
 import org.sonatype.tests.runner.api.SuiteConfigurator;
 import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
  */
-public class SuiteConfiguration
+public abstract class DefaultSuiteConfiguration
+    implements SuiteConfiguration
 {
 
     protected Logger logger = LoggerFactory.getLogger( this.getClass() );
@@ -86,11 +88,6 @@ public class SuiteConfiguration
         {
             throw new IllegalArgumentException( "Provider was set up with wrong url" );
         }
-    }
-
-    public ServerProvider server()
-    {
-        return provider;
     }
 
     protected ServerProvider provider()

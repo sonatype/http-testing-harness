@@ -13,7 +13,7 @@ package org.sonatype.tests.async.util;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import org.sonatype.tests.jetty.runner.SuiteConfiguration;
+import org.sonatype.tests.jetty.runner.DefaultSuiteConfiguration;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
@@ -27,7 +27,7 @@ import com.ning.http.client.Response;
  *
  */
 public class AsyncSuiteConfiguration
-    extends SuiteConfiguration
+    extends DefaultSuiteConfiguration
 {
 
     private Realm realm;
