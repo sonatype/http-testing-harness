@@ -25,8 +25,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonatype.tests.jetty.server.behaviour.Content;
@@ -47,20 +46,14 @@ public class JettyServerProviderTest
         throws Exception
     {
         provider = new JettyServerProvider();
-        provider.setPort( 8888 );
         provider.start();
     }
 
-    @Before
-    public void setup()
+    @AfterClass
+    public static void afterClass()
         throws Exception
     {
-    }
-
-    @After
-    public void teardown()
-        throws Exception
-    {
+        provider.stop();
     }
 
     @Test
@@ -68,7 +61,7 @@ public class JettyServerProviderTest
         throws Exception
     {
         Socket s = new Socket();
-        s.connect( new InetSocketAddress( "localhost", 8888 ) );
+        s.connect( new InetSocketAddress( "localhost", provider.getPort() ) );
         s.close();
     }
 
@@ -77,20 +70,20 @@ public class JettyServerProviderTest
         throws Exception
     {
         String content = "someContent";
-        URL url = new URL( "http://localhost:8888/content/" + content );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/content/" + content );
         URLConnection conn = url.openConnection();
         InputStream in = conn.getInputStream();
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
-        assertEquals( content, line );
         r.close();
+        assertEquals( content, line );
     }
 
     @Test
     public void testError()
         throws Exception
     {
-        URL url = new URL( "http://localhost:8888/error/404/errormsg" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/error/404/errormsg" );
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         assertEquals(404, conn.getResponseCode());
         assertEquals( "errormsg", conn.getResponseMessage() );
@@ -100,20 +93,17 @@ public class JettyServerProviderTest
     public void testBehaviour()
         throws Exception
     {
-        // provider.stop();
         provider.addBehaviour( "behave", new Pause( 500 ), new Content() );
-        // provider.initServer();
-        // provider.start();
 
         long begin = System.currentTimeMillis();
-        URL url = new URL( "http://localhost:8888/behave/baby" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/behave/baby" );
         URLConnection conn = url.openConnection();
         InputStream in = conn.getInputStream();
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
         long end = System.currentTimeMillis();
-        assertEquals( "baby", line );
-        assertTrue( end - begin > 500 );
+        assertEquals( "Received content was not correct.", "baby", line );
+        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 500 );
     }
 
     @Test
@@ -123,7 +113,7 @@ public class JettyServerProviderTest
         byte[] buffer = new byte[5];
         int read = -1;
         
-        URL url = new URL( "http://localhost:8888/stutter/210/one/two/three" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/stutter/210/one/two/three" );
         URLConnection conn = url.openConnection();
         long begin = System.currentTimeMillis();
         InputStream in = conn.getInputStream();
@@ -133,7 +123,7 @@ public class JettyServerProviderTest
 
         String value = new String( buffer, 0, read, "UTF-8" );
         assertEquals( "one", value );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 3, read );
 
         begin = System.currentTimeMillis();
@@ -141,7 +131,7 @@ public class JettyServerProviderTest
         end = System.currentTimeMillis();
         value = new String( buffer, 0, read, "UTF-8" );
         assertEquals( "two", value );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 3, read );
 
         begin = System.currentTimeMillis();
@@ -150,7 +140,7 @@ public class JettyServerProviderTest
         value = new String( buffer, 0, read, "UTF-8" );
 
         assertEquals( "three", value );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 5, read );
     }
 
@@ -158,7 +148,7 @@ public class JettyServerProviderTest
     public void testPause()
         throws Exception
     {
-        URL url = new URL( "http://localhost:8888/pause/500/content" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/pause/500/content" );
         URLConnection conn = url.openConnection();
 
         long begin = System.currentTimeMillis();
@@ -166,30 +156,30 @@ public class JettyServerProviderTest
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
         long end = System.currentTimeMillis();
-        assertEquals( "500/content", line );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 500 );
         r.close();
+        assertEquals( "500/content", line );
+        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 500 );
     }
 
     @Test
     public void testTruncate()
         throws Exception
     {
-        URL url = new URL( "http://localhost:8888/truncate/5/content" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/truncate/5/content" );
         URLConnection conn = url.openConnection();
 
         InputStream in = conn.getInputStream();
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
-        assertEquals( "conte", line );
         r.close();
+        assertEquals( "conte", line );
     }
 
     @Test
     public void testTimeout()
         throws Exception
     {
-        URL url = new URL( "http://localhost:8888/timeout/500/content" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/timeout/500/content" );
 
         long begin = System.currentTimeMillis();
         URLConnection conn = url.openConnection();
@@ -197,9 +187,9 @@ public class JettyServerProviderTest
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
         long end = System.currentTimeMillis();
+        r.close();
         assertTrue( "real delta: " + ( end - begin ), end - begin >= 500 );
         assertEquals( null, line );
-        r.close();
 
     }
 }
