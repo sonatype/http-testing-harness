@@ -56,6 +56,7 @@ public class NTLMAuth
             case 1:
                 if ( authHeader != null && authHeader.startsWith( "NTLM" ) )
                 {
+                    logger.debug( "received type 1: " + authHeader );
                     answerType1( authHeader, response );
                     state = 2;
                     return false;
@@ -64,6 +65,7 @@ public class NTLMAuth
             case 2:
                 if ( authHeader != null && authHeader.startsWith( "NTLM" ) )
                 {
+                    logger.debug( "received type 3: " + authHeader );
                     state = 0;
                     return checkType3( authHeader, response );
                 }
@@ -118,6 +120,9 @@ public class NTLMAuth
         System.err.println( Arrays.toString( ba ) );
         System.err.println( ba.length );
         String answer = new Base64Encoder().encode( ba );
+
+        logger.debug( "Sending type 2 message: " + "NTLM " + answer );
+
         response.setHeader( "WWW-Authenticate", "NTLM " + answer );
         response.sendError( 401 );
     }
@@ -129,6 +134,7 @@ public class NTLMAuth
     private void sendChallenge( HttpServletResponse response )
         throws IOException
     {
+        logger.debug( "Challenging NTML authentication" );
         response.addHeader( "WWW-Authenticate", "NTLM" );
         response.sendError( 401 );
     }
