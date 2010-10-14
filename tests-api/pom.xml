@@ -6,6 +6,7 @@
         <artifactId>http-test-case-parent</artifactId>
     </parent>
     <artifactId>tests-api</artifactId>
+    <name>HTTP Tests API</name>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>

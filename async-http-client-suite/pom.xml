@@ -8,6 +8,7 @@
 
     <artifactId>async-http-client-suite</artifactId>
 
+    <name>AsyncHttpClient Test Suite</name>
     <dependencies>
         <dependency>
             <groupId>com.ning</groupId>

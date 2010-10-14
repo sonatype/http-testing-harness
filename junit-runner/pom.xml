@@ -8,6 +8,7 @@
 
     <artifactId>junit-runner</artifactId>
 
+    <name>SuiteConfiguration Test Runner</name>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

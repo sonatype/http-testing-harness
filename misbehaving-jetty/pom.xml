@@ -10,12 +10,12 @@
 
     <artifactId>server-provider</artifactId>
 
-    <name>server-provider</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <name>Jetty Server Provider</name>
     <build>
         <plugins>
             <plugin>
