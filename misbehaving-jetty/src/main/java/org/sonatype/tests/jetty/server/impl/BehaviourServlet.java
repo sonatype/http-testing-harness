@@ -77,8 +77,10 @@ public class BehaviourServlet
             Map<Object, Object> ctx = new HashMap<Object, Object>();
             for ( Behaviour b : behaviour )
             {
-                b.execute( req, resp, ctx );
-                resp.flushBuffer();
+                if ( !b.execute( req, resp, ctx ) )
+                {
+                    break;
+                }
             }
         }
         catch ( Exception e )
