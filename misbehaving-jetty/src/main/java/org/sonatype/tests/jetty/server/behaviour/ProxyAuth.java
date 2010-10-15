@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonatype.tests.server.api.Behaviour;
 
+import com.thoughtworks.xstream.core.util.Base64Encoder;
+
 /**
  * @author Benjamin Hanzelmann
  *
@@ -35,6 +37,17 @@ public class ProxyAuth
     private boolean authorized = false;
 
     private boolean challenged = false;
+
+    private String user;
+
+    private String password;
+
+    public ProxyAuth( String user, String password )
+    {
+        this.user = user;
+        this.password = password;
+    }
+
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
@@ -50,15 +63,20 @@ public class ProxyAuth
             headers += name + ": " + value + "\n";
         }
         logger.debug( headers );
-        if ( request.getHeader( "Proxy-Authorization" ) == null )
+        String authHeader = request.getHeader( "Proxy-Authorization" );
+        if ( authHeader == null )
         {
-            response.addHeader( "Proxy-Authenticate", "BASIC realm" );
+            response.addHeader( "Proxy-Authenticate", "BASIC realm=\"Test Proxy\"" );
             response.sendError( 407, "proxy auth required" );
             challenged = true;
             return false;
         }
-        this.authorized = true;
-        return true;
+        else
+        {
+            String expected = "BASIC " + new Base64Encoder().encode( ( user + ":" + password ).getBytes( "UTF-8" ) );
+            this.authorized = expected.equals( authHeader );
+        }
+        return this.authorized;
     }
 
     public boolean isAuthorized()
