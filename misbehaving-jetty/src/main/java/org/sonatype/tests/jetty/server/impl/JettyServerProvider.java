@@ -312,10 +312,16 @@ public class JettyServerProvider
         server.start();
 
         int total = 0;
-        while ( total < 3000 && !server.isStarted() )
+        synchronized ( server )
         {
+            while ( total < 3000 && !server.isStarted() )
+            {
+                server.wait( 10 );
+                total += 10;
+            }
+
+            // extra wait to stabilize tests - ports not opened sometimes
             server.wait( 10 );
-            total += 10;
         }
 
         if ( !server.isStarted() )
@@ -407,6 +413,5 @@ public class JettyServerProvider
 
         webappContext.getServletHandler().addFilter( fh, fm );
     }
-
 
 }
