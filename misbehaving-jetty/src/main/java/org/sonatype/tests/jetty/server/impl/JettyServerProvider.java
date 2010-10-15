@@ -334,7 +334,6 @@ public class JettyServerProvider
 
     public void addBehaviour( String pathspec, Behaviour... behaviour )
     {
-        logger.debug( "Adding " + behaviour.getClass().getSimpleName() + " to " + pathspec );
         addServlet( new BehaviourServlet( pathspec, behaviour ) );
     }
 

@@ -208,8 +208,6 @@ public class ConfigurationRunner
                     String clsName;
                     while ( ( clsName = in.readLine() ) != null )
                     {
-                        System.err.println( "using " + clsName + " as configurator." );
-
                         @SuppressWarnings( "unchecked" )
                         Class<? extends SuiteConfigurator> cls =
                             (Class<? extends SuiteConfigurator>) getClass().getClassLoader().loadClass( clsName );
