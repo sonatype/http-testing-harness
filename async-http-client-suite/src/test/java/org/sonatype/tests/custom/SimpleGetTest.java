@@ -15,23 +15,15 @@ package org.sonatype.tests.custom;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AssertingAsyncHandler;
-import org.sonatype.tests.async.util.AsyncDebugHandler;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.server.behaviour.Consumer;
-import org.sonatype.tests.jetty.server.util.FileUtil;
 
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.Response;
 
 /**
@@ -71,7 +63,7 @@ public class SimpleGetTest
     public void testPause()
         throws Exception
     {
-        String url = url( "pause", "1500", "1", "2", "3" );
+        String url = url( "pause", "1550", "1", "2", "3" );
 
         long begin = System.currentTimeMillis();
         Response response = executeGet( url );
@@ -83,8 +75,8 @@ public class SimpleGetTest
 
         assertEquals( 200, code );
         assertEquals( "OK", text );
-        assertEquals( "1500/1/2/3", body );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 1500 );
+        assertEquals( "1550/1/2/3", body );
+        assertTrue( "real delta: " + ( end - begin ), end - begin >= 1450 );
 
     }
 
@@ -92,7 +84,7 @@ public class SimpleGetTest
     public void testStutter()
         throws Exception
     {
-        String url = url( "stutter", "500", "1", "2", "3" );
+        String url = url( "stutter", "520", "1", "2", "3" );
 
         long begin = System.currentTimeMillis();
         Response response = executeGet( url );
@@ -105,7 +97,7 @@ public class SimpleGetTest
         assertEquals( 200, code );
         assertEquals( "OK", text );
         assertEquals( "123", body );
-        assertTrue( "real delta: " + ( end - begin ), end - begin >= 1500 );
+        assertTrue( "real delta: " + ( end - begin ), end - begin >= 1450 );
     }
 
     /**
@@ -155,41 +147,9 @@ public class SimpleGetTest
     }
 
     @Test
-    @Ignore( "takes too long for rapid development" )
-    public void testPutLargeFile()
-        throws Exception
+    public void testReadFullyUnspecifiedLength()
     {
-        File largeFile = null;
-        try
-        {
-            Consumer consumer = new Consumer();
-            provider().addBehaviour( "/consume/*", consumer );
-            
-            String url = url( "consume", "foo" );
-            byte[] bytes = "RatherLargeFile".getBytes( "UTF-16" );
-            long heapSize = Runtime.getRuntime().maxMemory();
-            long repeats = ( heapSize / bytes.length ) + 1;
-            logger.debug( "creating file of size ~" + heapSize );
-            largeFile = FileUtil.createTempFile( bytes, (int) repeats );
-            
-            Builder cfg = new Builder();
-            cfg.setIdleConnectionTimeoutInMs( (int) heapSize );
-            cfg.setConnectionTimeoutInMs( (int) heapSize );
-            cfg.setRequestTimeoutInMs( (int) heapSize );
-            AsyncHttpClient c = new AsyncHttpClient( cfg.build() );
-            
-            BoundRequestBuilder put = c.preparePut( url );
-            requestSettings( put );
-            put.setBody( largeFile );
-            put.execute( new AsyncDebugHandler() ).get();
-
-            assertEquals( largeFile.length(), consumer.getTotal() );
-        }
-        finally
-        {
-            FileUtil.delete( largeFile );
-        }
-
+        fail( "unimplemented" );
     }
 
     private String contentUrl( String suffix )
