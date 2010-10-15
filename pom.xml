@@ -48,6 +48,24 @@
                 <artifactId>jetty</artifactId>
                 <version>6.1.25</version>
             </dependency>
+            <dependency>
+            	<groupId>org.sonatype.http-test-case</groupId>
+            	<artifactId>junit-runner</artifactId>
+            	<version>${project.version}</version>
+            	<scope>test</scope>
+            </dependency>
+            <dependency>
+            	<groupId>org.slf4j</groupId>
+            	<artifactId>slf4j-log4j12</artifactId>
+            	<version>1.6.1</version>
+            	<scope>test</scope>
+            </dependency>
+            <dependency>
+            	<groupId>org.sonatype.http-test-case</groupId>
+            	<artifactId>server-provider</artifactId>
+            	<version>${project.version}</version>
+            	<scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

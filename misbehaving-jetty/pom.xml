@@ -65,5 +65,13 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
+        <dependency>
+        	<groupId>org.sonatype.http-test-case</groupId>
+        	<artifactId>junit-runner</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-log4j12</artifactId>
+        </dependency>
     </dependencies>
 </project>
