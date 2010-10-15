@@ -16,14 +16,20 @@ package org.sonatype.tests.custom;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AssertingAsyncHandler;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
+import org.sonatype.tests.server.api.Behaviour;
 
+import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.Response;
 
 /**
@@ -148,8 +154,37 @@ public class SimpleGetTest
 
     @Test
     public void testReadFullyUnspecifiedLength()
+        throws Exception
     {
-        fail( "unimplemented" );
+        StringBuilder sb = new StringBuilder();
+        for ( int i = 0; i < 100; i++ )
+        {
+            sb.append( "write some content\n" );
+        }
+
+        final String output = sb.toString();
+
+        provider().addBehaviour( "/unspec/*", new Behaviour()
+        {
+
+            public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+                throws Exception
+            {
+                response.setContentLength( -1 );
+                response.getWriter().write( output );
+                return false;
+            }
+
+        } );
+
+        String url = url( "unspec", "behaviour" );
+        BoundRequestBuilder rb = client().prepareGet( url );
+        Response response = execute( rb );
+
+        assertEquals( output, response.getResponseBody() );
+        String header = response.getHeader( "Content-Length" );
+        assertNotNull( "no Content-Length header", header );
+        assertEquals( output.getBytes( "UTF-8" ).length, Integer.valueOf( header ).intValue() );
     }
 
     private String contentUrl( String suffix )
