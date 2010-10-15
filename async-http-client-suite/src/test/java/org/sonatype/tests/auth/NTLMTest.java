@@ -47,7 +47,7 @@ public class NTLMTest
 
     @Test
     @Ignore( "Does not work on windows (erroneous type2 message?), NTLMAuth is not complete anyway." )
-    public void testSimple()
+    public void testNTLM()
         throws Exception
     {
         provider().stop();
