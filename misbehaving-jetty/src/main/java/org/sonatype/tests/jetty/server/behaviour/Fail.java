@@ -1,0 +1,85 @@
+package org.sonatype.tests.jetty.server.behaviour;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonatype.tests.server.api.Behaviour;
+
+/*
+ * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0, 
+ * and you may not use this file except in compliance with the Apache License Version 2.0. 
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the Apache License Version 2.0 is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
+
+/**
+ * @author Benjamin Hanzelmann
+ */
+public class Fail
+    implements Behaviour
+{
+
+    private static Logger logger = LoggerFactory.getLogger( Fail.class );
+
+    private String message = null;
+
+    private int code = -1;
+
+    private int count = 0;
+
+    private int numFailures = -1;
+
+    private int failed = 0;
+
+    public Fail( int count, int code, String message )
+    {
+        this.numFailures = count;
+        this.code = code;
+        this.message = message;
+    }
+
+    public Fail( int code, String message )
+    {
+        this( -1, code, message );
+    }
+
+    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
+        throws Exception
+    {
+        if ( numFailures == -1 )
+        {
+            failed++;
+            logger.debug( "Always failing: " + failed );
+            response.sendError( code, message );
+            return false;
+        }
+
+        if ( count++ < numFailures )
+        {
+            failed++;
+            logger.debug( "failing " + count + " times: " + failed );
+            response.sendError( code, message );
+            return false;
+        }
+
+        count = 0;
+        return true;
+    }
+
+    public int getFailedCount()
+    {
+        return failed;
+    }
+
+}
