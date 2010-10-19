@@ -27,8 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 import com.thoughtworks.xstream.core.util.Base64Encoder;
@@ -41,8 +40,6 @@ import com.thoughtworks.xstream.core.util.Base64Encoder;
 public class NTLMAuth
     implements Behaviour
 {
-    private static Logger logger = LoggerFactory.getLogger( NTLMAuth.class );
-
     private boolean authorized;
 
     private int state;
@@ -56,7 +53,7 @@ public class NTLMAuth
             case 1:
                 if ( authHeader != null && authHeader.startsWith( "NTLM" ) )
                 {
-                    logger.debug( "received type 1: " + authHeader );
+                    Log.debug( "received type 1: " + authHeader );
                     answerType1( authHeader, response );
                     state = 2;
                     return false;
@@ -65,7 +62,7 @@ public class NTLMAuth
             case 2:
                 if ( authHeader != null && authHeader.startsWith( "NTLM" ) )
                 {
-                    logger.debug( "received type 3: " + authHeader );
+                    Log.debug( "received type 3: " + authHeader );
                     state = 0;
                     return checkType3( authHeader, response );
                 }
@@ -121,7 +118,7 @@ public class NTLMAuth
         System.err.println( ba.length );
         String answer = new Base64Encoder().encode( ba );
 
-        logger.debug( "Sending type 2 message: " + "NTLM " + answer );
+        Log.debug( "Sending type 2 message: " + "NTLM " + answer );
 
         response.setHeader( "WWW-Authenticate", "NTLM " + answer );
         response.sendError( 401 );
@@ -134,7 +131,7 @@ public class NTLMAuth
     private void sendChallenge( HttpServletResponse response )
         throws IOException
     {
-        logger.debug( "Challenging NTML authentication" );
+        Log.debug( "Challenging NTML authentication" );
         response.addHeader( "WWW-Authenticate", "NTLM" );
         response.sendError( 401 );
     }

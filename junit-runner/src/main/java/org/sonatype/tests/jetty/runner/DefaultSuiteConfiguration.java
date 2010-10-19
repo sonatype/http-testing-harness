@@ -20,8 +20,6 @@ import java.net.URLEncoder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonatype.tests.runner.api.SuiteConfiguration;
 import org.sonatype.tests.runner.api.SuiteConfigurator;
 import org.sonatype.tests.server.api.ServerProvider;
@@ -33,7 +31,7 @@ public abstract class DefaultSuiteConfiguration
     implements SuiteConfiguration
 {
 
-    protected Logger logger = LoggerFactory.getLogger( this.getClass() );
+	// protected Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     private boolean doClassInit = true;
 
@@ -75,7 +73,10 @@ public abstract class DefaultSuiteConfiguration
     public static void afterClass()
         throws Exception
     {
-        provider.stop();
+        if ( provider != null )
+        {
+            provider.stop();
+        }
     }
 
     protected String url()
@@ -106,7 +107,7 @@ public abstract class DefaultSuiteConfiguration
                 url += "/" + part;
             }
 
-            logger.debug( "returning url... " + url );
+			// logger.debug( "returning url... " + url );
 
             return url;
         }

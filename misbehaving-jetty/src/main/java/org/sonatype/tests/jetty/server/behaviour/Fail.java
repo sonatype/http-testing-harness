@@ -5,8 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /*
@@ -29,8 +28,6 @@ import org.sonatype.tests.server.api.Behaviour;
 public class Fail
     implements Behaviour
 {
-
-    private static Logger logger = LoggerFactory.getLogger( Fail.class );
 
     private String message = null;
 
@@ -60,7 +57,7 @@ public class Fail
         if ( numFailures == -1 )
         {
             failed++;
-            logger.debug( "Always failing: " + failed );
+            Log.debug( "Always failing: " + failed );
             response.sendError( code, message );
             return false;
         }
@@ -68,7 +65,7 @@ public class Fail
         if ( count++ < numFailures )
         {
             failed++;
-            logger.debug( "failing " + count + " times: " + failed );
+            Log.debug( "failing " + count + " times: " + failed );
             response.sendError( code, message );
             return false;
         }

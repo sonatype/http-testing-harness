@@ -21,9 +21,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.sonatype.tests.async.util.AsyncDebugHandler;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
@@ -45,6 +46,8 @@ import com.ning.http.client.Response;
 public class PutTest
     extends AsyncSuiteConfiguration
 {
+
+    private static Logger logger = org.slf4j.LoggerFactory.getLogger( PutTest.class );
 
     @Override
     public void before()

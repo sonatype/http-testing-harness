@@ -18,8 +18,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -28,8 +26,6 @@ import org.sonatype.tests.server.api.Behaviour;
 public class Truncate
     implements Behaviour
 {
-
-    private static Logger logger = LoggerFactory.getLogger( Truncate.class );
 
     private int count = -1;
 

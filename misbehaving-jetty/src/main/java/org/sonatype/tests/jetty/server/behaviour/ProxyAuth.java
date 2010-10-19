@@ -19,8 +19,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 import com.thoughtworks.xstream.core.util.Base64Encoder;
@@ -32,15 +31,13 @@ import com.thoughtworks.xstream.core.util.Base64Encoder;
 public class ProxyAuth
     implements Behaviour
 {
-    private Logger logger = LoggerFactory.getLogger( ProxyAuth.class );
-
     private boolean authorized = false;
 
     private boolean challenged = false;
 
-    private String user;
+    private final String user;
 
-    private String password;
+    private final String password;
 
     public ProxyAuth( String user, String password )
     {
@@ -62,7 +59,7 @@ public class ProxyAuth
             String value = request.getHeader( name );
             headers += name + ": " + value + "\n";
         }
-        logger.debug( headers );
+        Log.debug( headers );
         String authHeader = request.getHeader( "Proxy-Authorization" );
         if ( authHeader == null )
         {
@@ -87,6 +84,12 @@ public class ProxyAuth
     public boolean isChallenged()
     {
         return challenged;
+    }
+
+    public void reset()
+    {
+        this.authorized = false;
+        this.challenged = false;
     }
 
 }

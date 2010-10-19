@@ -14,18 +14,15 @@ package org.sonatype.tests.jetty.server.behaviour;
  */
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -35,11 +32,9 @@ public class Expect
     implements Behaviour
 {
 
-    private static Logger logger = LoggerFactory.getLogger( Expect.class );
+    private final Map<String, byte[]> expectations = new ConcurrentHashMap<String, byte[]>();
 
-    private Map<String, byte[]> expectations = new HashMap<String, byte[]>();
-
-    private Map<String, byte[]> seen = new HashMap<String, byte[]>();
+    private final Map<String, byte[]> seen = new ConcurrentHashMap<String, byte[]>();
 
     public void addExpectation( String path, byte[] content )
     {
@@ -65,8 +60,6 @@ public class Expect
             out.close();
             byte[] ba = out.toByteArray();
 
-            logger.debug( "expected length: " + request.getContentLength() );
-            logger.debug( path + ": " + Arrays.toString( ba ) );
             seen.put( path, ba );
 
             return false;

@@ -8,8 +8,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /*
@@ -25,15 +24,12 @@ import org.sonatype.tests.server.api.Behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class FileServer
     implements Behaviour
 {
-
-    private Logger logger = LoggerFactory.getLogger( FileServer.class );
 
     private String fpath = ".";
 
@@ -49,26 +45,28 @@ public class FileServer
 
     public FileServer( String path )
     {
+        Log.debug( "Starting FileServer with base path " + new File( path ).getAbsolutePath() );
         this.fpath = path;
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String path = request.getPathInfo();
-        File file = new File( fpath, path );
-
-        logger.debug( "GET " + path );
-        logger.debug( "getting " + file.getAbsolutePath() );
-
         if ( "GET".equals( request.getMethod() ) )
         {
+            String path = request.getPathInfo();
+            File file = new File( fpath, path );
+
+            Log.debug( "getting " + file.getAbsolutePath() );
+
             if ( !file.canRead() )
             {
+                Log.debug( "Cannot read: " + file.getPath() );
                 response.sendError( 404 );
                 return false;
             }
-            
+
+            Log.debug( "Delivering: " + file.getPath() );
             response.setContentLength( (int) file.length() );
             FileInputStream in = null;
             try
@@ -90,9 +88,10 @@ public class FileServer
                     in.close();
                 }
             }
+            return false;
         }
 
-        return false;
+        return true;
     }
 
 }

@@ -21,8 +21,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -33,7 +32,6 @@ public class Provide
     implements Behaviour
 {
 
-    private static Logger logger = LoggerFactory.getLogger( Provide.class );
 
     private Map<String, byte[]> db = new HashMap<String, byte[]>();
 
@@ -48,7 +46,7 @@ public class Provide
         throws Exception
     {
         String path = request.getPathInfo().substring( 1 );
-        logger.debug( request.getMethod() + " " + path );
+        Log.debug( request.getMethod() + " " + path );
 
         if ( "GET".equals( request.getMethod() ) )
         {
@@ -57,8 +55,6 @@ public class Provide
             {
                 ba = new byte[0];
             }
-
-            logger.debug( "sending " + Arrays.toString( ba ) );
 
             response.setContentType( "application/octet-stream" );
             response.setContentLength( ba.length );
@@ -73,7 +69,6 @@ public class Provide
                 }
             }
             out.close();
-            logger.debug( "sent " + Arrays.toString( ba ) );
             return false;
         }
 

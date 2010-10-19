@@ -34,8 +34,6 @@ import org.mortbay.jetty.security.SecurityHandler;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonatype.tests.jetty.server.behaviour.Content;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
 import org.sonatype.tests.jetty.server.behaviour.Redirect;
@@ -52,8 +50,6 @@ import org.sonatype.tests.server.api.TestServlet;
 public class JettyServerProvider
     implements ServerProvider
 {
-
-    private static Logger logger = LoggerFactory.getLogger( JettyServerProvider.class );
 
     protected Server server;
 

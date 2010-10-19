@@ -23,8 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 import org.sonatype.tests.server.api.TestServlet;
 
@@ -35,11 +34,9 @@ public class BehaviourServlet
     extends HttpServlet
     implements TestServlet
 {
-    private static Logger logger = LoggerFactory.getLogger( BehaviourServlet.class );
-
     private String spec;
 
-    private Behaviour[] behaviour;
+    private final Behaviour[] behaviour;
 
     public BehaviourServlet( String pathspec, Behaviour[] behaviour )
     {
@@ -71,7 +68,7 @@ public class BehaviourServlet
     private void behave( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException
     {
-        logger.debug( "behaving: " + req.getPathInfo() + ", " + Arrays.toString( behaviour ) );
+        Log.debug( "behaving: " + req.getPathInfo() + ", " + Arrays.toString( behaviour ) );
         try
         {
             Map<Object, Object> ctx = new HashMap<Object, Object>();

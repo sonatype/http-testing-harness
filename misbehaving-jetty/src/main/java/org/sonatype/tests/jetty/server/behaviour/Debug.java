@@ -19,8 +19,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -31,18 +30,18 @@ public class Debug
     implements Behaviour
 {
 
-    private static Logger logger = LoggerFactory.getLogger( Debug.class );
-
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        logger.debug( "context path " + request.getContextPath() );
-        logger.debug( "path info " + request.getPathInfo() );
+        Log.debug( "context path " + request.getContextPath() );
+        Log.debug( "path info " + request.getPathInfo() );
+
+        @SuppressWarnings( "rawtypes" )
         Enumeration headerNames = request.getHeaderNames();
         while ( headerNames.hasMoreElements() )
         {
             String element = headerNames.nextElement().toString();
-            logger.debug( element + ": " + request.getHeader( element ) );
+            Log.debug( element + ": " + request.getHeader( element ) );
         }
 
         return true;
