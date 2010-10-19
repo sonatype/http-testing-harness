@@ -57,11 +57,11 @@ public class JettyServerProvider
 
     protected boolean ssl;
 
-    private String host = "localhost";
+    private final String host = "localhost";
 
     private WebAppContext webappContext;
 
-    private String root = "default-server-root";
+    private final String root = "default-server-root";
 
     private String sslKeystorePassword;
 
@@ -114,7 +114,7 @@ public class JettyServerProvider
 
         initWebappContext( s );
 
-        addDefaultServices();
+		// addDefaultServices();
 
         return s;
     }
@@ -166,7 +166,7 @@ public class JettyServerProvider
         securityRealm.addUserToRole( user, "users" );
     }
 
-    private void addDefaultServices()
+	public void addDefaultServices()
     {
         addServlet( new ErrorServlet() );
         addBehaviour( "/content/*", new Content() );
@@ -210,7 +210,7 @@ public class JettyServerProvider
     private String resourceFile( String resource )
         throws Exception
     {
-        URL r = getClass().getResource( resource );
+        URL r = getClass().getResource( "/" + resource );
         if ( r == null )
         {
             throw new IllegalStateException( "cannot find resource: " + resource );

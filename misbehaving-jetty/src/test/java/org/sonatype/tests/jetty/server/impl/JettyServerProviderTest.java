@@ -39,13 +39,14 @@ import org.sonatype.tests.server.api.ServerProvider;
 public class JettyServerProviderTest
 {
     
-    private static ServerProvider provider;
+    private static JettyServerProvider provider;
 
     @BeforeClass
     public static void init()
         throws Exception
     {
         provider = new JettyServerProvider();
+        provider.addDefaultServices();
         provider.start();
     }
 

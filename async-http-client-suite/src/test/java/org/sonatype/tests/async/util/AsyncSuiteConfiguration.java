@@ -14,6 +14,8 @@ package org.sonatype.tests.async.util;
  */
 
 import org.sonatype.tests.jetty.runner.DefaultSuiteConfiguration;
+import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
+import org.sonatype.tests.server.api.ServerProvider;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
@@ -85,6 +87,16 @@ public class AsyncSuiteConfiguration
         throws Exception
     {
         return requestSettings( rb ).execute().get();
+    }
+
+    @Override
+    protected void configureProvider( ServerProvider provider )
+    {
+        super.configureProvider( provider );
+        if ( JettyServerProvider.class.isAssignableFrom( provider.getClass() ) )
+        {
+            ((JettyServerProvider)provider).addDefaultServices();
+        }
     }
 
 }

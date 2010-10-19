@@ -25,7 +25,6 @@ import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
 import org.sonatype.tests.jetty.server.behaviour.Redirect;
 import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
-import org.sonatype.tests.server.api.ServerProvider;
 
 import com.ning.http.client.MaxRedirectException;
 import com.ning.http.client.Response;
@@ -90,7 +89,8 @@ public class RedirectHttpTest
     public void testRedirectOtherServer()
         throws Exception
     {
-        ServerProvider p = new JettyServerProvider();
+        JettyServerProvider p = new JettyServerProvider();
+        p.addDefaultServices();
         p.start();
 
         provider().addBehaviour( "/external/*", new Redirect( "http://localhost:" + p.getPort() + "/content/foo" ) );
@@ -104,8 +104,9 @@ public class RedirectHttpTest
     public void testRedirectToSSL()
         throws Exception
     {
-        ServerProvider p = new JettyServerProvider();
+        JettyServerProvider p = new JettyServerProvider();
         p.setSSL( "keystore", "password" );
+        p.addDefaultServices();
         p.start();
 
         provider().addBehaviour( "/external/*", new Redirect( p.getUrl() + "/content/foo" ) );
@@ -119,7 +120,8 @@ public class RedirectHttpTest
     public void testTimeoutAfterRedirect()
         throws Exception
     {
-        ServerProvider p = new JettyServerProvider();
+        JettyServerProvider p = new JettyServerProvider();
+        p.addDefaultServices();
         p.start();
 
         provider().addBehaviour( "/external/*", new Redirect( "http://localhost:" + p.getPort() + "/content/foo" ),
