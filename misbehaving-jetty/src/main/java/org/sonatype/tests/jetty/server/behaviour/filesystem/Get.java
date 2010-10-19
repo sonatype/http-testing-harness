@@ -1,4 +1,4 @@
-package org.sonatype.tests.jetty.server.behaviour;
+package org.sonatype.tests.jetty.server.behaviour.filesystem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +27,7 @@ import org.sonatype.tests.server.api.Behaviour;
 /**
  * @author Benjamin Hanzelmann
  */
-public class FileServer
+public class Get
     implements Behaviour
 {
 
@@ -38,12 +38,12 @@ public class FileServer
         this.fpath = fpath;
     }
 
-    public FileServer()
+    public Get()
     {
         super();
     }
 
-    public FileServer( String path )
+    public Get( String path )
     {
         Log.debug( "Starting FileServer with base path " + new File( path ).getAbsolutePath() );
         this.fpath = path;

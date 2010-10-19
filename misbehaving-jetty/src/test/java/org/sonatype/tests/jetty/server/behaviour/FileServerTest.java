@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
+import org.sonatype.tests.jetty.server.behaviour.filesystem.Get;
 import org.sonatype.tests.jetty.server.util.FileUtil;
 
 /**
@@ -33,9 +34,9 @@ public class FileServerTest
 {
 
     @Override
-    public FileServer behaviour()
+    public Get behaviour()
     {
-        return (FileServer) super.behaviour();
+        return (Get) super.behaviour();
     }
 
     @Test
@@ -59,7 +60,7 @@ public class FileServerTest
     public void before()
         throws Exception
     {
-        behaviour( new FileServer() );
+        behaviour( new Get() );
         super.before();
     }
 
