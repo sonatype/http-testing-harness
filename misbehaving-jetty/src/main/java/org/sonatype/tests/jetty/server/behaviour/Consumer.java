@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -31,15 +30,13 @@ public class Consumer
     implements Behaviour
 {
 
-    private static Logger logger = LoggerFactory.getLogger( Consumer.class );
-
     private int total;
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
         int length = request.getContentLength();
-        logger.debug( "Consumer#execute: " + length );
+        Log.debug( "Consumer#execute: " + length );
 
         ServletInputStream in = request.getInputStream();
         int count;

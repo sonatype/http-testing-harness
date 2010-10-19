@@ -21,9 +21,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.proxy.AsyncProxyServlet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.TestServlet;
 
 import com.thoughtworks.xstream.core.util.Base64Encoder;
@@ -36,13 +34,11 @@ public class ProxyTestServlet
     implements TestServlet
 {
 
-    private Logger logger = LoggerFactory.getLogger( ProxyTestServlet.class );
-
     private String password = null;
 
     private String principal = null;
 
-    private boolean authenticated = false;
+    private final boolean authenticated = false;
 
     public String getPath()
     {
@@ -60,7 +56,7 @@ public class ProxyTestServlet
         throws ServletException, IOException
     {
         HttpServletRequest req = (HttpServletRequest) request;
-        logger.debug( req.getPathInfo() );
+        Log.debug( req.getPathInfo() );
         if ( principal != null )
         {
             String header = req.getHeader( "Proxy-Authorization" );
@@ -76,7 +72,7 @@ public class ProxyTestServlet
             {
                 String data = header.substring( "BASIC ".length() );
                 data = new String( new Base64Encoder().decode( data ) );
-                logger.debug( data );
+                Log.debug( data );
                 String[] creds = data.split( ":" );
 
                 if ( !creds[0].equals( principal ) || !creds[1].equals( password ) )
