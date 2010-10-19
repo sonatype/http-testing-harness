@@ -173,15 +173,6 @@
                     <extensions>true</extensions>
                     <configuration>
                         <manifestLocation>META-INF</manifestLocation>
-                        <instructions>
-                            <Import-Package>
-                                !org.sonatype.tests.*,
-                                *
-                            </Import-Package>
-                            <Export-Package>
-                                org.sonatype.tests.*
-                            </Export-Package>
-                        </instructions>
                     </configuration>
                     <executions>
                         <execution>
