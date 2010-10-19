@@ -13,9 +13,13 @@ package org.sonatype.tests.jetty.server.behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,28 +34,59 @@ public class Record
     implements Behaviour
 {
 
-    private Queue<HttpServletRequest> requests = new LinkedList<HttpServletRequest>();
+    private final Map<String, Map<String, String>> requestHeaders =
+        new ConcurrentHashMap<String, Map<String, String>>();
 
+    private final List<String> requests = Collections.synchronizedList( new LinkedList<String>() );
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
+    public Record()
     {
-        requests.add( request );
+        super();
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
+        add( request );
         return true;
     }
 
-    public Queue<HttpServletRequest> getRequests()
+    private void add( HttpServletRequest request )
+    {
+        String uri = request.getRequestURI();
+        String req = request.getMethod() + " " + uri;
+        requests.add( req );
+
+        String pathInfo = request.getPathInfo();
+        Map<String, String> list = requestHeaders.get( pathInfo );
+        if ( list == null )
+        {
+            list = new HashMap<String, String>();
+            requestHeaders.put( pathInfo, list );
+        }
+        @SuppressWarnings( "rawtypes" )
+        Enumeration headerNames = request.getHeaderNames();
+        while ( headerNames.hasMoreElements() )
+        {
+            String name = headerNames.nextElement().toString();
+            String value = request.getHeader( name );
+            list.put( name, value );
+        }
+    }
+
+    public Map<String, Map<String, String>> getRequestHeaders()
+    {
+        return requestHeaders;
+    }
+
+    public List<String> getRequests()
     {
         return requests;
     }
 
     public void clear()
     {
+        requestHeaders.clear();
         requests.clear();
     }
 
