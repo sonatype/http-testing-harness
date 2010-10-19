@@ -41,18 +41,13 @@ public class Consumer
         int length = request.getContentLength();
         logger.debug( "Consumer#execute: " + length );
 
-        // response.getOutputStream().close();
-
         ServletInputStream in = request.getInputStream();
         int count;
         byte[] b = new byte[16000];
-        do
+        while ( ( count = in.read( b ) ) != -1 )
         {
-            count = in.read( b );
             total += count;
         }
-        while ( count != -1 );
-        total += 1;
 
         Assert.assertEquals( "announced length does not match", length, total );
 

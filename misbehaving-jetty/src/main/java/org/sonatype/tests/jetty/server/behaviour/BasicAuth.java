@@ -14,6 +14,7 @@ package org.sonatype.tests.jetty.server.behaviour;
  */
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,11 +31,11 @@ public class BasicAuth
     implements Behaviour
 {
 
-    private String password;
+    private final String password;
 
-    private String user;
+    private final String user;
 
-    private int failed = 0;
+    private final AtomicInteger failed = new AtomicInteger( 0 );
 
     public BasicAuth( String user, String password )
     {
@@ -51,7 +52,7 @@ public class BasicAuth
             return true;
         }
 
-        failed++;
+        failed.incrementAndGet();
 
         response.sendError( 401, "not authorized" );
         return false;
@@ -59,7 +60,7 @@ public class BasicAuth
 
     public int getFailedCount()
     {
-        return failed;
+        return failed.get();
     }
 
 }

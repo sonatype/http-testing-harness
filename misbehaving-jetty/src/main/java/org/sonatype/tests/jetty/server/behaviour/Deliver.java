@@ -66,4 +66,9 @@ public class Deliver
         return false;
     }
 
+    public Deliver( File file )
+    {
+        this.file = file;
+    }
+
 }

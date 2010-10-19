@@ -16,6 +16,7 @@ package org.sonatype.tests.jetty.server.behaviour;
 import static org.sonatype.tests.jetty.server.behaviour.BehaviourHelper.*;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class Redirect
 
     private int count = -1;
 
-    private int redirectCount = 0;
+    private final AtomicInteger redirectCount = new AtomicInteger(0);
 
     private String content;
 
@@ -75,18 +76,18 @@ public class Redirect
             content = request.getPathInfo();
         }
 
-        if ( redirectCount < count )
+        if ( redirectCount.get() < count )
         {
             System.err.println( "Redirecting... " + redirectCount );
             response.setContentLength( 0 );
-            response.sendRedirect( String.valueOf( ++redirectCount ) );
+            response.sendRedirect( String.valueOf( redirectCount.incrementAndGet() ) );
             return false;
         }
 
         setContent( content, ctx );
 
         count = -1;
-        redirectCount = 0;
+        redirectCount.set( 0 );
         content = null;
 
         return true;

@@ -1,6 +1,7 @@
 package org.sonatype.tests.jetty.server.behaviour;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public class Fail
 
     private int numFailures = -1;
 
-    private int failed = 0;
+    private final AtomicInteger failed = new AtomicInteger( 0 );
 
     public Fail( int count, int code, String message )
     {
@@ -56,7 +57,7 @@ public class Fail
     {
         if ( numFailures == -1 )
         {
-            failed++;
+            failed.incrementAndGet();
             Log.debug( "Always failing: " + failed );
             response.sendError( code, message );
             return false;
@@ -64,7 +65,7 @@ public class Fail
 
         if ( count++ < numFailures )
         {
-            failed++;
+            failed.incrementAndGet();
             Log.debug( "failing " + count + " times: " + failed );
             response.sendError( code, message );
             return false;
@@ -76,7 +77,7 @@ public class Fail
 
     public int getFailedCount()
     {
-        return failed;
+        return failed.get();
     }
 
 }

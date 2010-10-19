@@ -13,9 +13,8 @@ package org.sonatype.tests.jetty.server.behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +31,7 @@ public class Provide
     implements Behaviour
 {
 
-
-    private Map<String, byte[]> db = new HashMap<String, byte[]>();
+    private final Map<String, byte[]> db = new ConcurrentHashMap<String, byte[]>();
 
     private int latency = -1;
 
