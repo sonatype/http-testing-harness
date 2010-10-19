@@ -269,7 +269,7 @@ public class JettyServerProvider
      */
     protected Connector sslConnector()
     {
-        SslSocketConnector connector = new SslSocketConnector();
+        SslSocketConnector connector = new FixedSslSocketConnector();
         String keystore;
         try
         {
