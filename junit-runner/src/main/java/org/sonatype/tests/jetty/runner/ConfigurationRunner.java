@@ -14,6 +14,7 @@ package org.sonatype.tests.jetty.runner;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.annotation.ElementType;
@@ -22,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,6 +63,8 @@ public class ConfigurationRunner
 {
 
     private List<Class<? extends SuiteConfigurator>> defaultConfiguratorClasses;
+
+    private List<SuiteConfigurator> configurators = new LinkedList<SuiteConfigurator>();
 
     public ConfigurationRunner( Class<?> klass )
         throws InitializationError
@@ -123,7 +127,7 @@ public class ConfigurationRunner
         {
             initDefaultConfiguratorClasses();
         }
-        List<SuiteConfigurator> configurators = new LinkedList<SuiteConfigurator>();
+        configurators = new LinkedList<SuiteConfigurator>();
         try
         {
             Configurators anno = getTestClass().getJavaClass().getAnnotation( Configurators.class );
@@ -136,7 +140,7 @@ public class ConfigurationRunner
             }
             else if ( list != null )
             {
-                configuratorClasses = getConfiguratorClasses( list.value() );
+                configuratorClasses = getConfiguratorClasses( list.getClass().getClassLoader(), list.value() );
             }
             else if ( defaultConfiguratorClasses != null )
             {
@@ -188,11 +192,17 @@ public class ConfigurationRunner
      */
     private void initDefaultConfiguratorClasses()
     {
-        defaultConfiguratorClasses = getConfiguratorClasses( "DefaultSuiteConfigurator.list" );
+        defaultConfiguratorClasses = getConfiguratorClasses( null, "DefaultSuiteConfigurator.list" );
     }
 
-    private List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( String... lists )
+    private List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( ClassLoader cl, String... lists )
     {
+        ClassLoader realCl = cl;
+        if ( realCl == null )
+        {
+            realCl = getClass().getClassLoader();
+        }
+
         List<Class<? extends SuiteConfigurator>> classes = new LinkedList<Class<? extends SuiteConfigurator>>();
 
         BufferedReader in = null;
@@ -200,7 +210,46 @@ public class ConfigurationRunner
         {
             for ( String list : lists )
             {
-                Enumeration<URL> resources = getClass().getClassLoader().getResources( list );
+                Enumeration<URL> resources = realCl.getResources( list );
+                if ( resources.hasMoreElements() == false )
+                {
+                    // fall back to file
+                    final File file = new File( list );
+                    if ( file.exists() )
+                    {
+                        resources = new Enumeration<URL>()
+                        {
+
+                            private boolean taken = false;
+
+                            public boolean hasMoreElements()
+                            {
+                                return !taken;
+                            }
+
+                            public URL nextElement()
+                            {
+                                try
+                                {
+                                    taken = true;
+                                    return file.toURI().toURL();
+                                }
+                                catch ( MalformedURLException e )
+                                {
+                                    String msg = "No resource found, tried to load list as file but: ";
+                                    throw new IllegalArgumentException( msg + e.getMessage(), e );
+                                }
+                            }
+
+                        };
+                    }
+                    else if ( cl != null )
+                    {
+                        throw new IllegalArgumentException( "Neither resource nor file found for configurator list: "
+                            + list );
+                    }
+
+                }
                 while ( resources.hasMoreElements() )
                 {
                     URL url = resources.nextElement();
@@ -210,19 +259,20 @@ public class ConfigurationRunner
                     {
                         @SuppressWarnings( "unchecked" )
                         Class<? extends SuiteConfigurator> cls =
-                            (Class<? extends SuiteConfigurator>) getClass().getClassLoader().loadClass( clsName );
+                            (Class<? extends SuiteConfigurator>) realCl.loadClass( clsName );
 
                         classes.add( cls );
                     }
                 }
             }
-            if ( classes.isEmpty() )
+            if ( classes.isEmpty() && cl != null )
             {
-                throw new IllegalStateException( "Cannot find default configurator list" );
+                throw new IllegalArgumentException( "Cannot find specified configurator list: "
+                    + Arrays.toString( lists ) );
             }
             return classes;
         }
-        catch ( Throwable t )
+        catch ( Exception t )
         {
             throw new RuntimeException( t );
         }
@@ -239,6 +289,18 @@ public class ConfigurationRunner
                 }
             }
         }
+    }
+
+    @SuppressWarnings( "deprecation" )
+    @Override
+    protected void validateInstanceMethods( List<Throwable> errors )
+    {
+        if ( computeTestMethods().isEmpty() && configurators != null && configurators.isEmpty() )
+        {
+            String msg = "No SuiteConfigurator found to run the tests with.";
+            errors.add( new Exception( msg ) );
+        }
+        super.validateInstanceMethods( errors );
     }
 
     @Override

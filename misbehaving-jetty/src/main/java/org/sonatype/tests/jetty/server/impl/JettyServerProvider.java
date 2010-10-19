@@ -210,9 +210,7 @@ public class JettyServerProvider
     private String resourceFile( String resource )
         throws Exception
     {
-        this.getClass().getClassLoader();
-        ClassLoader cl = ClassLoader.getSystemClassLoader();
-        URL r = cl.getResource( resource );
+        URL r = getClass().getResource( resource );
         if ( r == null )
         {
             throw new IllegalStateException( "cannot find resource: " + resource );
@@ -279,7 +277,7 @@ public class JettyServerProvider
         }
         catch ( Exception e )
         {
-            throw new IllegalStateException( e );
+            keystore = sslKeystore;
         }
 
         connector.setHost( host );
@@ -287,6 +285,7 @@ public class JettyServerProvider
         {
             connector.setPort( port );
         }
+
         connector.setKeystore( keystore );
         connector.setPassword( sslKeystorePassword );
         connector.setKeyPassword( sslKeystorePassword );
