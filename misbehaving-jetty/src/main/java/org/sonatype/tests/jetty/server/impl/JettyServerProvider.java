@@ -21,8 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.servlet.Filter;
-
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
@@ -34,8 +32,6 @@ import org.mortbay.jetty.security.ConstraintMapping;
 import org.mortbay.jetty.security.HashUserRealm;
 import org.mortbay.jetty.security.SecurityHandler;
 import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.servlet.FilterHolder;
-import org.mortbay.jetty.servlet.FilterMapping;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -387,30 +383,30 @@ public class JettyServerProvider
         return port;
     }
 
-    public void addFilter( String pathSpec, Filter filter )
-    {
-        if ( server == null )
-        {
-            try
-            {
-                initServer();
-            }
-            catch ( Exception e )
-            {
-                throw new IllegalStateException( e );
-            }
-        }
-
-        String name = filter.toString();
-
-        FilterMapping fm = new FilterMapping();
-        fm.setPathSpec( pathSpec );
-        fm.setFilterName( name );
-
-        FilterHolder fh = new FilterHolder( filter );
-        fh.setName( name );
-
-        webappContext.getServletHandler().addFilter( fh, fm );
-    }
+    // public void addFilter( String pathSpec, Filter filter )
+    // {
+    // if ( server == null )
+    // {
+    // try
+    // {
+    // initServer();
+    // }
+    // catch ( Exception e )
+    // {
+    // throw new IllegalStateException( e );
+    // }
+    // }
+    //
+    // String name = filter.toString();
+    //
+    // FilterMapping fm = new FilterMapping();
+    // fm.setPathSpec( pathSpec );
+    // fm.setFilterName( name );
+    //
+    // FilterHolder fh = new FilterHolder( filter );
+    // fh.setName( name );
+    //
+    // webappContext.getServletHandler().addFilter( fh, fm );
+    // }
 
 }

@@ -123,7 +123,6 @@ public class JettyProxyProvider
         this.real = real;
     }
 
-    @Override
     public void addFilter( String pathSpec, Filter filter )
     {
     }
