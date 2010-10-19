@@ -29,7 +29,7 @@ import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.resource.Resource;
 
 /**
- * A SSL connector that doesn't leak file handles when loading the key stores.
+ * A SSL connector that doesn't leak file handles when loading the key stores (cf. JETTY-1292).
  */
 class FixedSslSocketConnector
     extends SslSocketConnector
