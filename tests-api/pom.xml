@@ -14,4 +14,26 @@
             <version>2.5</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                    <configuration>
+                        <manifestLocation>META-INF</manifestLocation>
+                        <instructions>
+                            <Import-Package>
+                                !org.sonatype.tests.jetty.runner,
+                                *
+                            </Import-Package>
+                            <Export-Package>
+                                org.sonatype.tests.runner.api,
+                                org.sonatype.tests.server.api
+                            </Export-Package>
+                        </instructions>
+                    </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

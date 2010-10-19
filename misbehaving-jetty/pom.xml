@@ -16,15 +16,6 @@
     </properties>
 
     <name>Jetty Server Provider</name>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -66,12 +57,34 @@
             <version>2.5</version>
         </dependency>
         <dependency>
-        	<groupId>org.sonatype.http-test-case</groupId>
-        	<artifactId>junit-runner</artifactId>
+            <groupId>org.sonatype.http-test-case</groupId>
+            <artifactId>junit-runner</artifactId>
         </dependency>
         <dependency>
-        	<groupId>org.slf4j</groupId>
-        	<artifactId>slf4j-log4j12</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <manifestLocation>META-INF</manifestLocation>
+                    <instructions>
+                        <Import-Package>
+                            !org.sonatype.tests.jetty.server.*,
+                            *
+                        </Import-Package>
+                        <Export-Package>
+                            org.sonatype.tests.jetty.server.*
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
