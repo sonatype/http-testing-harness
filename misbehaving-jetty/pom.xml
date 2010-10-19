@@ -76,6 +76,7 @@
                     <instructions>
                         <Import-Package>
                             !org.sonatype.tests.jetty.server.*,
+                            org.sonatype.tests.jetty.runner,
                             *
                         </Import-Package>
                         <Export-Package>
