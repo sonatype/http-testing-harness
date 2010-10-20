@@ -64,8 +64,6 @@
                     <instructions>
                         <Import-Package>
                             !org.sonatype.tests.jetty.server.*,
-                            !org.slf4j.*,
-                            !org.mortbay.proxy.*,
                             org.sonatype.tests.jetty.runner,
                             *
                         </Import-Package>
