@@ -293,7 +293,7 @@ public class ProxyServlet
         throws IOException
     {
         int count = -1;
-        byte[] b = new byte[16000];
+        byte[] b = new byte[16 * 1024];
 
         while ( ( count = in.read( b ) ) != -1 )
         {

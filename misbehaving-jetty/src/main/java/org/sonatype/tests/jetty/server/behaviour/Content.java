@@ -28,10 +28,15 @@ public class Content
     implements Behaviour
 {
 
-    public void prepare( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
+    private String content;
 
+    public Content()
+    {
+    }
+
+    public Content( String content )
+    {
+        this.content = content;
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
@@ -41,7 +46,11 @@ public class Content
         String content = path;
         if ( "GET".equals( request.getMethod() ) )
         {
-            if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
+            if ( this.content != null )
+            {
+                content = this.content;
+            }
+            else if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
             {
                 content = ctx.get( Behaviour.Keys.CONTENT ).toString();
             }
