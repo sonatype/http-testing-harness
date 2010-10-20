@@ -19,9 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mortbay.jetty.security.B64Code;
 import org.sonatype.tests.server.api.Behaviour;
-
-import com.thoughtworks.xstream.core.util.Base64Encoder;
 
 /**
  * @author Benjamin Hanzelmann
@@ -46,7 +45,7 @@ public class BasicAuth
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String userPass = new Base64Encoder().encode( ( user + ":" + password ).getBytes( "UTF-8" ) );
+        String userPass = new String( B64Code.encode( ( user + ":" + password ).getBytes( "UTF-8" ) ) );
         if ( ( "Basic " + userPass ).equals( request.getHeader( "Authorization" ) ) )
         {
             return true;

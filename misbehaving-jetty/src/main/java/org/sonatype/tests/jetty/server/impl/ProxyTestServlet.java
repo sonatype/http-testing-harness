@@ -21,24 +21,21 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mortbay.jetty.security.B64Code;
 import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.TestServlet;
-
-import com.thoughtworks.xstream.core.util.Base64Encoder;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class ProxyTestServlet
-    extends AsyncProxyServlet
+    extends ProxyServlet
     implements TestServlet
 {
 
     private String password = null;
 
     private String principal = null;
-
-    private final boolean authenticated = false;
 
     public String getPath()
     {
@@ -71,7 +68,7 @@ public class ProxyTestServlet
             else
             {
                 String data = header.substring( "BASIC ".length() );
-                data = new String( new Base64Encoder().decode( data ) );
+                data = new String( B64Code.decode( data ) );
                 Log.debug( data );
                 String[] creds = data.split( ":" );
 

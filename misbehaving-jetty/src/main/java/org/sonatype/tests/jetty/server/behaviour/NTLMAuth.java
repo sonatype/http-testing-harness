@@ -27,10 +27,9 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mortbay.jetty.security.B64Code;
 import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
-
-import com.thoughtworks.xstream.core.util.Base64Encoder;
 
 /**
  * Incomplete, last step is not validated.
@@ -116,7 +115,7 @@ public class NTLMAuth
         byte[] ba = out.toByteArray();
         System.err.println( Arrays.toString( ba ) );
         System.err.println( ba.length );
-        String answer = new Base64Encoder().encode( ba );
+        String answer = new String( B64Code.encode( ba ) );
 
         Log.debug( "Sending type 2 message: " + "NTLM " + answer );
 

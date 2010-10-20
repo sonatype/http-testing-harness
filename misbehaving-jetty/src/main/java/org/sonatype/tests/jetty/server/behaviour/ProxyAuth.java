@@ -19,10 +19,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mortbay.jetty.security.B64Code;
 import org.mortbay.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
-
-import com.thoughtworks.xstream.core.util.Base64Encoder;
 
 /**
  * @author Benjamin Hanzelmann
@@ -70,7 +69,7 @@ public class ProxyAuth
         }
         else
         {
-            String expected = "BASIC " + new Base64Encoder().encode( ( user + ":" + password ).getBytes( "UTF-8" ) );
+            String expected = "BASIC " + new String( B64Code.encode( ( user + ":" + password ).getBytes( "UTF-8" ) ) );
             this.authorized = expected.equals( authHeader );
         }
         return this.authorized;
