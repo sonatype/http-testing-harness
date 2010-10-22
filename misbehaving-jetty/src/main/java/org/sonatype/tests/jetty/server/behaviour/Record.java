@@ -13,6 +13,7 @@ package org.sonatype.tests.jetty.server.behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -81,7 +82,9 @@ public class Record
 
     public List<String> getRequests()
     {
-        return requests;
+        List<String> list = new ArrayList<String>( requests );
+        Collections.reverse( list );
+        return list;
     }
 
     public void clear()
