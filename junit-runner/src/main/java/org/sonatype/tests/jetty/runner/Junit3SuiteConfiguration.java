@@ -25,16 +25,26 @@ public abstract class Junit3SuiteConfiguration
     extends TestCase
 {
     
-    private DefaultSuiteConfiguration cfg = new DefaultSuiteConfiguration()
+    private final DefaultSuiteConfiguration cfg = new DefaultSuiteConfiguration()
     {
     };
+
+    private ServerProvider provider;
+
+    private SuiteConfigurator configurator;
 
     @Override
     public void setUp()
         throws Exception
     {
         super.setUp();
-        cfg.before();
+        provider = configurator.provider();
+        if ( provider == null )
+        {
+            throw new IllegalArgumentException( "Configurator failed, provider is null." );
+        }
+        configureProvider( provider );
+        provider.start();
     }
 
     @Override
@@ -42,23 +52,15 @@ public abstract class Junit3SuiteConfiguration
         throws Exception
     {
         super.tearDown();
-        cfg.after();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return cfg.hashCode();
     }
 
     public void setConfigurator( SuiteConfigurator configurator )
     {
-        cfg.setConfigurator( configurator );
+        this.configurator = configurator;
     }
 
     public void configureProvider( ServerProvider provider )
     {
-        cfg.configureProvider( provider );
     }
 
     public String url()
@@ -68,7 +70,7 @@ public abstract class Junit3SuiteConfiguration
 
     public ServerProvider provider()
     {
-        return cfg.provider();
+        return provider;
     }
 
     public String url( String path, String... parts )
@@ -76,9 +78,4 @@ public abstract class Junit3SuiteConfiguration
         return cfg.url( path, parts );
     }
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        return cfg.equals( obj );
-    }
 }

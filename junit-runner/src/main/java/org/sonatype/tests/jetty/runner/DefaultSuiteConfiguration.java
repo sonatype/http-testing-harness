@@ -37,6 +37,7 @@ public abstract class DefaultSuiteConfiguration
 
     private static ServerProvider provider;
 
+
     public void setConfigurator( SuiteConfigurator configurator )
     {
         this.configurator = configurator;
@@ -117,6 +118,11 @@ public abstract class DefaultSuiteConfiguration
         {
             throw new IllegalArgumentException( e );
         }
+    }
+
+    public SuiteConfigurator configurator()
+    {
+        return configurator;
     }
 
 }
