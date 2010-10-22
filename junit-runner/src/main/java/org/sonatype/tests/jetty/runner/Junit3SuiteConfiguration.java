@@ -19,7 +19,22 @@ import org.sonatype.tests.runner.api.SuiteConfigurator;
 import org.sonatype.tests.server.api.ServerProvider;
 
 /**
+ * Junit3 test case supporting multiple server configurations for the test class.
+ * <p>
+ * Annotations are provided to configure the used configurations.
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators} takes {@link SuiteConfigurator} classes and
+ * uses them to run every test method. Every entry in
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList} will be loaded as a resource. The runner
+ * expects every line of the resource to be the class name of a SuiteConfigurator.
+ * {@link org.sonatype.tests.jetty.runner.ConfigurationRunner.IgnoreConfigurators} may be used to to ignore
+ * configurators from the list.
+ * <p>
+ * If none of the annotations are present, the runner tries to load a default list (
+ * <code>DefaultSuiteConfigurators.list</code>).
+ * 
  * @author Benjamin Hanzelmann
+ * @see SuiteConfigurator
+ * @see DefaultSuiteConfiguration
  */
 public abstract class Junit3SuiteConfiguration
     extends TestCase

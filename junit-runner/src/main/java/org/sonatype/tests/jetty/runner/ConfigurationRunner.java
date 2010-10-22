@@ -46,7 +46,6 @@ import org.sonatype.tests.runner.api.SuiteConfigurator;
  * @author Benjamin Hanzelmann
  * @see SuiteConfigurator
  * @see DefaultSuiteConfiguration
- * @see DefaultSuiteConfiguration
  */
 public class ConfigurationRunner
     extends BlockJUnit4ClassRunner

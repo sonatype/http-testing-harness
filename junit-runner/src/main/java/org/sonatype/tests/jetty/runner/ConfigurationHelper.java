@@ -35,11 +35,22 @@ import org.sonatype.tests.jetty.runner.ConfigurationRunner.IgnoreConfigurators;
 import org.sonatype.tests.runner.api.SuiteConfigurator;
 
 /**
+ * A Helper class for the tasks needed by {@link Junit3SuiteConfiguration} and {@link ConfigurationRunner} as well.
+ * 
  * @author Benjamin Hanzelmann
  */
 public class ConfigurationHelper
 {
 
+    /**
+     * Use the annotations for the given class to compute the configurators to use.
+     * 
+     * @param testClass the class to scan.
+     * @return the configured configurators.
+     * @see Configurators
+     * @see ConfiguratorList
+     * @see IgnoreConfigurators
+     */
     public static List<SuiteConfigurator> computeConfigurators( Class<?> testClass )
     {
         List<SuiteConfigurator> configurators = new LinkedList<SuiteConfigurator>();
@@ -78,6 +89,14 @@ public class ConfigurationHelper
         return configurators;
     }
 
+    /**
+     * Use the annotations for the given class to compute the configurators to ignore.
+     * 
+     * @param testClass the class to scan.
+     * @return the ignored configurators.
+     * @see ConfiguratorList
+     * @see IgnoreConfigurators
+     */
     public static Collection<?> computeIgnoredConfiguratorClasses( Class<?> testCls )
     {
 
@@ -93,11 +112,23 @@ public class ConfigurationHelper
         return ret;
     }
 
+    /**
+     * Load the default configurator list ("DefaultSuiteConfigurator.list").
+     * 
+     * @return the configurator classes defined in the list.
+     */
     public static List<Class<? extends SuiteConfigurator>> getDefaultConfiguratorClasses()
     {
         return getConfiguratorClasses( null, "DefaultSuiteConfigurator.list" );
     }
 
+    /**
+     * Load the configurators mentioned in the given lists, using the given classloader.
+     * 
+     * @param cl the classloader to use.
+     * @param lists the lists to read.
+     * @return the configurator classes.
+     */
     public static List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( ClassLoader cl, String... lists )
     {
         ClassLoader realCl = cl;
@@ -194,6 +225,14 @@ public class ConfigurationHelper
         }
     }
 
+    /**
+     * Create a {@link TestSuite} containing all tests for the given class. A test consists of a test method declared in
+     * or inherited by the class, combined with a {@link SuiteConfigurator}.
+     * 
+     * @param cls the class to scan.
+     * @return the test suite to run.
+     * @throws Exception when reflection fails with the given class.
+     */
     public static TestSuite suite( Class<? extends Junit3SuiteConfiguration> cls )
         throws Exception
     {
