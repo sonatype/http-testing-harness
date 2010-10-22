@@ -35,7 +35,6 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.sonatype.tests.jetty.server.behaviour.Content;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
 import org.sonatype.tests.jetty.server.behaviour.Redirect;
@@ -374,7 +373,7 @@ public class JettyServerProvider
         return webappContext;
     }
 
-    public void setWebappContext( WebAppContext webappContext )
+    public void setWebappContext( ServletContextHandler webappContext )
     {
         this.webappContext = webappContext;
     }
