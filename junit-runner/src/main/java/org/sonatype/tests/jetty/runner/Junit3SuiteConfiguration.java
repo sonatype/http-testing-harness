@@ -13,6 +13,10 @@ package org.sonatype.tests.jetty.runner;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+
 import junit.framework.TestCase;
 
 import org.sonatype.tests.runner.api.SuiteConfigurator;
@@ -39,11 +43,6 @@ import org.sonatype.tests.server.api.ServerProvider;
 public abstract class Junit3SuiteConfiguration
     extends TestCase
 {
-    
-    private final DefaultSuiteConfiguration cfg = new DefaultSuiteConfiguration()
-    {
-    };
-
     private ServerProvider provider;
 
     private SuiteConfigurator configurator;
@@ -80,7 +79,14 @@ public abstract class Junit3SuiteConfiguration
 
     public String url()
     {
-        return cfg.url();
+        try
+        {
+            return provider.getUrl().toExternalForm();
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new IllegalArgumentException( "Provider was set up with wrong url" );
+        }
     }
 
     public ServerProvider provider()
@@ -90,7 +96,23 @@ public abstract class Junit3SuiteConfiguration
 
     public String url( String path, String... parts )
     {
-        return cfg.url( path, parts );
+        try
+        {
+            String url = url() + "/" + path;
+            for ( String part : parts )
+            {
+                part = URLEncoder.encode( part, "UTF-8" );
+                url += "/" + part;
+            }
+
+            // logger.debug( "returning url... " + url );
+
+            return url;
+        }
+        catch ( UnsupportedEncodingException e )
+        {
+            throw new IllegalArgumentException( e );
+        }
     }
 
 }

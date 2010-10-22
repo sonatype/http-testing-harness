@@ -33,6 +33,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.sonatype.tests.jetty.server.behaviour.Content;
@@ -60,7 +61,7 @@ public class JettyServerProvider
 
     private final String host = "localhost";
 
-    private WebAppContext webappContext;
+    private ServletContextHandler webappContext;
 
     private final String root = "default-server-root";
 
@@ -154,7 +155,7 @@ public class JettyServerProvider
 
         securityHandler = new ConstraintSecurityHandler();
         securityHandler.setRealmName( "Test Server" );
-        securityHandler.addConstraintMapping( cm );
+        securityHandler.setConstraintMappings( new ConstraintMapping[] { cm } );
         securityHandler.setAuthMethod( authName );
         loginService = new HashLoginService( "Test Server" );
         securityHandler.setLoginService( loginService );
@@ -201,9 +202,12 @@ public class JettyServerProvider
     protected void initWebappContext( Server s )
         throws URISyntaxException
     {
-        this.webappContext = new WebAppContext();
+        this.webappContext = new ServletContextHandler();
+        // webappContext.setConfigurations( new Configuration[] { new WebXmlConfiguration(). } );
+        // webappContext.setContextPath( "/" );
+        // webappContext.setWar( "resources" );
+        // webappContext.setServletHandler( new ServletHandler() );
         webappContext.setContextPath( "/" );
-        webappContext.setWar( "target" );
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers( new Handler[] { webappContext, new DefaultHandler() } );
         s.setHandler( handlers );
@@ -365,7 +369,7 @@ public class JettyServerProvider
         return new URL( protocol, host, port, "" );
     }
 
-    public WebAppContext getWebappContext()
+    public ServletContextHandler getWebappContext()
     {
         return webappContext;
     }
