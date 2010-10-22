@@ -13,21 +13,11 @@ package org.sonatype.tests.jetty.runner;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Constructor;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -127,38 +117,8 @@ public class ConfigurationRunner
         {
             initDefaultConfiguratorClasses();
         }
-        configurators = new LinkedList<SuiteConfigurator>();
-        try
-        {
-            Configurators anno = getTestClass().getJavaClass().getAnnotation( Configurators.class );
-            ConfiguratorList list = getTestClass().getJavaClass().getAnnotation( ConfiguratorList.class );
-            List<Class<? extends SuiteConfigurator>> configuratorClasses =
-                new LinkedList<Class<? extends SuiteConfigurator>>();
-            if ( anno != null )
-            {
-                configuratorClasses = Arrays.asList( anno.value() );
-            }
-            else if ( list != null )
-            {
-                configuratorClasses = getConfiguratorClasses( list.getClass().getClassLoader(), list.value() );
-            }
-            else if ( defaultConfiguratorClasses != null )
-            {
-                configuratorClasses = defaultConfiguratorClasses;
-                configuratorClasses.removeAll( computeIgnoredConfiguratorClasses() );
-            }
-
-            for ( Class<? extends SuiteConfigurator> cfgClass : configuratorClasses )
-            {
-                Constructor<? extends SuiteConfigurator> con = cfgClass.getConstructor();
-                SuiteConfigurator configurator = con.newInstance();
-                configurators.add( configurator );
-            }
-        }
-        catch ( Throwable e )
-        {
-            throw new IllegalStateException( "Configuration error: " + e.getMessage(), e );
-        }
+        Class<?> testClass = getTestClass().getJavaClass();
+        configurators = ConfigurationHelper.computeConfigurators( testClass );
 
         List<FrameworkMethod> methods = super.computeTestMethods();
 
@@ -173,122 +133,12 @@ public class ConfigurationRunner
         return cfgMethods;
     }
 
-    private Collection<?> computeIgnoredConfiguratorClasses()
-    {
-        LinkedList<Class<? extends SuiteConfigurator>> ret = new LinkedList<Class<? extends SuiteConfigurator>>();
-        IgnoreConfigurators anno = getTestClass().getJavaClass().getAnnotation( IgnoreConfigurators.class );
-        if ( anno != null )
-        {
-            for ( Class<? extends SuiteConfigurator> cls : anno.value() )
-            {
-                ret.add( cls );
-            }
-        }
-        return ret;
-    }
-
     /**
      * Load list of configurators from all resources named "SuiteConfigurator.list". (One full class name per line.)
      */
     private void initDefaultConfiguratorClasses()
     {
-        defaultConfiguratorClasses = getConfiguratorClasses( null, "DefaultSuiteConfigurator.list" );
-    }
-
-    private List<Class<? extends SuiteConfigurator>> getConfiguratorClasses( ClassLoader cl, String... lists )
-    {
-        ClassLoader realCl = cl;
-        if ( realCl == null )
-        {
-            realCl = getClass().getClassLoader();
-        }
-
-        List<Class<? extends SuiteConfigurator>> classes = new LinkedList<Class<? extends SuiteConfigurator>>();
-
-        BufferedReader in = null;
-        try
-        {
-            for ( String list : lists )
-            {
-                Enumeration<URL> resources = realCl.getResources( list );
-                if ( resources.hasMoreElements() == false )
-                {
-                    // fall back to file
-                    final File file = new File( list );
-                    if ( file.exists() )
-                    {
-                        resources = new Enumeration<URL>()
-                        {
-
-                            private boolean taken = false;
-
-                            public boolean hasMoreElements()
-                            {
-                                return !taken;
-                            }
-
-                            public URL nextElement()
-                            {
-                                try
-                                {
-                                    taken = true;
-                                    return file.toURI().toURL();
-                                }
-                                catch ( MalformedURLException e )
-                                {
-                                    String msg = "No resource found, tried to load list as file but: ";
-                                    throw new IllegalArgumentException( msg + e.getMessage(), e );
-                                }
-                            }
-
-                        };
-                    }
-                    else if ( cl != null )
-                    {
-                        throw new IllegalArgumentException( "Neither resource nor file found for configurator list: "
-                            + list );
-                    }
-
-                }
-                while ( resources.hasMoreElements() )
-                {
-                    URL url = resources.nextElement();
-                    in = new BufferedReader( new InputStreamReader( url.openStream() ) );
-                    String clsName;
-                    while ( ( clsName = in.readLine() ) != null )
-                    {
-                        @SuppressWarnings( "unchecked" )
-                        Class<? extends SuiteConfigurator> cls =
-                            (Class<? extends SuiteConfigurator>) realCl.loadClass( clsName );
-
-                        classes.add( cls );
-                    }
-                }
-            }
-            if ( classes.isEmpty() && cl != null )
-            {
-                throw new IllegalArgumentException( "Cannot find specified configurator list: "
-                    + Arrays.toString( lists ) );
-            }
-            return classes;
-        }
-        catch ( Exception t )
-        {
-            throw new RuntimeException( t );
-        }
-        finally
-        {
-            if ( in != null )
-            {
-                try
-                {
-                    in.close();
-                }
-                catch ( IOException e )
-                {
-                }
-            }
-        }
+        defaultConfiguratorClasses = ConfigurationHelper.getDefaultConfiguratorClasses();
     }
 
     @SuppressWarnings( "deprecation" )

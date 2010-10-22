@@ -90,7 +90,7 @@ public class AsyncSuiteConfiguration
     }
 
     @Override
-    protected void configureProvider( ServerProvider provider )
+    public void configureProvider( ServerProvider provider )
     {
         super.configureProvider( provider );
         if ( JettyServerProvider.class.isAssignableFrom( provider.getClass() ) )

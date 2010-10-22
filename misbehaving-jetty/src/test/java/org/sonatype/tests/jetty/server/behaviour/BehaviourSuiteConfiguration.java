@@ -75,7 +75,7 @@ public abstract class BehaviourSuiteConfiguration
     }
 
     @Override
-    protected void configureProvider( ServerProvider provider )
+    public void configureProvider( ServerProvider provider )
     {
         super.configureProvider( provider );
         ( (JettyServerProvider) provider() ).addDefaultServices();

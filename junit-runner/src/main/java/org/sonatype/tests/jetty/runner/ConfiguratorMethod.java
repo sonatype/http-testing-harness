@@ -41,7 +41,7 @@ class ConfiguratorMethod
     @Override
     public String getName()
     {
-        return String.format( "%s (%s)", super.getName(), configurator.getName() );
+        return String.format( "%s %s", super.getName(), configurator.getName() );
     }
 
     @Override

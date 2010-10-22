@@ -31,8 +31,6 @@ public abstract class DefaultSuiteConfiguration
     implements SuiteConfiguration
 {
 
-	// protected Logger logger = LoggerFactory.getLogger( this.getClass() );
-
     private boolean doClassInit = true;
 
     private SuiteConfigurator configurator;
@@ -51,6 +49,10 @@ public abstract class DefaultSuiteConfiguration
         if ( doClassInit )
         {
             provider = configurator.provider();
+            if ( provider == null )
+            {
+                throw new IllegalArgumentException( "Configurator failed, provider is null." );
+            }
             doClassInit = false;
             configureProvider( provider );
             provider.start();
@@ -58,7 +60,7 @@ public abstract class DefaultSuiteConfiguration
     }
 
 
-    protected void configureProvider( ServerProvider provider )
+    public void configureProvider( ServerProvider provider )
     {
     }
 
@@ -79,7 +81,7 @@ public abstract class DefaultSuiteConfiguration
         }
     }
 
-    protected String url()
+    public String url()
     {
         try
         {
@@ -91,12 +93,12 @@ public abstract class DefaultSuiteConfiguration
         }
     }
 
-    protected ServerProvider provider()
+    public ServerProvider provider()
     {
         return provider;
     }
 
-    protected String url( String path, String... parts )
+    public String url( String path, String... parts )
     {
         try
         {
@@ -115,7 +117,6 @@ public abstract class DefaultSuiteConfiguration
         {
             throw new IllegalArgumentException( e );
         }
-
     }
 
 }
