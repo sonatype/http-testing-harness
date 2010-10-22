@@ -27,8 +27,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.jetty.security.B64Code;
-import org.mortbay.log.Log;
+import org.eclipse.jetty.http.security.B64Code;
+import org.eclipse.jetty.util.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**

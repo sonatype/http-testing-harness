@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.log.Log;
+import org.eclipse.jetty.util.log.Log;
 import org.sonatype.tests.server.api.Behaviour;
 
 /*

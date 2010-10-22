@@ -25,8 +25,9 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.resource.Resource;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.util.resource.Resource;
+
 
 /**
  * A SSL connector that doesn't leak file handles when loading the key stores (cf. JETTY-1292).
@@ -85,7 +86,9 @@ class FixedSslSocketConnector
         KeyManager[] keyManagers = null;
         InputStream keystoreInputStream = null;
         if ( _keystore != null )
+        {
             keystoreInputStream = Resource.newResource( _keystore ).getInputStream();
+        }
         KeyStore keyStore = KeyStore.getInstance( _keystoreType );
         keyStore.load( keystoreInputStream, _password == null ? null : _password.toString().toCharArray() );
         close( keystoreInputStream );
@@ -97,7 +100,9 @@ class FixedSslSocketConnector
         TrustManager[] trustManagers = null;
         InputStream truststoreInputStream = null;
         if ( _truststore != null )
+        {
             truststoreInputStream = Resource.newResource( _truststore ).getInputStream();
+        }
         KeyStore trustStore = KeyStore.getInstance( _truststoreType );
         trustStore.load( truststoreInputStream, _trustPassword == null ? null : _trustPassword.toString().toCharArray() );
         close( truststoreInputStream );

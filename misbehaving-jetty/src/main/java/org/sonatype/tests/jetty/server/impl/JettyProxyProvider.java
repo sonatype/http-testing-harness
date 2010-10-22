@@ -18,8 +18,8 @@ import java.net.URL;
 
 import javax.servlet.Filter;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
 import org.sonatype.tests.server.api.ServerProvider;
 
 /**

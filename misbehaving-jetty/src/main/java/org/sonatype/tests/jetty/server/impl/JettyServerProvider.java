@@ -21,19 +21,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.DefaultHandler;
-import org.mortbay.jetty.handler.HandlerCollection;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.security.Constraint;
-import org.mortbay.jetty.security.ConstraintMapping;
-import org.mortbay.jetty.security.HashUserRealm;
-import org.mortbay.jetty.security.SecurityHandler;
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.http.security.Constraint;
+import org.eclipse.jetty.http.security.Password;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.sonatype.tests.jetty.server.behaviour.Content;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
 import org.sonatype.tests.jetty.server.behaviour.Redirect;
@@ -67,9 +68,9 @@ public class JettyServerProvider
 
     private String sslKeystore;
 
-    private SecurityHandler securityHandler;
+    private ConstraintSecurityHandler securityHandler;
 
-    private HashUserRealm securityRealm;
+    private HashLoginService loginService;
 
     public JettyServerProvider()
         throws Exception
@@ -151,19 +152,20 @@ public class JettyServerProvider
         cm.setConstraint( constraint );
         cm.setPathSpec( pathSpec );
 
-        securityHandler = new SecurityHandler();
+        securityHandler = new ConstraintSecurityHandler();
+        securityHandler.setRealmName( "Test Server" );
+        securityHandler.addConstraintMapping( cm );
+        securityHandler.setAuthMethod( authName );
+        loginService = new HashLoginService( "Test Server" );
+        securityHandler.setLoginService( loginService );
 
-        securityRealm = new HashUserRealm( "Test Server" );
 
-        securityHandler.setUserRealm( securityRealm );
-        securityHandler.setConstraintMappings( new ConstraintMapping[] { cm } );
-        webappContext.addHandler( securityHandler );
+        webappContext.setSecurityHandler( securityHandler );
     }
 
     public void addUser( String user, String password )
     {
-        securityRealm.put( user, password );
-        securityRealm.addUserToRole( user, "users" );
+        loginService.putUser( user, new Password( password ), new String[] { "users" } );
     }
 
 	public void addDefaultServices()
