@@ -115,7 +115,7 @@ public class JettyServerProvider
 
         initWebappContext( s );
 
-		// addDefaultServices();
+        // addDefaultServices();
 
         return s;
     }
@@ -146,7 +146,8 @@ public class JettyServerProvider
         constraint.setName( authName );
 
         constraint.setRoles( new String[] { "users" } );
-        constraint.setAuthenticate( true );
+        // bug in jetty 7, DIGEST authenticate must be set opposite
+        constraint.setAuthenticate( !"DIGEST".equals( authName ) );
 
         ConstraintMapping cm = new ConstraintMapping();
         cm.setConstraint( constraint );
@@ -156,9 +157,10 @@ public class JettyServerProvider
         securityHandler.setRealmName( "Test Server" );
         securityHandler.setConstraintMappings( new ConstraintMapping[] { cm } );
         securityHandler.setAuthMethod( authName );
+        securityHandler.setStrict( true );
+
         loginService = new HashLoginService( "Test Server" );
         securityHandler.setLoginService( loginService );
-
 
         webappContext.setSecurityHandler( securityHandler );
     }
@@ -168,7 +170,7 @@ public class JettyServerProvider
         loginService.putUser( user, new Password( password ), new String[] { "users" } );
     }
 
-	public void addDefaultServices()
+    public void addDefaultServices()
     {
         addServlet( new ErrorServlet() );
         addBehaviour( "/content/*", new Content() );
