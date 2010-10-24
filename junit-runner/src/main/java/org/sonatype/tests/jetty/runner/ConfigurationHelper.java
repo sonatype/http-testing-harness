@@ -72,8 +72,9 @@ public class ConfigurationHelper
             else if ( defaultConfiguratorClasses != null )
             {
                 configuratorClasses = defaultConfiguratorClasses;
-                configuratorClasses.removeAll( computeIgnoredConfiguratorClasses( testClass ) );
             }
+
+            configuratorClasses.removeAll( computeIgnoredConfiguratorClasses( testClass ) );
 
             for ( Class<? extends SuiteConfigurator> cfgClass : configuratorClasses )
             {
