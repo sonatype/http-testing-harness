@@ -72,6 +72,7 @@
                 <configuration>
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
+                    	<Bundle-SymbolicName>org.sonatype.http_test_case.server_provider</Bundle-SymbolicName> 
                         <Import-Package>
                             !org.sonatype.tests.jetty.server.*,
                             org.sonatype.tests.jetty.runner,

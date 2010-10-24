@@ -40,6 +40,7 @@
                     <configuration>
                         <manifestLocation>META-INF</manifestLocation>
                         <instructions>
+                        <Bundle-SymbolicName>org.sonatype.http_test_case.junit_runner</Bundle-SymbolicName>
                             <Import-Package>
                                 !org.sonatype.tests.jetty.runner,
                                 *
