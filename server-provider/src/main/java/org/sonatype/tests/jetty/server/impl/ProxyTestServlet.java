@@ -44,6 +44,7 @@ public class ProxyTestServlet
 
     public ProxyTestServlet( String principal, String password )
     {
+        super( "localhost" );
         this.principal = principal;
         this.password = password;
     }

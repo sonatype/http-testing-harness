@@ -11,6 +11,12 @@ public class HttpProxyAuthConfigurator
     extends DefaultSuiteConfigurator
 {
 
+    @Override
+    public String getName()
+    {
+        return super.getName() + " AUTHPROXY ";
+    }
+
     private JettyProxyProvider provider;
 
     public HttpProxyAuthConfigurator()

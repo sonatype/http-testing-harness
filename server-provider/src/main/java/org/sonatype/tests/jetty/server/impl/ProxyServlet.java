@@ -58,9 +58,21 @@ public class ProxyServlet
         skipHeaders.add( "upgrade" );
     }
 
+
     private ServletConfig config;
 
     private ServletContext context;
+
+    private String host = null;
+
+    public ProxyServlet()
+    {
+    }
+
+    public ProxyServlet( String realHost )
+    {
+        this.host = realHost;
+    }
 
     public void init( ServletConfig config )
         throws ServletException
@@ -90,7 +102,9 @@ public class ProxyServlet
             {
                 uri += "?" + request.getQueryString();
             }
-            URL url = new URL( request.getScheme(), request.getServerName(), request.getServerPort(), uri );
+            URL url =
+                new URL( request.getScheme(), host != null ? host : request.getServerName(), request.getServerPort(),
+                         uri );
 
             context.log( "URL=" + url );
 

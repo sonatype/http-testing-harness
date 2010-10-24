@@ -10,6 +10,12 @@ import org.sonatype.tests.server.api.ServerProvider;
 public class HttpProxyConfigurator
     extends DefaultSuiteConfigurator
 {
+    @Override
+    public String getName()
+    {
+        return super.getName() + " PROXY ";
+    }
+
     private JettyProxyProvider provider;
 
     public HttpProxyConfigurator()
