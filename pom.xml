@@ -253,8 +253,8 @@
     </build>
 
     <modules>
-        <module>misbehaving-jetty</module>
-        <module>async-http-client-suite</module>
+        <module>server-provider</module>
+        <module>ahc-tests</module>
         <module>junit-runner</module>
         <module>tests-api</module>
     </modules>
