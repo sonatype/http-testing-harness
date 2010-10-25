@@ -52,6 +52,12 @@ public abstract class Junit3SuiteConfiguration
         throws Exception
     {
         super.setUp();
+        if ( provider != null )
+        {
+            provider.stop();
+            provider = null;
+        }
+
         provider = configurator.provider();
         if ( provider == null )
         {
@@ -66,6 +72,7 @@ public abstract class Junit3SuiteConfiguration
         throws Exception
     {
         super.tearDown();
+        provider.stop();
     }
 
     public void setConfigurator( SuiteConfigurator configurator )
