@@ -66,7 +66,7 @@ public class NonPreemptiveAuthSimpleGetTest
 
     @Override
     @Test
-    @Ignore( "Yields 401, credentials not sent to the redirect?" )
+    // @Ignore( "Yields 401, credentials not sent to the redirect?" )
     public void testRedirect()
         throws Exception
     {
