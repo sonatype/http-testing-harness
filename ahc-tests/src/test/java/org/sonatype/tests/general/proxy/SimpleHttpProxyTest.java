@@ -162,4 +162,24 @@ public class SimpleHttpProxyTest
         realServer.addUser( "u", "p" );
         realServer.start();
     }
+
+    @Test
+    @Ignore( "TODO: think about whether this scenario makes sense" )
+    // TODO: think about whether this scenario makes sense" )
+    public void testSslBehindProxy()
+        throws Exception
+    {
+        realServer.stop();
+        realServer.setSSL( "keystore", "password" );
+        realServer.initServer();
+        realServer.addDefaultServices();
+        realServer.start();
+
+        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
+
+        BoundRequestBuilder rb = client().prepareGet( realServer.getUrl() + "/content/foo" );
+        Response response = execute( rb );
+
+        assertEquals( "foo", response.getResponseBody() );
+    }
 }
