@@ -16,10 +16,9 @@ package org.sonatype.tests.jetty.server.impl;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.servlet.Filter;
-
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.sonatype.tests.server.api.Behaviour;
 import org.sonatype.tests.server.api.ServerProvider;
 
 /**
@@ -103,6 +102,7 @@ public class JettyProxyProvider
     @Override
     public void addAuthentication( String pathSpec, String authName )
     {
+        real.addAuthentication( pathSpec, authName );
     }
 
     /* (non-Javadoc)
@@ -111,6 +111,7 @@ public class JettyProxyProvider
     @Override
     public void addUser( String user, String password )
     {
+        real.addUser( user, password );
     }
 
     public ServerProvider getRealServer()
@@ -123,8 +124,10 @@ public class JettyProxyProvider
         this.real = real;
     }
 
-    public void addFilter( String pathSpec, Filter filter )
+    @Override
+    public void addBehaviour( String pathspec, Behaviour... behaviour )
     {
+        real.addBehaviour( pathspec, behaviour );
     }
 
 }
