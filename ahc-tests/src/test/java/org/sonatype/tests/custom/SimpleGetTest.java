@@ -138,8 +138,6 @@ public class SimpleGetTest
     }
 
     /**
-     * Fails for authenticated.
-     * 
      * @throws Exception
      */
     @Test

@@ -14,6 +14,8 @@ package org.sonatype.tests.async.util;
  */
 
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonatype.tests.jetty.runner.DefaultSuiteConfiguration;
 import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
 import org.sonatype.tests.server.api.ServerProvider;
@@ -104,67 +106,67 @@ public class AsyncSuiteConfiguration
     }
 
     public static void setUpLogger() {
-        final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("UnitTest");
         LogManager.setProvider(new LoggerProvider() {
     
             public com.ning.http.client.logging.Logger getLogger(final Class<?> clazz) {
                 return new com.ning.http.client.logging.Logger() {
+
+                    Logger log = LoggerFactory.getLogger( "com.ning.http.client" );
     
                     public boolean isDebugEnabled() {
-                        return true;
+                        return log.isDebugEnabled();
                     }
     
                     public void debug(final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
+                        log.debug( msg, msgArgs );
                     }
     
                     public void debug(final Throwable t) {
-                        t.printStackTrace();
+                        log.debug( t.getMessage(), t );
                     }
     
                     public void debug(final Throwable t, final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
-                        t.printStackTrace();
+                        log.debug( msg, msgArgs );
+                        log.debug( t.getMessage(), t );
                     }
     
                     public void info(final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
+                        log.info( msg, msgArgs );
                     }
     
                     public void info(final Throwable t) {
-                        t.printStackTrace();
+                        log.info( t.getMessage(), t );
                     }
     
                     public void info(final Throwable t, final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
-                        t.printStackTrace();
+                        log.info( msg, msgArgs );
+                        log.info( t.getMessage(), t );
                     }
     
                     public void warn(final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
+                        log.warn( msg, msgArgs );
                     }
     
                     public void warn(final Throwable t) {
-                        t.printStackTrace();
+                        log.warn( t.getMessage(), t );
                     }
     
                     public void warn(final Throwable t, final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
-                        t.printStackTrace();
+                        log.warn( msg, msgArgs );
+                        log.warn( t.getMessage(), t );
                     }
     
                     public void error(final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
-    
+                        log.error( msg, msgArgs );
                     }
     
                     public void error(final Throwable t) {
-                        t.printStackTrace();
+                        log.error( t.getMessage(), t );
                     }
     
                     public void error(final Throwable t, final String msg, final Object... msgArgs) {
-                        System.out.println(msg);
-                        t.printStackTrace();
+                        log.error( msg, msgArgs );
+                        log.error( t.getMessage(), t );
                     }
                 };
             }
