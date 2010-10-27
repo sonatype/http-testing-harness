@@ -5,9 +5,6 @@ import org.junit.runner.RunWith;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList;
 
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-import com.ning.http.client.AsyncHttpClientConfig.Builder;
-
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -40,18 +37,5 @@ public class PreemptiveAuthSimpleGetTest
         super.before();
         setAuthentication( "user", "password", true );
     }
-
-    @Override
-    protected Builder settings( Builder rb )
-    {
-        return super.settings( rb );
-    }
-
-    @Override
-    protected BoundRequestBuilder requestSettings( BoundRequestBuilder rb )
-    {
-        return super.requestSettings( rb );
-    }
-
 
 }
