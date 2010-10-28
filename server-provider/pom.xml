@@ -44,10 +44,6 @@
             <artifactId>junit-runner</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
-        <dependency>
         	<groupId>org.eclipse.jetty</groupId>
         	<artifactId>jetty-servlet</artifactId>
         	<version>7.0.0.v20091005</version>
@@ -61,6 +57,11 @@
         	<groupId>org.eclipse.jetty</groupId>
         	<artifactId>jetty-webapp</artifactId>
         	<version>7.0.0.v20091005</version>
+        </dependency>
+        <dependency>
+        	<groupId>ch.qos.logback</groupId>
+        	<artifactId>logback-classic</artifactId>
+        	<version>0.9.26</version>
         </dependency>
     </dependencies>
 
