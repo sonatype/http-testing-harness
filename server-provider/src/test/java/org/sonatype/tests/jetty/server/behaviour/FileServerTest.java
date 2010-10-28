@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
@@ -30,13 +29,14 @@ import org.sonatype.tests.jetty.server.util.FileUtil;
  */
 @RunWith( ConfigurationRunner.class )
 public class FileServerTest
-    extends BehaviourSuiteConfiguration
+    extends BehaviourSuiteConfiguration<Get>
 {
+    private Get get = new Get();
 
     @Override
     public Get behaviour()
     {
-        return (Get) super.behaviour();
+        return get;
     }
 
     @Test
@@ -53,15 +53,6 @@ public class FileServerTest
         Assert.assertArrayEquals( "foo".getBytes( "UTF-8" ), ba );
 
         f.delete();
-    }
-
-    @Override
-    @Before
-    public void before()
-        throws Exception
-    {
-        behaviour( new Get() );
-        super.before();
     }
 
 }

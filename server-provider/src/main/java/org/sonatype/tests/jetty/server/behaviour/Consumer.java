@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.log.Log;
-import org.junit.Assert;
 import org.sonatype.tests.server.api.Behaviour;
 
 /**
@@ -40,13 +39,12 @@ public class Consumer
 
         ServletInputStream in = request.getInputStream();
         int count;
-        byte[] b = new byte[16000];
+        byte[] b = new byte[8092];
         while ( ( count = in.read( b ) ) != -1 )
         {
             total += count;
         }
-
-        Assert.assertEquals( "announced length does not match", length, total );
+        Log.debug( String.format( "read total %s (expecting %s)", total, length ) );
 
         return true;
     }

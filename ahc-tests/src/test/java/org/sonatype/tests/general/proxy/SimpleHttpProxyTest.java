@@ -15,7 +15,6 @@ package org.sonatype.tests.general.proxy;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,17 +39,6 @@ import com.ning.http.client.Response;
 public class SimpleHttpProxyTest
     extends AsyncSuiteConfiguration
 {
-
-    protected JettyServerProvider realServer;
-
-    @Override
-    @Before
-    public void before()
-        throws Exception
-    {
-        super.before();
-        realServer = (JettyServerProvider) ( (JettyProxyProvider) provider() ).getRealServer();
-    }
 
     @Override
     protected Builder settings( Builder rb )
@@ -87,8 +75,6 @@ public class SimpleHttpProxyTest
     {
         authServer( "BASIC" );
 
-        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
-
         setAuthentication( "u", "p", false );
         BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
         Response response = execute( rb );
@@ -102,8 +88,6 @@ public class SimpleHttpProxyTest
     {
         authServer( "DIGEST" );
 
-        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
-
         BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
         rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "p" ).setUsePreemptiveAuth( false ).build() );
         Response response = execute( rb );
@@ -111,19 +95,13 @@ public class SimpleHttpProxyTest
         assertEquals( "something", response.getResponseBody() );
     }
 
-    /**
-     * FIXME investigate failure
-     */
     @Test
-    @Ignore( "Fails after changes for eclipse-commons" )
     public void testBasicAuthFailBehindProxy()
         throws Exception
     {
         authServer( "BASIC" );
 
         JettyProxyProvider proxy = (JettyProxyProvider) provider();
-        proxy.setRealServer( realServer );
-
         setAuthentication( "u", "wrong", false );
         BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
         Response response = execute( rb );
@@ -133,17 +111,11 @@ public class SimpleHttpProxyTest
         assertEquals( 401, response.getStatusCode() );
     }
 
-    /**
-     * FIXME investigate failure
-     */
     @Test
-    @Ignore( "Fails after changes for eclipse-commons" )
     public void testDigestAuthFailBehindProxy()
         throws Exception
     {
         authServer( "DIGEST" );
-
-        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
 
         BoundRequestBuilder rb = client().prepareGet( url( "content", "something" ) );
         rb.setRealm( new Realm.RealmBuilder().setPrincipal( "u" ).setPassword( "wrong" ).setUsePreemptiveAuth( false ).build() );
@@ -155,12 +127,13 @@ public class SimpleHttpProxyTest
     private void authServer( String method )
         throws Exception
     {
-        realServer.stop();
-        realServer.initServer();
-        realServer.addDefaultServices();
-        realServer.addAuthentication( "/*", method );
-        realServer.addUser( "u", "p" );
-        realServer.start();
+        JettyServerProvider p = (JettyServerProvider) provider();
+        p.stop();
+        p.initServer();
+        p.addDefaultServices();
+        p.addAuthentication( "/*", method );
+        p.addUser( "u", "p" );
+        p.start();
     }
 
     @Test
@@ -169,15 +142,15 @@ public class SimpleHttpProxyTest
     public void testSslBehindProxy()
         throws Exception
     {
-        realServer.stop();
-        realServer.setSSL( "keystore", "password" );
-        realServer.initServer();
-        realServer.addDefaultServices();
-        realServer.start();
+        setTimeout( 10000 );
+        JettyServerProvider p = (JettyServerProvider) provider();
+        p.stop();
+        p.setSSL( "keystore", "password" );
+        p.initServer();
+        p.addDefaultServices();
+        p.start();
 
-        ( (JettyProxyProvider) provider() ).setRealServer( realServer );
-
-        BoundRequestBuilder rb = client().prepareGet( realServer.getUrl() + "/content/foo" );
+        BoundRequestBuilder rb = client().prepareGet( "https://proxiedhost.invalid/content/foo" );
         Response response = execute( rb );
 
         assertEquals( "foo", response.getResponseBody() );

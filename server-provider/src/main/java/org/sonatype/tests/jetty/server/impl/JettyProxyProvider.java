@@ -1,5 +1,17 @@
 package org.sonatype.tests.jetty.server.impl;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.sonatype.tests.jetty.server.behaviour.ProxyAuth;
+
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -13,13 +25,6 @@ package org.sonatype.tests.jetty.server.impl;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.sonatype.tests.server.api.Behaviour;
-import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
@@ -27,107 +32,76 @@ import org.sonatype.tests.server.api.ServerProvider;
  */
 public class JettyProxyProvider
     extends JettyServerProvider
-    implements ServerProvider
 {
 
-    private ServerProvider real;
+    /**
+     * @author Benjamin Hanzelmann
+     */
+    public class ProxyAuthHandler
+        extends ConstraintSecurityHandler
+    {
+        @Override
+        public void handle( String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response )
+            throws IOException, ServletException
+        {
+            try
+            {
+                boolean authenticated = true;
+                if ( user != null )
+                {
+                    authenticated = new ProxyAuth( user, password ).execute( request, response, null );
+                }
+
+                if ( authenticated )
+                {
+                    super.handle( target, baseRequest, request, response );
+                }
+                else
+                {
+                    baseRequest.setHandled( true );
+                }
+            }
+            catch ( Exception e )
+            {
+                throw new ServletException( e.getMessage(), e );
+            }
+        }
+
+    }
 
     private String password;
 
     private String user;
 
-    public JettyProxyProvider( ServerProvider real )
+    public JettyProxyProvider()
         throws Exception
     {
-        this.real = real;
     }
 
-    public JettyProxyProvider( ServerProvider realServer, String user, String pw )
+    public JettyProxyProvider( String user, String pw )
         throws Exception
     {
-        this( realServer );
         this.user = user;
         this.password = pw;
     }
 
     @Override
-    public void stop()
-        throws Exception
-    {
-        real.stop();
-        super.stop();
-    }
-
-    @Override
-    public void start()
-        throws Exception
-    {
-        real.start();
-        super.start();
-    }
-
-    @Override
-    public void initServer()
-        throws Exception
-    {
-        server = new Server();
-
-        Connector connector;
-        if ( ssl )
-        {
-            connector = sslConnector();
-        }
-        else
-        {
-            connector = connector();
-        }
-        server.addConnector( connector );
-
-        initWebappContext( server );
-
-        addServlet( new ProxyTestServlet( user, password ) );
-
-    }
-
-    @Override
-    public URL getUrl()
-        throws MalformedURLException
-    {
-        return real.getUrl();
-    }
-
-    /* (non-Javadoc)
-     * @see org.sonatype.tests.jetty.server.api.ServerProvider#addAuthentication(java.lang.String)
-     */
-    @Override
     public void addAuthentication( String pathSpec, String authName )
     {
-        real.addAuthentication( pathSpec, authName );
-    }
-
-    /* (non-Javadoc)
-     * @see org.sonatype.tests.jetty.server.api.ServerProvider#addUser(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void addUser( String user, String password )
-    {
-        real.addUser( user, password );
-    }
-
-    public ServerProvider getRealServer()
-    {
-        return real;
-    }
-
-    public void setRealServer( ServerProvider real )
-    {
-        this.real = real;
+        setSecurityHandler( new ProxyAuthHandler() );
+        super.addAuthentication( pathSpec, authName );
     }
 
     @Override
-    public void addBehaviour( String pathspec, Behaviour... behaviour )
+    protected void initWebappContext( Server s )
+        throws URISyntaxException
     {
-        real.addBehaviour( pathspec, behaviour );
+        super.initWebappContext( s );
+        if ( user != null )
+        {
+            ProxyAuthHandler pah = new ProxyAuthHandler();
+            getWebappContext().setSecurityHandler( pah );
+        }
     }
 
 }

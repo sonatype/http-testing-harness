@@ -30,7 +30,6 @@ import javax.net.ssl.X509TrustManager;
 
 import org.junit.Before;
 import org.sonatype.tests.jetty.runner.DefaultSuiteConfiguration;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
 import org.sonatype.tests.server.api.Behaviour;
 import org.sonatype.tests.server.api.ServerProvider;
 
@@ -38,7 +37,7 @@ import org.sonatype.tests.server.api.ServerProvider;
  * @author Benjamin Hanzelmann
  *
  */
-public abstract class BehaviourSuiteConfiguration
+public abstract class BehaviourSuiteConfiguration<T extends Behaviour>
     extends DefaultSuiteConfiguration
 {
     public static final class CustomTrustManager
@@ -62,7 +61,7 @@ public abstract class BehaviourSuiteConfiguration
 
     }
 
-    protected Behaviour behaviour;
+    protected T behaviour;
     
     @Override
     @Before
@@ -71,32 +70,25 @@ public abstract class BehaviourSuiteConfiguration
     {
         trustAllHttpsCertificates();
         super.before();
-        provider().addBehaviour( "/*", behaviour() );
     }
 
     @Override
     public void configureProvider( ServerProvider provider )
     {
         super.configureProvider( provider );
-        ( (JettyServerProvider) provider() ).addDefaultServices();
+        provider.addBehaviour( "/*", behaviour() );
+        // ( (JettyServerProvider) provider() ).addDefaultServices();
     }
 
-    protected Behaviour behaviour()
-    {
-        return behaviour;
-    }
+    protected abstract T behaviour();
 
-    protected void behaviour( Behaviour behaviour )
-    {
-        this.behaviour = behaviour;
-    }
 
     protected byte[] fetch( String url )
         throws IOException, MalformedURLException
     {
         InputStream in = new URL( url ).openStream();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] b = new byte[16000];
+        byte[] b = new byte[16 * 1024];
         int count = -1;
         while ( ( count = in.read( b ) ) != -1 )
         {

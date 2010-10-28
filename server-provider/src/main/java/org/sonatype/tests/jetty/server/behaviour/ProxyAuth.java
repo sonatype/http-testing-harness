@@ -62,6 +62,7 @@ public class ProxyAuth
         String authHeader = request.getHeader( "Proxy-Authorization" );
         if ( authHeader == null )
         {
+            response.setContentType( "text/html" );
             response.addHeader( "Proxy-Authenticate", "BASIC realm=\"Test Proxy\"" );
             response.sendError( 407, "proxy auth required" );
             challenged = true;
@@ -69,8 +70,8 @@ public class ProxyAuth
         }
         else
         {
-            String expected = "BASIC " + new String( B64Code.encode( ( user + ":" + password ).getBytes( "UTF-8" ) ) );
-            this.authorized = expected.equals( authHeader );
+            String expected = new String( B64Code.encode( ( user + ":" + password ).getBytes( "UTF-8" ) ) );
+            this.authorized = expected.equals( authHeader.split( " ", 2 )[1] );
         }
         return this.authorized;
     }

@@ -46,6 +46,7 @@ public class Content
         String content = path;
         if ( "GET".equals( request.getMethod() ) )
         {
+            response.setContentType( "text/plain" );
             if ( this.content != null )
             {
                 content = this.content;

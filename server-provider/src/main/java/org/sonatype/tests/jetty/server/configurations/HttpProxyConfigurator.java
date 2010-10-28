@@ -1,7 +1,6 @@
 package org.sonatype.tests.jetty.server.configurations;
 
 import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
 import org.sonatype.tests.server.api.ServerProvider;
 
 /**
@@ -22,8 +21,7 @@ public class HttpProxyConfigurator
     {
         try
         {
-            ServerProvider realServer = new JettyServerProvider();
-            provider = new JettyProxyProvider( realServer );
+            provider = new JettyProxyProvider();
         }
         catch ( Exception e )
         {

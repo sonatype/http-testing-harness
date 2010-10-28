@@ -127,4 +127,10 @@ public class BehaviourServlet
     {
         behave( req, resp );
     }
+
+    @Override
+    public String toString()
+    {
+        return getClass().getSimpleName() + " " + Arrays.toString( behaviour );
+    }
 }

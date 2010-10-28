@@ -68,7 +68,7 @@ public class JettyServerProvider
 
     private String sslKeystore;
 
-    private ConstraintSecurityHandler securityHandler;
+    private ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 
     private HashLoginService loginService;
 
@@ -153,7 +153,6 @@ public class JettyServerProvider
         cm.setConstraint( constraint );
         cm.setPathSpec( pathSpec );
 
-        securityHandler = new ConstraintSecurityHandler();
         securityHandler.setRealmName( "Test Server" );
         securityHandler.setConstraintMappings( new ConstraintMapping[] { cm } );
         securityHandler.setAuthMethod( authName );
@@ -387,6 +386,16 @@ public class JettyServerProvider
     public int getPort()
     {
         return port;
+    }
+
+    public ConstraintSecurityHandler getSecurityHandler()
+    {
+        return securityHandler;
+    }
+
+    public void setSecurityHandler( ConstraintSecurityHandler securityHandler )
+    {
+        this.securityHandler = securityHandler;
     }
 
     // public void addFilter( String pathSpec, Filter filter )

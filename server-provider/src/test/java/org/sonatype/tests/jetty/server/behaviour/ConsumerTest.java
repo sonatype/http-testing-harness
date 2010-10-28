@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
@@ -35,6 +34,7 @@ import org.sonatype.tests.jetty.server.configurations.DefaultSuiteConfigurator;
 public class ConsumerTest
     extends BehaviourSuiteConfiguration<Consumer>
 {
+    private Consumer consumer = new Consumer();
 
     @Test
     public void testConsumer()
@@ -51,6 +51,7 @@ public class ConsumerTest
             pattern[i] = (byte) ( 33 + i );
         }
         int count = 1024 * 1024 * 16;
+        count = 16;
         int targetSize = count * pattern.length;
         
         conn.setFixedLengthStreamingMode( targetSize );
@@ -68,17 +69,17 @@ public class ConsumerTest
 
         out.close();
 
+        assertEquals( 200, conn.getResponseCode() );
         conn.disconnect();
 
+        assertEquals( total, targetSize );
         assertEquals( total, behaviour().getTotal() );
     }
 
+
     @Override
-    @Before
-    public void before()
-        throws Exception
+    protected Consumer behaviour()
     {
-        behaviour( new Consumer() );
-        super.before();
+        return consumer;
     }
 }
