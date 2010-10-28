@@ -1,14 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>http-test-case-parent</artifactId>
-        <groupId>org.sonatype.http-test-case</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <groupId>com.sonatype</groupId>
+        <artifactId>sonatype</artifactId>
+        <version>8</version>
     </parent>
 
+    <groupId>org.sonatype.tests</groupId>
+    <version>0.1-SNAPSHOT</version>
     <artifactId>ahc-tests</artifactId>
 
     <name>AsyncHttpClient Test Suite</name>
+    <description>
+        Testsuite for the AsyncHttpClient
+    </description>
+
+    <properties>
+        <harness.version>0.1-SNAPSHOT</harness.version>
+    </properties>   
+
     <dependencies>
         <dependency>
             <groupId>com.ning</groupId>
@@ -22,8 +32,8 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
                 <exclusion>
-                	<artifactId>slf4j-api</artifactId>
-                	<groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -32,7 +42,7 @@
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
             <type>jar</type>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -42,22 +52,24 @@
         <dependency>
             <groupId>org.sonatype.http-test-case</groupId>
             <artifactId>server-provider</artifactId>
+            <version>${harness.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sonatype.http-test-case</groupId>
             <artifactId>junit-runner</artifactId>
+            <version>${harness.version}</version>
         </dependency>
         <dependency>
-        	<groupId>javax.servlet</groupId>
-        	<artifactId>servlet-api</artifactId>
-        	<version>2.5</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
         </dependency>
         <dependency>
-        	<groupId>ch.qos.logback</groupId>
-        	<artifactId>logback-classic</artifactId>
-        	<version>0.9.26</version>
-        	<type>jar</type>
-        	<scope>compile</scope>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>0.9.26</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

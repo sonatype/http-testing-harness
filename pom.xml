@@ -14,10 +14,9 @@
     <packaging>pom</packaging>
 
     <name>http-test-case Parent Module</name>
+
     <url>http://sonatype.org</url>
-    <description>
-        The parent and aggregator for the http connector test case.
-    </description>
+    <description>Parent and aggregator for the testing harness for HTTP clients.</description>
     <inceptionYear>2010</inceptionYear>
 
     <organization>
@@ -31,9 +30,29 @@
         <url>git@github.com:sonatype/jetty-test-case.git</url>
     </scm>
 
+    <ciManagement>
+        <system>Hudson</system>
+        <url>https://ci.sonatype.com/job/http-test-case/</url>
+    </ciManagement>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <modules>
+        <module>server-provider</module>
+        <module>junit-runner</module>
+        <module>tests-api</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <dependencyManagement>
         <dependencies>
@@ -235,28 +254,8 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<groupId>org.codehaus.plexus</groupId>-->
-                    <!--<artifactId>plexus-component-metadata</artifactId>-->
-                    <!--<version>1.5.5</version>-->
-                    <!--<executions>-->
-                        <!--<execution>-->
-                            <!--<id>generate-components-xml</id>-->
-                            <!--<goals>-->
-                                <!--<goal>generate-metadata</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
             </plugins>
         </pluginManagement>
     </build>
-
-    <modules>
-        <module>server-provider</module>
-        <module>ahc-tests</module>
-        <module>junit-runner</module>
-        <module>tests-api</module>
-    </modules>
 
 </project>
