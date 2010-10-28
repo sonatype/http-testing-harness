@@ -25,7 +25,6 @@
                         <instructions>
                         <Bundle-SymbolicName>org.sonatype.http_test_case.tests_api</Bundle-SymbolicName>
                             <Import-Package>
-                                !org.sonatype.tests.jetty.runner,
                                 *
                             </Import-Package>
                             <Export-Package>

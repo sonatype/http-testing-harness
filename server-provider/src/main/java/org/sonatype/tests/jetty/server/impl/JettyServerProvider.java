@@ -200,9 +200,6 @@ public class JettyServerProvider
         webappContext.getServletHandler().addServletWithMapping( new ServletHolder( servlet ), servlet.getPath() );
     }
 
-    /**
-     * @throws URISyntaxException
-     */
     protected void initWebappContext( Server s )
         throws URISyntaxException
     {
@@ -260,9 +257,6 @@ public class JettyServerProvider
         }
     }
 
-    /**
-     * @return
-     */
     protected Connector connector()
     {
         SelectChannelConnector connector = new SelectChannelConnector();
@@ -274,9 +268,6 @@ public class JettyServerProvider
         return connector;
     }
 
-    /**
-     * @return
-     */
     protected Connector sslConnector()
     {
         SslSocketConnector connector = new FixedSslSocketConnector();
