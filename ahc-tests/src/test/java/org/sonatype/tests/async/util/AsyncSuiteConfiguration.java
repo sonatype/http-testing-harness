@@ -39,6 +39,8 @@ public class AsyncSuiteConfiguration
 
     protected Realm realm;
 
+    private int timeout = 2000;
+
     protected AsyncHttpClient client()
     {
         return new AsyncHttpClient( settings( builder() ).build() );
@@ -64,9 +66,9 @@ public class AsyncSuiteConfiguration
     protected Builder settings( Builder rb )
     {
         rb.setFollowRedirects( true );
-        rb.setConnectionTimeoutInMs( 200 );
-        rb.setIdleConnectionTimeoutInMs( 2000 );
-        rb.setRequestTimeoutInMs( 2000 );
+        rb.setConnectionTimeoutInMs( timeout );
+        rb.setIdleConnectionTimeoutInMs( timeout );
+        rb.setRequestTimeoutInMs( timeout );
         rb.setMaximumNumberOfRedirects( 5 );
         return rb;
     }
@@ -178,6 +180,11 @@ public class AsyncSuiteConfiguration
         throws Exception
     {
         setUpLogger();
+    }
+
+    public void setTimeout( int timeout )
+    {
+        this.timeout = timeout;
     }
 
 }
