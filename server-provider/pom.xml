@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.sonatype.http-test-case</groupId>
+        <groupId>org.sonatype.http-testing-harness</groupId>
         <version>0.1-SNAPSHOT</version>
-        <artifactId>http-test-case-parent</artifactId>
+        <artifactId>hth-parent</artifactId>
     </parent>
 
     <artifactId>server-provider</artifactId>
@@ -25,23 +25,19 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.sonatype.http-test-case</groupId>
-            <artifactId>tests-api</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.sonatype.http-testing-harness</groupId>
+            <artifactId>hth-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.http-testing-harness</groupId>
+            <artifactId>junit-runner</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.http-test-case</groupId>
-            <artifactId>junit-runner</artifactId>
         </dependency>
         <dependency>
         	<groupId>org.eclipse.jetty</groupId>
