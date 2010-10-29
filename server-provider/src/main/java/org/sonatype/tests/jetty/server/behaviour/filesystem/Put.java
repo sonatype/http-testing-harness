@@ -38,6 +38,7 @@ public class Put
             code = 201;
         }
 
+        fsFile.getParentFile().mkdirs();
         fsFile.createNewFile();
 
         if ( !fsFile.canWrite() )
