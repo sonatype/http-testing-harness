@@ -23,7 +23,6 @@
                     <configuration>
                         <manifestLocation>META-INF</manifestLocation>
                         <instructions>
-                        <Bundle-SymbolicName>org.sonatype.http_test_case.tests_api</Bundle-SymbolicName>
                             <Import-Package>
                                 *
                             </Import-Package>
