@@ -16,7 +16,7 @@
     </description>
 
     <properties>
-        <harness.version>0.1-SNAPSHOT</harness.version>
+        <harness.version>0.1</harness.version>
     </properties>   
 
     <dependencies>
@@ -50,12 +50,12 @@
             <version>1.6.1</version>
         </dependency>
         <dependency>
-            <groupId>org.sonatype.http-test-case</groupId>
+            <groupId>org.sonatype.http-testing-harness</groupId>
             <artifactId>server-provider</artifactId>
             <version>${harness.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.sonatype.http-test-case</groupId>
+            <groupId>org.sonatype.http-testing-harness</groupId>
             <artifactId>junit-runner</artifactId>
             <version>${harness.version}</version>
         </dependency>
