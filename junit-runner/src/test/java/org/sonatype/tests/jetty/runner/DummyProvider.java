@@ -72,7 +72,7 @@ class DummyProvider
 
     }
 
-    public void addUser( String user, String password )
+    public void addUser( String user, Object password )
     {
 
     }

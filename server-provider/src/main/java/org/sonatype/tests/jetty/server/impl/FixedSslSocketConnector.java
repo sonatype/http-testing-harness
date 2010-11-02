@@ -66,6 +66,14 @@ class FixedSslSocketConnector
     protected SSLServerSocketFactory createFactory()
         throws Exception
     {
+
+        return getSslContext().getServerSocketFactory();
+    }
+
+    @Override
+    protected SSLContext createSSLContext()
+        throws Exception
+    {
         String _protocol = getProtocol();
         String _provider = getProvider();
         String _secureRandomAlgorithm = getSecureRandomAlgorithm();
@@ -118,8 +126,8 @@ class FixedSslSocketConnector
             _provider == null ? SSLContext.getInstance( _protocol ) : SSLContext.getInstance( _protocol, _provider );
 
         context.init( keyManagers, trustManagers, secureRandom );
-
-        return context.getServerSocketFactory();
+        setSslContext( context );
+        return context;
     }
 
     private void close( InputStream is )

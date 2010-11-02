@@ -56,9 +56,10 @@ public interface ServerProvider
     void addAuthentication( String pathSpec, String authName );
 
     /**
-     * Add the given user and password to the servers security realm.
+     * Add the given user and password to the servers security realm. The password may be any type supported by the
+     * authentication type (e.g. a certificate for client side certificate auth).
      */
-    void addUser( String user, String password );
+    void addUser( String user, Object password );
 
     // void addFilter( String pathSpec, Filter filter );
 }
