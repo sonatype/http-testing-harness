@@ -32,4 +32,10 @@ public class CertAuthSuiteConfigurator
         return p;
     }
 
+    @Override
+    public String getName()
+    {
+        return super.getName() + " CERT-AUTH";
+    }
+
 }
