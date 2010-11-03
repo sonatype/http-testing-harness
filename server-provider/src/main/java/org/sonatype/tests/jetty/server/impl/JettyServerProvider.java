@@ -351,7 +351,6 @@ public class JettyServerProvider
         {
             InputStream in = null;
             FileOutputStream out = null;
-            // TODO make sure to not leak files -> shutdown handler
             File target = FileUtil.createTempFile( "" );
             try
             {
