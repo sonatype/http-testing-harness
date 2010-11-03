@@ -30,7 +30,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonatype.tests.jetty.server.behaviour.Content;
 import org.sonatype.tests.jetty.server.behaviour.Pause;
-import org.sonatype.tests.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
@@ -94,7 +93,7 @@ public class JettyServerProviderTest
     public void testBehaviour()
         throws Exception
     {
-        provider.addBehaviour( "behave", new Pause( 500 ), new Content() );
+        provider.addBehaviour( "behave", new Pause( 550 ), new Content() );
 
         long begin = System.currentTimeMillis();
         URL url = new URL( "http://localhost:" + provider.getPort() + "/behave/baby" );
