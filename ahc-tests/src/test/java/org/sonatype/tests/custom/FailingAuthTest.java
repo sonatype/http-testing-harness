@@ -20,11 +20,7 @@ import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner;
 import org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.IgnoreConfigurators;
-import org.sonatype.tests.jetty.server.configurations.DigestAuthSslSuiteConfigurator;
-import org.sonatype.tests.jetty.server.configurations.DigestAuthSuiteConfigurator;
 
-import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.Response;
 
 /**
@@ -33,8 +29,6 @@ import com.ning.http.client.Response;
  */
 @RunWith( ConfigurationRunner.class )
 @ConfiguratorList( "AuthSuiteConfigurator.list" )
-// AHC Bug: Will always use Basic-Auth
-@IgnoreConfigurators( { DigestAuthSuiteConfigurator.class, DigestAuthSslSuiteConfigurator.class } )
 public class FailingAuthTest
     extends AsyncSuiteConfiguration
 {
@@ -63,12 +57,6 @@ public class FailingAuthTest
         Response response = executeGet( url );
 
         assertEquals( 401, response.getStatusCode() );
-    }
-
-    @Override
-    protected Builder settings( Builder rb )
-    {
-        return super.settings( rb ).setRequestTimeoutInMs( 60000 ).setConnectionTimeoutInMs( 60000 ).setIdleConnectionTimeoutInMs( 60000 );
     }
 
 }
