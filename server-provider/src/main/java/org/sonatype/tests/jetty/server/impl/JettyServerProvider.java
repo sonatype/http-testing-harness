@@ -166,7 +166,6 @@ public class JettyServerProvider
         constraint.setName( authName );
 
         constraint.setRoles( new String[] { "users" } );
-        // bug in jetty 7, DIGEST authenticate must be set opposite
         constraint.setAuthenticate( true );
 
         ConstraintMapping cm = new ConstraintMapping();
@@ -178,7 +177,8 @@ public class JettyServerProvider
         securityHandler.setStrict( true );
         if ( "DIGEST".equals( authName ) )
         {
-            securityHandler.setAuthenticator( new DigestAuthenticator() );
+            // bug in jetty 7, DIGEST authenticate must be set opposite
+            securityHandler.setAuthenticator( new FixedDigestAuthenticator() );
         }
 
         if ( authName.endsWith( "CERT" ) )
