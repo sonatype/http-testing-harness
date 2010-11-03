@@ -16,7 +16,7 @@
     </description>
 
     <properties>
-        <harness.version>0.1</harness.version>
+        <harness.version>0.2-SNAPSHOT</harness.version>
     </properties>   
 
     <dependencies>
