@@ -113,7 +113,7 @@ public class JettyServerProviderTest
         byte[] buffer = new byte[5];
         int read = -1;
         
-        URL url = new URL( "http://localhost:" + provider.getPort() + "/stutter/210/one/two/three" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/stutter/250/one/two/three" );
         URLConnection conn = url.openConnection();
         long begin = System.currentTimeMillis();
         InputStream in = conn.getInputStream();
@@ -123,7 +123,7 @@ public class JettyServerProviderTest
 
         String value = new String( buffer, 0, read, "UTF-8" );
         assertEquals( "one", value );
-        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 200ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 3, read );
 
         begin = System.currentTimeMillis();
@@ -131,7 +131,7 @@ public class JettyServerProviderTest
         end = System.currentTimeMillis();
         value = new String( buffer, 0, read, "UTF-8" );
         assertEquals( "two", value );
-        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 200ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 3, read );
 
         begin = System.currentTimeMillis();
@@ -140,7 +140,7 @@ public class JettyServerProviderTest
         value = new String( buffer, 0, read, "UTF-8" );
 
         assertEquals( "three", value );
-        assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 200 );
+        assertTrue( "expected 200ms, real delta: " + ( end - begin ), end - begin >= 200 );
         assertEquals( 5, read );
     }
 
@@ -148,7 +148,7 @@ public class JettyServerProviderTest
     public void testPause()
         throws Exception
     {
-        URL url = new URL( "http://localhost:" + provider.getPort() + "/pause/500/content" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/pause/550/content" );
         URLConnection conn = url.openConnection();
 
         long begin = System.currentTimeMillis();
@@ -179,7 +179,7 @@ public class JettyServerProviderTest
     public void testTimeout()
         throws Exception
     {
-        URL url = new URL( "http://localhost:" + provider.getPort() + "/timeout/500/content" );
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/timeout/550/content" );
 
         long begin = System.currentTimeMillis();
         URLConnection conn = url.openConnection();
