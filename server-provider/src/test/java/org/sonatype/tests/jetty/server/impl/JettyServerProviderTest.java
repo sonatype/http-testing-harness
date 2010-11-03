@@ -157,7 +157,7 @@ public class JettyServerProviderTest
         String line = r.readLine();
         long end = System.currentTimeMillis();
         r.close();
-        assertEquals( "500/content", line );
+        assertEquals( "550/content", line );
         assertTrue( "expected 500ms, real delta: " + ( end - begin ), end - begin >= 500 );
     }
 
