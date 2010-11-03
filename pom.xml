@@ -28,7 +28,7 @@
     <scm>
         <connection>scm:git:git@github.com:sonatype/jetty-test-case.git</connection>
         <developerConnection>scm:git:git@github.com:sonatype/jetty-test-case.git</developerConnection>
-        <url>git@github.com:sonatype/jetty-test-case.git</url>
+        <url>http://github.com/sonatype/jetty-test-case</url>
     </scm>
 
     <ciManagement>
