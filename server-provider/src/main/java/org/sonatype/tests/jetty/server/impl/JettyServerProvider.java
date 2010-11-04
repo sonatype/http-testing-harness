@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -75,7 +76,7 @@ public class JettyServerProvider
 
     protected boolean ssl;
 
-    private final String host = "localhost";
+    private final String host = InetAddress.getLocalHost().getCanonicalHostName();
 
     private ServletContextHandler webappContext;
 
@@ -205,6 +206,14 @@ public class JettyServerProvider
         webappContext.setSecurityHandler( securityHandler );
     }
 
+    /**
+     * Add the given user to the LoginService. If the password object is a {@link CertificateHolder},
+     * {@link #addCertificate(String, CertificateHolder)} is called. For any other class, the String representation of
+     * the object is used as a password.
+     * 
+     * @param user the username, may not be {@code null}.
+     * @param password The password to use, may not be {@code null}.
+     */
     public void addUser( String user, Object password )
     {
         if ( password instanceof CertificateHolder )
@@ -228,6 +237,12 @@ public class JettyServerProvider
         }
     }
 
+    /**
+     * Adds the given certificate to the keystore for use with AUTH-CERT.
+     * 
+     * @param alias The alias to use for the key in the keystore.
+     * @param certHolder The key and certificate to use.
+     */
     public void addCertificate( String alias, CertificateHolder certHolder )
         throws Exception
     {
