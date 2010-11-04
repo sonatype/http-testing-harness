@@ -282,6 +282,11 @@ public class JettyServerProvider
 	
                         addUser( username, String.valueOf( credential ) );
                     }
+                    else
+                    {
+                        throw new IllegalArgumentException( "Unsupported Certificate Type (need X509Certificate): "
+                            + certHolder.getCertificate().getClass() );
+                    }
                 }
                 finally
                 {
