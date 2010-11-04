@@ -1,10 +1,5 @@
 package org.sonatype.tests.jetty.runner;
 
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
-import org.sonatype.tests.server.api.ServerProvider;
-
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -18,28 +13,21 @@ import org.sonatype.tests.server.api.ServerProvider;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import org.sonatype.tests.runner.api.SuiteConfigurator;
+import org.sonatype.tests.server.api.ServerProvider;
 
-/**
- * @author Benjamin Hanzelmann
- *
- */
-@RunWith( ConfigurationRunner.class )
-@Configurators( TestConfigurator.class )
-public class Junit4Support
-    extends DefaultSuiteConfiguration
+public class CopyOfTestConfigurator
+    implements SuiteConfigurator
 {
-    static DummyProvider p = new DummyProvider();
 
-    @org.junit.Test
-    public void succeed()
+    public ServerProvider provider()
     {
+        return Junit4Support.p;
+    }
 
-    }
-    
-    @Override
-    public void configureProvider( ServerProvider provider )
+    public String getName()
     {
-        Assert.assertEquals( p, provider );
-        super.configureProvider( provider );
+        return "CopyTest";
     }
+
 }

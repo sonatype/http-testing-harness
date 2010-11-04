@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>hth-parent</artifactId>
@@ -24,6 +25,11 @@
             <groupId>org.sonatype.http-testing-harness</groupId>
             <artifactId>hth-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>5.14.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -31,19 +37,33 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                    <configuration>
-                        <manifestLocation>META-INF</manifestLocation>
-                        <instructions>
-                            <Import-Package>
-                                !org.sonatype.tests.jetty.runner,
-                                *
-                            </Import-Package>
-                            <Export-Package>
-                                org.sonatype.tests.jetty.runner
-                            </Export-Package>
-                        </instructions>
-                    </configuration>
+                <configuration>
+                    <manifestLocation>META-INF</manifestLocation>
+                    <instructions>
+                        <Import-Package>
+                            !org.sonatype.tests.jetty.runner,
+                            *
+                        </Import-Package>
+                        <Export-Package>
+                            org.sonatype.tests.jetty.runner
+                        </Export-Package>
+                    </instructions>
+                </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <properties>
+                        <property>
+                            <name>transformer</name>
+                            <value>org.sonatype.tests.jetty.runner.SuiteNameTransformer</value>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

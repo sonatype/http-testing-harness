@@ -1,10 +1,5 @@
 package org.sonatype.tests.jetty.runner;
 
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
-import org.sonatype.tests.server.api.ServerProvider;
-
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -19,27 +14,41 @@ import org.sonatype.tests.server.api.ServerProvider;
  */
 
 
+import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
+import org.testng.annotations.Factory;
+import org.testng.annotations.Test;
+
 /**
  * @author Benjamin Hanzelmann
- *
  */
-@RunWith( ConfigurationRunner.class )
-@Configurators( TestConfigurator.class )
-public class Junit4Support
+@Test
+@Configurators( { TestConfigurator.class, CopyOfTestConfigurator.class } )
+public class TestNGTest
     extends DefaultSuiteConfiguration
 {
-    static DummyProvider p = new DummyProvider();
 
-    @org.junit.Test
-    public void succeed()
+    @Factory
+    public Object[] configurationTests()
+        throws Exception
     {
+        return ConfigurationHelper.testNGFactory( getClass() );
+    }
 
-    }
-    
-    @Override
-    public void configureProvider( ServerProvider provider )
+    public void testRunner1()
     {
-        Assert.assertEquals( p, provider );
-        super.configureProvider( provider );
+        System.err.println( "test" );
     }
+
+    public void testRunner2()
+    {
+        System.err.println( "test2" );
+    }
+
+
+    public String getTestName()
+    {
+        return configurator().getName();
+    }
+
+
 }

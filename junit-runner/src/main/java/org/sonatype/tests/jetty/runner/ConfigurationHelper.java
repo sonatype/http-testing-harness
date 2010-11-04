@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -267,6 +268,21 @@ public class ConfigurationHelper
         }
         
         return suite;
+    }
+
+    public static Object[] testNGFactory( Class<? extends DefaultSuiteConfiguration> cls )
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
+        List<SuiteConfigurator> configurators = computeConfigurators( cls );
+        List<DefaultSuiteConfiguration> tests = new LinkedList<DefaultSuiteConfiguration>();
+        for ( SuiteConfigurator cfg : configurators )
+        {
+            DefaultSuiteConfiguration test = cls.getConstructor().newInstance();
+            test.setConfigurator( cfg );
+            tests.add( test );
+        }
+    
+        return tests.toArray();
     }
 
 }

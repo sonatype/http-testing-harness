@@ -23,6 +23,8 @@ import org.junit.Before;
 import org.sonatype.tests.runner.api.SuiteConfiguration;
 import org.sonatype.tests.runner.api.SuiteConfigurator;
 import org.sonatype.tests.server.api.ServerProvider;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 
 /**
  * @author Benjamin Hanzelmann
@@ -44,6 +46,7 @@ public abstract class DefaultSuiteConfiguration
     }
 
     @Before
+    @BeforeTest
     public void before()
         throws Exception
     {
@@ -66,6 +69,7 @@ public abstract class DefaultSuiteConfiguration
     }
 
     @After
+    @AfterTest
     public void after()
         throws Exception
     {
@@ -73,6 +77,7 @@ public abstract class DefaultSuiteConfiguration
     }
 
     @AfterClass
+    @org.testng.annotations.AfterClass
     public static void afterClass()
         throws Exception
     {
