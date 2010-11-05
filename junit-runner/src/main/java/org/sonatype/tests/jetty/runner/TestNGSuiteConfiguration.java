@@ -1,9 +1,5 @@
 package org.sonatype.tests.jetty.runner;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
  *
@@ -17,17 +13,19 @@ import org.junit.Before;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 
 /**
  * @author Benjamin Hanzelmann
  */
-public abstract class DefaultSuiteConfiguration
+public class TestNGSuiteConfiguration
     extends AbstractSuiteConfiguration
 {
 
     @Override
-    @Before
+    @BeforeTest
     public void before()
         throws Exception
     {
@@ -35,7 +33,7 @@ public abstract class DefaultSuiteConfiguration
     }
 
     @Override
-    @After
+    @AfterTest
     public void after()
         throws Exception
     {
@@ -47,6 +45,6 @@ public abstract class DefaultSuiteConfiguration
         throws Exception
     {
         AbstractSuiteConfiguration.afterClass();
-
     }
+
 }
