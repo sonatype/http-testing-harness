@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -76,7 +75,7 @@ public class JettyServerProvider
 
     protected boolean ssl;
 
-    private final String host = InetAddress.getLocalHost().getCanonicalHostName();
+    private final String host = "localhost"; // InetAddress.getLocalHost().getCanonicalHostName();
 
     private ServletContextHandler webappContext;
 
