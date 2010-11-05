@@ -16,9 +16,9 @@ package org.sonatype.tests.async.util;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.tests.jetty.runner.DefaultSuiteConfiguration;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
-import org.sonatype.tests.server.api.ServerProvider;
+import org.sonatype.tests.http.runner.junit.DefaultSuiteConfiguration;
+import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;

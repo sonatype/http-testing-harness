@@ -30,10 +30,6 @@
             <artifactId>hth-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.sonatype.http-testing-harness</groupId>
-            <artifactId>junit-runner</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
@@ -58,6 +54,11 @@
         	<artifactId>logback-classic</artifactId>
         	<version>0.9.26</version>
         </dependency>
+        <dependency>
+        	<groupId>org.sonatype.http-testing-harness</groupId>
+        	<artifactId>junit-runner</artifactId>
+        	<scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -69,13 +70,13 @@
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
                         <Import-Package>
-                            !org.sonatype.tests.jetty.server.*,
-                            org.sonatype.tests.jetty.runner,
+                            !org.sonatype.tests.http.server.*,
+                            org.sonatype.tests.http.runner,
                             org.eclipse.jetty.io,
                             *
                         </Import-Package>
                         <Export-Package>
-                            org.sonatype.tests.jetty.server.*
+                            org.sonatype.tests.http.server.jetty.*
                         </Export-Package>
                     </instructions>
                 </configuration>

@@ -19,9 +19,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.server.behaviour.Content;
-import org.sonatype.tests.jetty.server.behaviour.NTLMAuth;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.jetty.behaviour.Content;
+import org.sonatype.tests.http.server.jetty.behaviour.NTLMAuth;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;

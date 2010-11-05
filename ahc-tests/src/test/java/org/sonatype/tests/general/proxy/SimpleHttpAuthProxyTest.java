@@ -1,9 +1,9 @@
 package org.sonatype.tests.general.proxy;
 
 import org.junit.runner.RunWith;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
-import org.sonatype.tests.jetty.server.configurations.HttpProxyAuthConfigurator;
+import org.sonatype.tests.http.runner.annotations.Configurators;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.jetty.configurations.HttpProxyAuthConfigurator;
 
 import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.ProxyServer;

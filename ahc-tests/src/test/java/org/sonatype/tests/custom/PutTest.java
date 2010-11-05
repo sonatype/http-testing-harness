@@ -24,12 +24,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList;
-import org.sonatype.tests.jetty.server.behaviour.Consumer;
-import org.sonatype.tests.jetty.server.behaviour.ErrorBehaviour;
-import org.sonatype.tests.jetty.server.util.FileUtil;
-import org.sonatype.tests.server.api.ServerProvider;
+import org.sonatype.tests.http.runner.annotations.ConfiguratorList;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.server.jetty.behaviour.Consumer;
+import org.sonatype.tests.http.server.jetty.behaviour.ErrorBehaviour;
+import org.sonatype.tests.http.server.jetty.util.FileUtil;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;

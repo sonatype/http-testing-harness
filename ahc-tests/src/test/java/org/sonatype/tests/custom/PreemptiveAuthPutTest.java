@@ -2,8 +2,8 @@ package org.sonatype.tests.custom;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.ConfiguratorList;
+import org.sonatype.tests.http.runner.annotations.ConfiguratorList;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
 
 /*
  * Copyright (c) 2010 Sonatype, Inc. All rights reserved.

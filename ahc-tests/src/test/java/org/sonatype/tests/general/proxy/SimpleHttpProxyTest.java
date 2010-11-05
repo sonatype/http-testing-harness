@@ -19,11 +19,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
-import org.sonatype.tests.jetty.server.configurations.HttpProxyConfigurator;
-import org.sonatype.tests.jetty.server.impl.JettyProxyProvider;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
+import org.sonatype.tests.http.runner.annotations.Configurators;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.jetty.configurations.HttpProxyConfigurator;
+import org.sonatype.tests.http.server.jetty.impl.JettyProxyProvider;
+import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.AsyncHttpClientConfig.Builder;

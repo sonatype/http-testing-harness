@@ -17,9 +17,9 @@ package org.sonatype.tests.custom;
 import javax.net.ssl.SSLContext;
 
 import org.sonatype.tests.async.util.CertUtil;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner.Configurators;
-import org.sonatype.tests.jetty.server.configurations.CertAuthSuiteConfigurator;
-import org.sonatype.tests.server.api.ServerProvider;
+import org.sonatype.tests.http.runner.annotations.Configurators;
+import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.server.jetty.configurations.CertAuthSuiteConfigurator;
 
 import com.ning.http.client.AsyncHttpClientConfig.Builder;
 

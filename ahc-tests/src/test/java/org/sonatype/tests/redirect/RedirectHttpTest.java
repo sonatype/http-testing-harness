@@ -21,10 +21,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.server.behaviour.Pause;
-import org.sonatype.tests.jetty.server.behaviour.Redirect;
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.jetty.behaviour.Pause;
+import org.sonatype.tests.http.server.jetty.behaviour.Redirect;
+import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 import com.ning.http.client.MaxRedirectException;
 import com.ning.http.client.Response;

@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>hth-parent</artifactId>
+        <groupId>org.sonatype.http-testing-harness</groupId>
+        <version>0.3-SNAPSHOT</version>
+    </parent>
+    <artifactId>harness-runner</artifactId>
+
+    <name>Base for SuiteConfiguration test runners</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.sonatype.http-testing-harness</groupId>
+            <artifactId>hth-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <manifestLocation>META-INF</manifestLocation>
+                    <instructions>
+                        <Import-Package>
+                            !org.sonatype.tests.http.runner,
+                            *
+                        </Import-Package>
+                        <Export-Package>
+                            org.sonatype.tests.http.runner
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

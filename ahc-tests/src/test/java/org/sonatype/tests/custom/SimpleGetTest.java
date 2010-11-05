@@ -26,8 +26,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AssertingAsyncHandler;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.server.api.Behaviour;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.api.Behaviour;
 
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.Response;

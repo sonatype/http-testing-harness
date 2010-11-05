@@ -18,11 +18,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.tests.async.util.AsyncSuiteConfiguration;
-import org.sonatype.tests.jetty.runner.ConfigurationRunner;
-import org.sonatype.tests.jetty.server.behaviour.BasicAuth;
-import org.sonatype.tests.jetty.server.behaviour.Content;
-import org.sonatype.tests.jetty.server.behaviour.Fail;
-import org.sonatype.tests.jetty.server.behaviour.Realm;
+import org.sonatype.tests.http.runner.junit.ConfigurationRunner;
+import org.sonatype.tests.http.server.jetty.behaviour.BasicAuth;
+import org.sonatype.tests.http.server.jetty.behaviour.Content;
+import org.sonatype.tests.http.server.jetty.behaviour.Fail;
+import org.sonatype.tests.http.server.jetty.behaviour.Realm;
 
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.Response;

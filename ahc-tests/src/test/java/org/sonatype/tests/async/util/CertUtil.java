@@ -37,7 +37,7 @@ import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.sonatype.tests.jetty.server.impl.JettyServerProvider.CertificateHolder;
+import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider.CertificateHolder;
 
 public class CertUtil
 {

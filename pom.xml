@@ -48,7 +48,9 @@
         <module>server-provider</module>
         <module>junit-runner</module>
         <module>hth-api</module>
-  </modules>
+        <module>harness-runner</module>
+        <module>testng-runner</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -82,6 +84,11 @@
                 <groupId>org.sonatype.http-testing-harness</groupId>
                 <artifactId>junit-runner</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+            	<groupId>org.sonatype.http-testing-harness</groupId>
+            	<artifactId>harness-runner</artifactId>
+            	<version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
