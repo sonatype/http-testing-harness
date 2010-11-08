@@ -29,7 +29,8 @@
                             *
                         </Import-Package>
                         <Export-Package>
-                            org.sonatype.tests.http.runner
+                            org.sonatype.tests.http.runner,
+                            org.sonatype.tests.http.runner.annotations
                         </Export-Package>
                     </instructions>
                 </configuration>

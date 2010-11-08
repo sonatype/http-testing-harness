@@ -65,8 +65,10 @@
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
                         <Import-Package>
-                            !org.sonatype.tests.http.server.*,
+                            !org.sonatype.tests.http.server.jetty.*,
                             org.sonatype.tests.http.runner,
+                            org.sonatype.tests.http.runner.api,
+                            org.sonatype.tests.http.server.api,
                             org.eclipse.jetty.io,
                             *
                         </Import-Package>

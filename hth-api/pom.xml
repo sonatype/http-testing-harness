@@ -24,6 +24,8 @@
                         <manifestLocation>META-INF</manifestLocation>
                         <instructions>
                             <Import-Package>
+                                !org.sonatype.tests.http.runner.api,
+                                !org.sonatype.tests.http.server.api,
                                 *
                             </Import-Package>
                             <Export-Package>
