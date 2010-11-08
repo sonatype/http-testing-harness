@@ -23,14 +23,15 @@ import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class AbstractSuiteConfiguration
     implements SuiteConfiguration
 {
 
     private boolean doClassInit = true;
+
     private SuiteConfigurator configurator;
+
     private static ServerProvider provider;
 
     public void setConfigurator( SuiteConfigurator configurator )
@@ -41,17 +42,14 @@ public class AbstractSuiteConfiguration
     public void before()
         throws Exception
     {
-        if ( doClassInit )
+        provider = configurator.provider();
+        if ( provider == null )
         {
-            provider = configurator.provider();
-            if ( provider == null )
-            {
-                throw new IllegalArgumentException( "Configurator failed, provider is null." );
-            }
-            doClassInit = false;
-            configureProvider( provider );
-            provider.start();
+            throw new IllegalArgumentException( "Configurator failed, provider is null." );
         }
+        doClassInit = false;
+        configureProvider( provider );
+        provider.start();
     }
 
     public void configureProvider( ServerProvider provider )
@@ -61,16 +59,16 @@ public class AbstractSuiteConfiguration
     public void after()
         throws Exception
     {
-        // provider.stop();
+        if ( provider != null )
+        {
+            provider.stop();
+        }
     }
 
     public static void afterClass()
         throws Exception
     {
-        if ( provider != null )
-        {
-            provider.stop();
-        }
+
     }
 
     public String url()
@@ -100,9 +98,9 @@ public class AbstractSuiteConfiguration
                 part = URLEncoder.encode( part, "UTF-8" );
                 url += "/" + part;
             }
-    
-    		// logger.debug( "returning url... " + url );
-    
+
+            // logger.debug( "returning url... " + url );
+
             return url;
         }
         catch ( UnsupportedEncodingException e )
