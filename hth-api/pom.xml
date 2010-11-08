@@ -27,8 +27,8 @@
                                 *
                             </Import-Package>
                             <Export-Package>
-                                org.sonatype.tests.runner.api,
-                                org.sonatype.tests.server.api
+                                org.sonatype.tests.http.runner.api,
+                                org.sonatype.tests.http.server.api
                             </Export-Package>
                         </instructions>
                     </configuration>
