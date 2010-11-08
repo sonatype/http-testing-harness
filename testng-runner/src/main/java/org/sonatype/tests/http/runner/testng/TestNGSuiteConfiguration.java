@@ -20,19 +20,21 @@ import java.util.List;
 import org.sonatype.tests.http.runner.AbstractSuiteConfiguration;
 import org.sonatype.tests.http.runner.ConfigurationHelper;
 import org.sonatype.tests.http.runner.api.SuiteConfigurator;
+import org.testng.ITest;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class TestNGSuiteConfiguration
     extends AbstractSuiteConfiguration
+    implements ITest
 {
 
     @Override
-    @BeforeTest
+    @BeforeMethod
     public void before()
         throws Exception
     {
@@ -40,7 +42,7 @@ public class TestNGSuiteConfiguration
     }
 
     @Override
-    @AfterTest
+    @AfterMethod
     public void after()
         throws Exception
     {
@@ -67,6 +69,15 @@ public class TestNGSuiteConfiguration
         throws Exception
     {
         AbstractSuiteConfiguration.afterClass();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.testng.ITest#getTestName()
+     */
+    public String getTestName()
+    {
+        return configurator().getName();
     }
 
 }
