@@ -15,24 +15,17 @@ public class HttpProxyConfigurator
         return super.getName() + " PROXY ";
     }
 
-    private JettyProxyProvider provider;
-
-    public HttpProxyConfigurator()
+    @Override
+    public ServerProvider provider()
     {
         try
         {
-            provider = new JettyProxyProvider();
+            return new JettyProxyProvider();
         }
         catch ( Exception e )
         {
             throw new IllegalStateException( e );
         }
-    }
-
-    @Override
-    public ServerProvider provider()
-    {
-        return provider;
     }
 
 }

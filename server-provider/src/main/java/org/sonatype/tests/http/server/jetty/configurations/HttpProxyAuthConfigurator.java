@@ -16,24 +16,18 @@ public class HttpProxyAuthConfigurator
         return super.getName() + " AUTHPROXY ";
     }
 
-    private JettyProxyProvider provider;
-
-    public HttpProxyAuthConfigurator()
-    {
-        try
-        {
-            provider = new JettyProxyProvider( "puser", "password" );
-        }
-        catch ( Exception e )
-        {
-            throw new IllegalStateException( e );
-        }
-    }
 
     @Override
     public ServerProvider provider()
     {
-        return provider;
+        try
+        {
+            return new JettyProxyProvider( "puser", "password" );
+        }
+        catch ( Exception e )
+        {
+            throw new IllegalStateException( e.getMessage(), e );
+        }
     }
 
 }
