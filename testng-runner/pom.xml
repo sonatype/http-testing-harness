@@ -15,6 +15,12 @@
   		<groupId>org.testng</groupId>
   		<artifactId>testng</artifactId>
   		<version>5.14.2</version>
+  		<exclusions>
+  			<exclusion>
+  				<artifactId>junit</artifactId>
+  				<groupId>junit</groupId>
+  			</exclusion>
+  		</exclusions>
   	</dependency>
   	<dependency>
   		<groupId>org.sonatype.http-testing-harness</groupId>
