@@ -5,3 +5,4 @@ target/
 bin/
 */META-INF
 build.properties
+test-output/
