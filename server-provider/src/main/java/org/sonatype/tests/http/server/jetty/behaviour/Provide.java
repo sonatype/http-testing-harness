@@ -61,6 +61,7 @@ public class Provide
             for ( int i = 0; i < ba.length; i++ )
             {
                 out.write( ba[i] );
+                out.flush();
                 if ( latency != -1 )
                 {
                     Thread.sleep( latency );

@@ -58,6 +58,7 @@ public class Stutter
             for ( int i = 0; i < content.length; i++ )
             {
                 out.write( content[i] );
+                out.flush();
                 Thread.sleep( wait );
             }
             return false;
