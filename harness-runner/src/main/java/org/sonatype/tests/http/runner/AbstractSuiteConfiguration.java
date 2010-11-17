@@ -79,7 +79,7 @@ public class AbstractSuiteConfiguration
         }
         catch ( MalformedURLException e )
         {
-            throw new IllegalArgumentException( "Provider was set up with wrong url" );
+            throw new IllegalArgumentException( "Provider was set up with wrong url", e );
         }
     }
 
