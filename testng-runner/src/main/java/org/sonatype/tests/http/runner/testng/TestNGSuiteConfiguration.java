@@ -13,7 +13,6 @@ package org.sonatype.tests.http.runner.testng;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class TestNGSuiteConfiguration
     }
 
     public static Object[] testNGFactory( Class<? extends TestNGSuiteConfiguration> cls )
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+        throws Exception
     {
         List<SuiteConfigurator> configurators = ConfigurationHelper.computeConfigurators( cls );
         List<TestNGSuiteConfiguration> tests = new LinkedList<TestNGSuiteConfiguration>();
