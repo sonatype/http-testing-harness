@@ -42,8 +42,6 @@ public class ErrorBehaviour
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        response.getOutputStream().write( msg.getBytes( "UTF-8" ) );
-        response.getOutputStream().flush();
         response.sendError( error, msg );
 
         return false;
