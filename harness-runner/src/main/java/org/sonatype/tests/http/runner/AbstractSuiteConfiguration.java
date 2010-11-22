@@ -42,7 +42,7 @@ public class AbstractSuiteConfiguration
     public void before()
         throws Exception
     {
-        provider = configurator.provider();
+        provider = configurator().provider();
         if ( provider == null )
         {
             throw new IllegalArgumentException( "Configurator failed, provider is null." );
