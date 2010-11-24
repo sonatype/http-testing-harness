@@ -65,12 +65,12 @@ public class Content
             {
                 response.getWriter().write( content );
             }
+            return false;
         }
         else
         {
-            response.getWriter().close();
+            return true;
         }
-        return false;
     }
 
 }
