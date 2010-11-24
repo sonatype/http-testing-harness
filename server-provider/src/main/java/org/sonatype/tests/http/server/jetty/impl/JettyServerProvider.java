@@ -22,8 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
-import java.security.KeyStore.PasswordProtection;
-import java.security.KeyStore.PrivateKeyEntry;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
@@ -215,6 +213,10 @@ public class JettyServerProvider
      */
     public void addUser( String user, Object password )
     {
+        if ( authType == null )
+        {
+            throw new IllegalStateException("no authentication method set.");
+        }
         if ( password instanceof CertificateHolder )
         {
             if ( !authType.endsWith( "CERT" ) )
@@ -270,10 +272,16 @@ public class JettyServerProvider
                                     : sslKeystorePassword.toString().toCharArray() );
                     keystore.setCertificateEntry( alias, certHolder.getCertificate() );
 
-                    PrivateKey key = certHolder.getKey();
-                    Certificate[] chain = new Certificate[] { certHolder.getCertificate() };
-                    keystore.setEntry( alias, new PrivateKeyEntry( key, chain ),
-                                       new PasswordProtection( sslKeystorePassword.toCharArray() ) );
+                    Certificate[] chain = certHolder.getChain();
+                    for ( int i = 1; i < chain.length; i++ )
+                    {
+                        keystore.setCertificateEntry( alias + "chain" + i, chain[i] );
+                    }
+
+                    // PrivateKey key = certHolder.getKey();
+                    // Certificate[] chain = new Certificate[] { certHolder.getCertificate() };
+                    // keystore.setEntry( alias, new PrivateKeyEntry( key, chain ),
+                    // new PasswordProtection( sslKeystorePassword.toCharArray() ) );
                     keyManagerFactory.init( keystore, sslKeystorePassword == null ? null
                                     : sslKeystorePassword.toString().toCharArray() );
                     KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
@@ -536,19 +544,31 @@ public class JettyServerProvider
     
         private PrivateKey key;
     
-        private Certificate certificate;
+        private Certificate[] chain;
     
         public Certificate getCertificate()
         {
-            return certificate;
+            return chain[0];
         }
     
+        public Certificate[] getChain()
+        {
+            return chain;
+        }
+
+        @Deprecated
         public CertificateHolder( PrivateKey key, Certificate certificate )
         {
             this.key = key;
-            this.certificate = certificate;
+            this.chain = new Certificate[] { certificate };
+        }
+
+        public CertificateHolder( Certificate[] chain )
+        {
+            this.chain = chain;
         }
     
+        @Deprecated
         public PrivateKey getKey()
         {
             return key;
