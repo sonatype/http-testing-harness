@@ -22,7 +22,6 @@ import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class ErrorBehaviour
     implements Behaviour
@@ -30,7 +29,11 @@ public class ErrorBehaviour
 
     private String msg;
 
-    private int error;
+    private int error = -1;
+
+    public ErrorBehaviour()
+    {
+    }
 
     public ErrorBehaviour( int error, String msg )
     {
@@ -38,11 +41,28 @@ public class ErrorBehaviour
         this.msg = msg;
     }
 
-
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        response.sendError( error, msg );
+        if ( error == -1 )
+        {
+            String path = request.getPathInfo().substring( 1 );
+            String[] split = path.split( "/", 2 );
+            int sc = Integer.valueOf( split[0] );
+            if ( split.length > 1 )
+            {
+                msg = split[1];
+            }
+            else
+            {
+                msg = "errormsg";
+            }
+            response.sendError( sc, msg );
+        }
+        else
+        {
+            response.sendError( error, msg );
+        }
 
         return false;
 
