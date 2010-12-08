@@ -28,11 +28,9 @@ public class AbstractSuiteConfiguration
     implements SuiteConfiguration
 {
 
-    private boolean doClassInit = true;
-
     private SuiteConfigurator configurator;
 
-    private static ServerProvider provider;
+    private ServerProvider provider;
 
     public void setConfigurator( SuiteConfigurator configurator )
     {
@@ -47,7 +45,6 @@ public class AbstractSuiteConfiguration
         {
             throw new IllegalArgumentException( "Configurator failed, provider is null." );
         }
-        doClassInit = false;
         configureProvider( provider );
         provider.start();
     }
@@ -63,12 +60,6 @@ public class AbstractSuiteConfiguration
         {
             provider.stop();
         }
-    }
-
-    public static void afterClass()
-        throws Exception
-    {
-
     }
 
     public String url()

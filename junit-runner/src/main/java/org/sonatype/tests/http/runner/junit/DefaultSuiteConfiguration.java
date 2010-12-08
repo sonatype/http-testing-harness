@@ -1,7 +1,6 @@
 package org.sonatype.tests.http.runner.junit;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.sonatype.tests.http.runner.AbstractSuiteConfiguration;
 
@@ -41,13 +40,5 @@ public abstract class DefaultSuiteConfiguration
         throws Exception
     {
         super.after();
-    }
-
-    @AfterClass
-    public static void afterClass()
-        throws Exception
-    {
-        AbstractSuiteConfiguration.afterClass();
-
     }
 }

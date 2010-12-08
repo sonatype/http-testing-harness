@@ -20,7 +20,6 @@ import org.sonatype.tests.http.runner.AbstractSuiteConfiguration;
 import org.sonatype.tests.http.runner.ConfigurationHelper;
 import org.sonatype.tests.http.runner.api.SuiteConfigurator;
 import org.testng.ITest;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -61,13 +60,6 @@ public class TestNGSuiteConfiguration
         }
     
         return tests.toArray();
-    }
-
-    @AfterClass
-    public static void afterClass()
-        throws Exception
-    {
-        AbstractSuiteConfiguration.afterClass();
     }
 
     /*
