@@ -7,6 +7,7 @@
     </parent>
 
     <artifactId>junit-runner</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
 
     <name>JUnit 3/4 SuiteConfiguration Test Runner</name>
     <dependencies>
@@ -38,6 +39,7 @@
                 <configuration>
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
+                        <Bundle-Version>$(replace;$(project.version);-SNAPSHOT;.$(tstamp;yyyyMMdd-HHmm))</Bundle-Version>
                         <Import-Package>
                             !org.sonatype.tests.http.runner.junit,
                             *

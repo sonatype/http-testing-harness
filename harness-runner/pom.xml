@@ -6,6 +6,7 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>harness-runner</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
 
     <name>Base for SuiteConfiguration test runners</name>
 
@@ -24,6 +25,7 @@
                 <configuration>
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
+                        <Bundle-Version>$(replace;$(project.version);-SNAPSHOT;.$(tstamp;yyyyMMdd-HHmm))</Bundle-Version>
                         <Import-Package>
                             !org.sonatype.tests.http.runner,
                             *
