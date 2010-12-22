@@ -30,7 +30,7 @@ public class AbstractSuiteConfiguration
 
     private SuiteConfigurator configurator;
 
-    private ServerProvider provider;
+    private ThreadLocal<ServerProvider> provider = new ThreadLocal<ServerProvider>();
 
     public void setConfigurator( SuiteConfigurator configurator )
     {
@@ -40,13 +40,13 @@ public class AbstractSuiteConfiguration
     public void before()
         throws Exception
     {
-        provider = configurator().provider();
-        if ( provider == null )
+        provider.set( configurator().provider() );
+        if ( provider.get() == null )
         {
             throw new IllegalArgumentException( "Configurator failed, provider is null." );
         }
-        configureProvider( provider );
-        provider.start();
+        configureProvider( provider.get() );
+        provider.get().start();
     }
 
     public void configureProvider( ServerProvider provider )
@@ -56,9 +56,9 @@ public class AbstractSuiteConfiguration
     public void after()
         throws Exception
     {
-        if ( provider != null )
+        if ( provider.get() != null )
         {
-            provider.stop();
+            provider.get().stop();
         }
     }
 
@@ -66,7 +66,7 @@ public class AbstractSuiteConfiguration
     {
         try
         {
-            return provider.getUrl().toExternalForm();
+            return provider.get().getUrl().toExternalForm();
         }
         catch ( MalformedURLException e )
         {
@@ -76,7 +76,7 @@ public class AbstractSuiteConfiguration
 
     public ServerProvider provider()
     {
-        return provider;
+        return provider.get();
     }
 
     public String url( String path, String... parts )
