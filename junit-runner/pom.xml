@@ -3,7 +3,7 @@
     <parent>
         <artifactId>hth-parent</artifactId>
         <groupId>org.sonatype.http-testing-harness</groupId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>junit-runner</artifactId>
