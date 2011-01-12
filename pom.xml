@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>org.sonatype.http-testing-harness</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <artifactId>hth-parent</artifactId>
     <packaging>pom</packaging>
 
