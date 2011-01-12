@@ -3,11 +3,11 @@
     <parent>
         <artifactId>hth-parent</artifactId>
         <groupId>org.sonatype.http-testing-harness</groupId>
-        <version>0.4.0</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>junit-runner</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
 
     <name>JUnit 3/4 SuiteConfiguration Test Runner</name>
     <dependencies>
