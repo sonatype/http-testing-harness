@@ -26,9 +26,9 @@
     </organization>
 
     <scm>
-        <connection>scm:git:git@github.com:sonatype/jetty-test-case.git</connection>
-        <developerConnection>scm:git:git@github.com:sonatype/jetty-test-case.git</developerConnection>
-        <url>http://github.com/sonatype/jetty-test-case</url>
+        <connection>scm:git:git@github.com:sonatype/http-testing-harness.git</connection>
+        <developerConnection>scm:git:git@github.com:sonatype/http-testing-harness.git</developerConnection>
+        <url>http://github.com/sonatype/http-testing-harness</url>
     </scm>
 
     <ciManagement>
