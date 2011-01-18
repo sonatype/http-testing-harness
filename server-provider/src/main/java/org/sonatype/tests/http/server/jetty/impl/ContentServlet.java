@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.sonatype.tests.http.server.api.TestServlet;
 
 /*
- * Copyright (c) 2010 Sonatype, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0, 
  * and you may not use this file except in compliance with the Apache License Version 2.0. 
