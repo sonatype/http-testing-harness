@@ -28,7 +28,7 @@ import org.sonatype.tests.http.server.jetty.util.FileUtil;
  *
  */
 @RunWith( ConfigurationRunner.class )
-public class FileServerTest
+public class GetTest
     extends BehaviourSuiteConfiguration<Get>
 {
     private Get get = new Get();

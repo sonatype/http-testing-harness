@@ -45,7 +45,6 @@ public class Get
 
     public Get( String path )
     {
-        Log.debug( "Starting FileServer with base path " + new File( path ).getAbsolutePath() );
         this.fpath = path;
     }
 
