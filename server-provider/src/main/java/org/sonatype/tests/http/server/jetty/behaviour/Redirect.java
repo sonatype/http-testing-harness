@@ -32,11 +32,21 @@ public class Redirect
 
     private int count = -1;
 
-    private final AtomicInteger redirectCount = new AtomicInteger(0);
+    private final AtomicInteger redirectCount = new AtomicInteger( 0 );
 
     private String content;
 
     private String target;
+
+    private String pattern;
+
+    private String replace;
+
+    public Redirect( String pattern, String replace )
+    {
+        this.pattern = pattern;
+        this.replace = replace;
+    }
 
     public Redirect()
     {
@@ -65,6 +75,17 @@ public class Redirect
             response.sendRedirect( target );
             return false;
         }
+
+        if ( pattern != null )
+        {
+            String path = request.getPathInfo();
+            path = path.replaceAll( pattern, replace );
+
+            response.sendRedirect( path );
+
+            return false;
+        }
+
         if ( count == -1 )
         {
             count = Integer.valueOf( firstPart( request.getPathInfo() ) );
@@ -92,6 +113,5 @@ public class Redirect
 
         return true;
     }
-
 
 }
