@@ -3,10 +3,10 @@
     <parent>
         <artifactId>hth-parent</artifactId>
         <groupId>org.sonatype.http-testing-harness</groupId>
-        <version>0.4.1-SNAPSHOT</version>
+        <version>0.4.1</version>
     </parent>
     <artifactId>harness-runner</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.1</version>
 
     <name>Base for SuiteConfiguration test runners</name>
 
