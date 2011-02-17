@@ -77,8 +77,6 @@ public class JettyServerProvider
 
     private ServletContextHandler webappContext;
 
-    private final String root = "default-server-root";
-
     private String sslKeystorePassword;
 
     private String sslKeystore;

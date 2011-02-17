@@ -30,6 +30,7 @@ public class ErrorServlet
     extends HttpServlet
     implements TestServlet
 {
+    private static final long serialVersionUID = 35957265254538010L;
 
     public String getPath()
     {

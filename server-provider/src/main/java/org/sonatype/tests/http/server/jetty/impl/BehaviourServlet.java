@@ -34,6 +34,8 @@ public class BehaviourServlet
     extends HttpServlet
     implements TestServlet
 {
+    private static final long serialVersionUID = 5041671509085780121L;
+
     private String spec;
 
     private final Behaviour[] behaviour;
