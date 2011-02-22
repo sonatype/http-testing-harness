@@ -31,6 +31,8 @@ public class ContentServlet
     extends HttpServlet
     implements TestServlet
 {
+    private static final long serialVersionUID = -7203178968027466655L;
+
     public String getPath()
     {
         return "/content/*";

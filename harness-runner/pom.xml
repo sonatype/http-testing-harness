@@ -5,8 +5,8 @@
         <groupId>org.sonatype.http-testing-harness</groupId>
         <version>0.4.2-SNAPSHOT</version>
     </parent>
+    
     <artifactId>harness-runner</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
 
     <name>Base for SuiteConfiguration test runners</name>
 

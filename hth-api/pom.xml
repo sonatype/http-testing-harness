@@ -6,7 +6,7 @@
         <artifactId>hth-parent</artifactId>
     </parent>
     <artifactId>hth-api</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
+
     <name>HTTP Tests API</name>
     <dependencies>
         <dependency>
