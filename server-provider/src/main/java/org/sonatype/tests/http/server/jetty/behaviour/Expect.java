@@ -79,7 +79,11 @@ public class Expect
             String path = entry.getKey();
             if ( !Arrays.equals( entry.getValue(), seen.get( path ) ) )
             {
-                throw new AssertionError( "assertion failed for " + path );
+                String msg =
+                    String.format( "assertion failed for %s, expected: %s (%s), actual: %s (%s)", path,
+                                   Arrays.toString( entry.getValue() ), new String( entry.getValue() ),
+                                   Arrays.toString( seen.get( path ) ), new String( seen.get( path ) ) );
+                throw new AssertionError( msg );
             }
         }
     }
