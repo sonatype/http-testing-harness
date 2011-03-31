@@ -21,7 +21,7 @@ import org.sonatype.tests.http.runner.api.SuiteConfigurator;
 /**
  * @author Benjamin Hanzelmann
  */
-class ConfiguratorMethod
+public class ConfiguratorMethod
     extends FrameworkMethod
 {
 
