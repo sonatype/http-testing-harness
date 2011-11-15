@@ -31,6 +31,16 @@ public class ErrorBehaviour
 
     private int error = -1;
 
+    public static ErrorBehaviour error( int code )
+    {
+        return new ErrorBehaviour( code, "error" );
+    }
+
+    public static ErrorBehaviour error( int code, String msg )
+    {
+        return new ErrorBehaviour( code, msg );
+    }
+
     public ErrorBehaviour()
     {
     }

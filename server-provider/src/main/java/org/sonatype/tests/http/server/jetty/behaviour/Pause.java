@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.sonatype.sisu.goodies.common.Time;
 import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
@@ -27,11 +28,21 @@ public class Pause
     implements Behaviour
 {
 
-    private int pause = -1;
+    private long pause = -1;
+
+    public static Pause pause( Time time )
+    {
+        return new Pause( time.toMillis() );
+    }
 
     public Pause()
     {
         super();
+    }
+
+    public Pause( long pause )
+    {
+        this.pause = pause;
     }
 
     public Pause( int pause )

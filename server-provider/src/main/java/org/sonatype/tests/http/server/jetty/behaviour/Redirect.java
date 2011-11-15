@@ -42,6 +42,11 @@ public class Redirect
 
     private String replace;
 
+    public static Redirect redirect( String url )
+    {
+        return new Redirect( url );
+    }
+
     public Redirect( String pattern, String replace )
     {
         this.pattern = pattern;
