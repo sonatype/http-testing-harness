@@ -55,6 +55,7 @@ public class Post
             {
                 out = new FileOutputStream( fsFile );
 
+
                 byte[] b = new byte[16000];
                 int count = -1;
                 while ( ( count = in.read( b ) ) != -1 )
@@ -73,7 +74,6 @@ public class Post
                 {
                     out.close();
                 }
-
             }
 
         }

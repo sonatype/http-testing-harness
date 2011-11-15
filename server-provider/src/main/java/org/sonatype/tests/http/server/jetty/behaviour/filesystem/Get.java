@@ -2,12 +2,15 @@ package org.sonatype.tests.http.server.jetty.behaviour.filesystem;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.util.log.Log;
 import org.sonatype.tests.http.server.api.Behaviour;
 
@@ -67,26 +70,21 @@ public class Get
 
             Log.debug( "Delivering: " + file.getPath() );
             response.setContentLength( (int) file.length() );
-            FileInputStream in = null;
+
+            InputStream in = null;
+            OutputStream out = null;
             try
             {
                 in = new FileInputStream( file );
-                ServletOutputStream out = response.getOutputStream();
-                byte[] b = new byte[16000];
-                int count;
-                while ( ( count = in.read( b ) ) != -1 )
-                {
-                    out.write( b, 0, count );
-                }
-                out.close();
+                out = response.getOutputStream();
+                IOUtils.copy( in, out );
             }
             finally
             {
-                if ( in != null )
-                {
-                    in.close();
-                }
+                IOUtils.closeQuietly( in );
+                IOUtils.closeQuietly( out );
             }
+
             return false;
         }
 

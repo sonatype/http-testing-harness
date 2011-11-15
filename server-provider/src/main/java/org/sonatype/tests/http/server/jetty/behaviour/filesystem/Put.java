@@ -8,6 +8,8 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 public class Put
     extends FSBehaviour
 {
@@ -32,11 +34,7 @@ public class Put
 
         File fsFile = fs( request.getPathInfo() );
 
-        int code = 200;
-        if ( !fsFile.exists() )
-        {
-            code = 201;
-        }
+        int code = fsFile.exists() ? 200 : 201;
 
         fsFile.getParentFile().mkdirs();
         fsFile.createNewFile();
@@ -55,28 +53,13 @@ public class Put
             try
             {
                 out = new FileOutputStream( fsFile );
-
-                byte[] b = new byte[16000];
-                int count = -1;
-                while ( ( count = in.read( b ) ) != -1 )
-                {
-                    out.write( b, 0, count );
-                }
-
+                IOUtils.copy( in, out );
             }
             finally
             {
-                if ( in != null )
-                {
-                    in.close();
-                }
-                if ( out != null )
-                {
-                    out.close();
-                }
-
+                IOUtils.closeQuietly( in );
+                IOUtils.closeQuietly( out );
             }
-
         }
 
         response.setStatus( code );

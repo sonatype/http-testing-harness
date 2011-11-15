@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ProtocolException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -43,6 +44,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.configurations.CertAuthSuiteConfigurator;
@@ -54,6 +56,15 @@ import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider.Certificate
  */
 public class ClientSideCertTest
 {
+
+    private File clientKeystore;
+
+    @Before
+    public void setup()
+        throws URISyntaxException
+    {
+        clientKeystore = new File( ClassLoader.getSystemResource( "client.keystore" ).toURI() );
+    }
 
     @Test
     public void testClientSideCertFail()
@@ -87,7 +98,7 @@ public class ClientSideCertTest
     }
 
     private HttpsURLConnection connect( String location )
-        throws IOException, ProtocolException, Exception
+        throws Exception
     {
         URL url = new URL( location );
         HttpsURLConnection connection;
@@ -108,7 +119,7 @@ public class ClientSideCertTest
         connection.setRequestProperty( "Content-Type", "text/plain" );
 
         SSLSocketFactory sslSocketFactory =
-            getFactory( new File( "src/test/resources/client.keystore" ), "password", "client" );
+            getFactory( clientKeystore, "password", "client" );
 
         connection.setSSLSocketFactory( sslSocketFactory );
         return connection;
@@ -120,7 +131,7 @@ public class ClientSideCertTest
     {
         ServerProvider p = new CertAuthSuiteConfigurator().provider();
 
-        CertificateHolder cert = getCertificate( "client", "src/test/resources/client.keystore", "password" );
+        CertificateHolder cert = getCertificate( "client", clientKeystore.getAbsolutePath(), "password" );
         p.addUser( "client", cert );
         ( (JettyServerProvider) p ).addDefaultServices();
         p.start();

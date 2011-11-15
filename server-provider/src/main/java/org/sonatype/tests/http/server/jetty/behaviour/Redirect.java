@@ -58,9 +58,6 @@ public class Redirect
         this.count = count;
     }
 
-    /**
-     * @param url
-     */
     public Redirect( String url )
     {
         this.target = url;
