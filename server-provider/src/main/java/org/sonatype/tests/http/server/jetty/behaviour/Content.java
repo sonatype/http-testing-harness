@@ -30,6 +30,11 @@ public class Content
 
     private String content;
 
+    public static Content content(String content)
+    {
+        return new Content( content );
+    }
+
     public Content()
     {
     }
