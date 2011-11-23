@@ -1,22 +1,24 @@
 package org.sonatype.tests.http.server.jetty.impl;
 
-
 /*
- * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
- *
- * This program is licensed to you under the Apache License Version 2.0, 
- * and you may not use this file except in compliance with the Apache License Version 2.0. 
- * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
- *
- * Unless required by applicable law or agreed to in writing, 
- * software distributed under the Apache License Version 2.0 is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
- */
+* Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
+*
+* This program is licensed to you under the Apache License Version 2.0,
+* and you may not use this file except in compliance with the Apache License Version 2.0.
+* You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the Apache License Version 2.0 is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+*/
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -25,24 +27,25 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sonatype.tests.http.server.fluent.Behaviours;
 import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;
-import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class JettyServerProviderTest
 {
-    
+
     private static JettyServerProvider provider;
 
-    @BeforeClass
-    public static void init()
+    @Before
+    public void init()
         throws Exception
     {
         provider = new JettyServerProvider();
@@ -50,8 +53,8 @@ public class JettyServerProviderTest
         provider.start();
     }
 
-    @AfterClass
-    public static void afterClass()
+    @After
+    public void afterClass()
         throws Exception
     {
         provider.stop();
@@ -86,7 +89,7 @@ public class JettyServerProviderTest
     {
         URL url = new URL( "http://localhost:" + provider.getPort() + "/error/404/errormsg" );
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        assertEquals(404, conn.getResponseCode());
+        assertEquals( 404, conn.getResponseCode() );
         assertEquals( "errormsg", conn.getResponseMessage() );
     }
 
@@ -94,7 +97,7 @@ public class JettyServerProviderTest
     public void testBehaviour()
         throws Exception
     {
-        provider.addBehaviour( "behave", new Pause( 550 ), new Content() );
+        provider.addBehaviour( "behave/*", new Pause( 550 ), new Content() );
 
         long begin = System.currentTimeMillis();
         URL url = new URL( "http://localhost:" + provider.getPort() + "/behave/baby" );
@@ -113,7 +116,7 @@ public class JettyServerProviderTest
     {
         byte[] buffer = new byte[5];
         int read = -1;
-        
+
         URL url = new URL( "http://localhost:" + provider.getPort() + "/stutter/250/one/two/three" );
         URLConnection conn = url.openConnection();
         long begin = System.currentTimeMillis();
@@ -168,7 +171,6 @@ public class JettyServerProviderTest
     {
         URL url = new URL( "http://localhost:" + provider.getPort() + "/truncate/5/content" );
         URLConnection conn = url.openConnection();
-
         InputStream in = conn.getInputStream();
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
         String line = r.readLine();
@@ -180,9 +182,10 @@ public class JettyServerProviderTest
     public void testTimeout()
         throws Exception
     {
-        URL url = new URL( "http://localhost:" + provider.getPort() + "/timeout/550/content" );
-
         long begin = System.currentTimeMillis();
+
+        String path = "/timeout/550/content";
+        URL url = new URL( "http://localhost:" + provider.getPort() + path );
         URLConnection conn = url.openConnection();
         InputStream in = conn.getInputStream();
         BufferedReader r = new BufferedReader( new InputStreamReader( in ) );
@@ -191,6 +194,47 @@ public class JettyServerProviderTest
         r.close();
         assertTrue( "real delta: " + ( end - begin ), end - begin >= 500 );
         assertEquals( null, line );
+    }
 
+    @Test
+    public void overrideBehavior()
+        throws IOException
+    {
+        provider.addBehaviour( "/test/*", Behaviours.error( 404 ) );
+
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/test/1" );
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 404 ) );
+
+        provider.addBehaviour( "/test/*", Behaviours.error( 400 ) );
+        url = new URL( "http://localhost:" + provider.getPort() + "/test/2" );
+        conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 400 ) );
+
+        provider.addBehaviour( "/test/*", Behaviours.error( 500 ) );
+        url = new URL( "http://localhost:" + provider.getPort() + "/test/3" );
+        conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 500 ) );
+    }
+
+    @Test
+    public void overrideBehavior2()
+        throws IOException
+    {
+        provider.addBehaviour( "/*", Behaviours.error( 404 ) );
+        provider.addBehaviour( "/test/artifact.pom", Behaviours.content( "pom", "application/xml" ));
+
+        URL url = new URL( "http://localhost:" + provider.getPort() + "/test/artifact.pom" );
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 200 ) );
+
+        url = new URL( "http://localhost:" + provider.getPort() + "/test/artifact.pom.sha1" );
+        conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 404 ) );
+
+        provider.addBehaviour( "/test/artifact.pom", Behaviours.error( 403 ) );
+        url = new URL( "http://localhost:" + provider.getPort() + "/test/artifact.pom" );
+        conn = (HttpURLConnection) url.openConnection();
+        assertThat( conn.getResponseCode(), is( 403 ) );
     }
 }

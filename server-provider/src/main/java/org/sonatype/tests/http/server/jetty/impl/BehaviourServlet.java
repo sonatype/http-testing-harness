@@ -52,10 +52,6 @@ public class BehaviourServlet
         {
             spec = "/" + spec;
         }
-        if ( !spec.endsWith( "/*" ) )
-        {
-            spec += "/*";
-        }
         return spec;
     }
 
@@ -70,7 +66,7 @@ public class BehaviourServlet
     private void behave( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException
     {
-        Log.debug( "behaving: " + req.getPathInfo() + ", " + Arrays.toString( behaviour ) );
+        Log.debug( "behaving: " + req.getRequestURI() + ", " + Arrays.toString( behaviour ) );
         try
         {
             Map<Object, Object> ctx = new HashMap<Object, Object>();

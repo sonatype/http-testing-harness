@@ -43,6 +43,7 @@ public class Content
 
     public Content()
     {
+        this.type = "text/plain";
     }
 
     public Content( String content )
@@ -59,16 +60,18 @@ public class Content
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        String path = request.getPathInfo().substring( 1 );
-        String content = path;
         if ( "GET".equals( request.getMethod() ) )
         {
+            String content = this.content;
             response.setContentType( type );
-            if ( this.content != null )
+
+            if ( content == null )
             {
-                content = this.content;
+                String pathInfo = request.getPathInfo();
+                content = pathInfo == null ? "" : pathInfo.substring( 1 );
             }
-            else if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
+
+            if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
             {
                 content = ctx.get( Behaviour.Keys.CONTENT ).toString();
             }
