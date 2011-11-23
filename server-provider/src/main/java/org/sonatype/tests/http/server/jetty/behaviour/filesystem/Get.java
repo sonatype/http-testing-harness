@@ -41,6 +41,11 @@ public class Get
         this.fpath = fpath;
     }
 
+    public static Get get( File root )
+    {
+        return new Get( root.getAbsolutePath() );
+    }
+
     public Get()
     {
         super();
