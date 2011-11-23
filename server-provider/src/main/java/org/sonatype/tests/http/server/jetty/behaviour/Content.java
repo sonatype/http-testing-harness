@@ -22,7 +22,6 @@ import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Content
     implements Behaviour
@@ -30,9 +29,16 @@ public class Content
 
     private String content;
 
-    public static Content content(String content)
+    private String type;
+
+    public static Content content( String content )
     {
         return new Content( content );
+    }
+
+    public static Content content( String content, String type )
+    {
+        return new Content( content, type );
     }
 
     public Content()
@@ -41,7 +47,13 @@ public class Content
 
     public Content( String content )
     {
+        this( content, "text/plain" );
+    }
+
+    public Content( String content, String type )
+    {
         this.content = content;
+        this.type = type;
     }
 
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
@@ -51,7 +63,7 @@ public class Content
         String content = path;
         if ( "GET".equals( request.getMethod() ) )
         {
-            response.setContentType( "text/plain" );
+            response.setContentType( type );
             if ( this.content != null )
             {
                 content = this.content;

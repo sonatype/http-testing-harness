@@ -37,4 +37,9 @@ public class Behaviours
         return Content.content( content );
     }
 
+    public static Content content( String content, String type )
+    {
+        return Content.content( content, type );
+    }
+
 }
