@@ -1,5 +1,8 @@
 package org.sonatype.tests.http.server.fluent;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
@@ -40,6 +43,17 @@ public class Server
         throws Exception
     {
         serverProvider.stop();
+    }
+
+    public int getPort()
+    {
+        return serverProvider.getPort();
+    }
+
+    public URL getUrl()
+        throws MalformedURLException
+    {
+        return serverProvider.getUrl();
     }
 
 }
