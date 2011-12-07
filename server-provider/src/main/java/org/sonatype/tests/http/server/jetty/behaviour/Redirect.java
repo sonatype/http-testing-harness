@@ -42,9 +42,16 @@ public class Redirect
 
     private String replace;
 
+    private int status = -1;
+
     public static Redirect redirect( String url )
     {
         return new Redirect( url );
+    }
+
+    public static Redirect redirect( String url, int status )
+    {
+        return new Redirect( url, status );
     }
 
     public Redirect( String pattern, String replace )
@@ -68,10 +75,23 @@ public class Redirect
         this.target = url;
     }
 
+    public Redirect( String url, int status )
+    {
+        this.target = url;
+        this.status = status;
+    }
+
     public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
         throws Exception
     {
-        if ( target != null )
+        if ( target != null && status != -1 )
+        {
+            response.setContentLength( 0 );
+            response.setStatus( status );
+            response.setHeader("Location", target);
+            return false;
+        }
+        else if ( target != null )
         {
             response.setContentLength( 0 );
             response.sendRedirect( target );

@@ -20,6 +20,11 @@ public class Behaviours
         return Redirect.redirect( url );
     }
 
+    public static Redirect redirect( String url, int status )
+    {
+        return Redirect.redirect( url, status );
+    }
+
     public static ErrorBehaviour error( int code )
     {
         return ErrorBehaviour.error( code );
