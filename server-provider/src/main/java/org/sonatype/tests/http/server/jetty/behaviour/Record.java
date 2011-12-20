@@ -58,7 +58,7 @@ public class Record
         String req = request.getMethod() + " " + uri;
         requests.add( req );
 
-        String pathInfo = request.getPathInfo();
+        String pathInfo = request.getContextPath() + (request.getPathInfo() == null ? "" : request.getPathInfo() );
         Map<String, String> list = requestHeaders.get( pathInfo );
         if ( list == null )
         {
