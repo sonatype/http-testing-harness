@@ -13,11 +13,17 @@ package org.sonatype.tests.http.server.jetty.behaviour;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Throwables;
+import com.google.common.io.Files;
 import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
@@ -30,6 +36,18 @@ public class Content
     private String content;
 
     private String type;
+
+    public Content( final File content )
+    {
+        try
+        {
+            this.content = Joiner.on( "\n" ).join( Files.readLines( content, Charset.forName("utf-8") ) );
+        }
+        catch ( IOException e )
+        {
+            Throwables.propagate( e );
+        }
+    }
 
     public static Content content( String content )
     {
