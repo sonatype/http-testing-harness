@@ -27,7 +27,6 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -108,10 +107,19 @@ public class JettyServerProvider
     public void initServer()
         throws Exception
     {
-        server = getServer();
+        server = createServer();
     }
 
-    public Server getServer()
+    public void getServer()
+        throws Exception
+    {
+        if ( server != null )
+        {
+            initServer();
+        }
+    }
+
+    public Server createServer()
         throws URISyntaxException
     {
         Server s = new Server();
