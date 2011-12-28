@@ -56,9 +56,14 @@ public class Behaviours
         return Get.get( root );
     }
 
-    public static Content content( File content )
+    public static Content file( File content )
     {
         return new Content( content );
+    }
+    
+    public static Content file( File content, String type )
+    {
+        return new Content( content, type );
     }
 
     public static Record record()

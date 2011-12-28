@@ -15,6 +15,7 @@ package org.sonatype.tests.http.server.jetty.behaviour;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -37,16 +38,27 @@ public class Content
 
     private String type;
 
+    private File file;
+
     public Content( final File content )
     {
-        try
-        {
-            this.content = Joiner.on( "\n" ).join( Files.readLines( content, Charset.forName("utf-8") ) );
-        }
-        catch ( IOException e )
-        {
-            Throwables.propagate( e );
-        }
+        this( content, "application/octet-stream" );
+    }
+
+    public Content( final File content, final String type )
+    {
+        this.file = content;
+        this.type = type;
+    }
+
+    public static Content content( File content )
+    {
+        return new Content( content );
+    }
+
+    public static Content content( File content, String type )
+    {
+        return new Content( content, type );
     }
 
     public static Content content( String content )
@@ -80,34 +92,56 @@ public class Content
     {
         if ( "GET".equals( request.getMethod() ) )
         {
-            String content = this.content;
-            response.setContentType( type );
-
-            if ( content == null )
+            if ( file != null )
             {
-                String pathInfo = request.getPathInfo();
-                content = pathInfo == null ? "" : pathInfo.substring( 1 );
+                deliverFile( request, response );
             }
-
-            if ( ctx.containsKey( Behaviour.Keys.CONTENT ) )
+            else
             {
-                content = ctx.get( Behaviour.Keys.CONTENT ).toString();
-            }
-
-            response.setContentLength( content.getBytes( "UTF-8" ).length );
-            try
-            {
-                response.getOutputStream().write( content.getBytes( "UTF-8" ) );
-            }
-            catch ( IllegalStateException e )
-            {
-                response.getWriter().write( content );
+                deliverString( request, response, ctx );
             }
             return false;
         }
         else
         {
             return true;
+        }
+    }
+
+    private void deliverFile( final HttpServletRequest request, final HttpServletResponse response )
+        throws IOException
+    {
+        response.setContentType( type );
+        response.setContentLength( (int) file.length() );
+        response.getOutputStream().write( Files.toByteArray( file ) );
+    }
+
+    private void deliverString( final HttpServletRequest request, final HttpServletResponse response,
+                                final Map<Object, Object> ctx )
+        throws IOException
+    {
+        String content = this.content;
+        response.setContentType( type );
+
+        if ( content == null )
+        {
+            String pathInfo = request.getPathInfo();
+            content = pathInfo == null ? "" : pathInfo.substring( 1 );
+        }
+
+        if ( ctx.containsKey( Keys.CONTENT ) )
+        {
+            content = ctx.get( Keys.CONTENT ).toString();
+        }
+
+        response.setContentLength( content.getBytes( "UTF-8" ).length );
+        try
+        {
+            response.getOutputStream().write( content.getBytes( "UTF-8" ) );
+        }
+        catch ( IllegalStateException e )
+        {
+            response.getWriter().write( content );
         }
     }
 
