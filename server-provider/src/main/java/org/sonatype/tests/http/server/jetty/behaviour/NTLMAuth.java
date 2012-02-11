@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.security.B64Code;
+import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.log.Log;
 import org.sonatype.tests.http.server.api.Behaviour;
 
