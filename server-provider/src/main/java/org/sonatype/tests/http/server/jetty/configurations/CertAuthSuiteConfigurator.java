@@ -13,7 +13,7 @@ package org.sonatype.tests.http.server.jetty.configurations;
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-import org.eclipse.jetty.http.security.Constraint;
+import org.eclipse.jetty.util.security.Constraint;
 import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**

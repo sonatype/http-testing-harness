@@ -27,15 +27,13 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.eclipse.jetty.http.security.B64Code;
-import org.eclipse.jetty.http.security.Constraint;
-import org.eclipse.jetty.http.security.Password;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -49,6 +47,9 @@ import org.eclipse.jetty.server.ssl.SslConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.B64Code;
+import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.util.security.Password;
 import org.sonatype.tests.http.server.api.Behaviour;
 import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.api.TestServlet;
@@ -424,7 +425,7 @@ public class JettyServerProvider
 
     protected Connector sslConnector()
     {
-        SslSocketConnector connector = new FixedSslSocketConnector();
+        SslSocketConnector connector = new SslSocketConnector();
         String keystore;
         try
         {
