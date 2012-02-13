@@ -51,6 +51,8 @@ import org.sonatype.tests.http.server.jetty.configurations.CertAuthSuiteConfigur
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider.CertificateHolder;
 
+import com.google.common.io.ByteStreams;
+
 /**
  * @author Benjamin Hanzelmann
  */
@@ -151,7 +153,7 @@ public class ClientSideCertTest
             content = (InputStream) connection.getContent();
             Integer length = Integer.valueOf( connection.getHeaderField( "Content-Length" ) );
             byte[] b = new byte[length];
-            assertEquals( length.intValue(), content.read( b, 0, length ) );
+            assertEquals( length.intValue(), ByteStreams.read( content, b, 0, length ) );
 
             assertEquals( "foo", new String( b ).trim() );
         }
