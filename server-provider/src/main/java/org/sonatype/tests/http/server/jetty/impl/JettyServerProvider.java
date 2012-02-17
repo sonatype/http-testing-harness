@@ -42,7 +42,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.nio.BlockingChannelConnector;
 import org.eclipse.jetty.server.ssl.SslConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -414,7 +414,7 @@ public class JettyServerProvider
 
     protected Connector connector()
     {
-        SelectChannelConnector connector = new SelectChannelConnector();
+        Connector connector = new BlockingChannelConnector();
         connector.setHost( host );
         if ( port != -1 )
         {
