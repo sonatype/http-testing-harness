@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>org.sonatype.http-testing-harness</groupId>
-        <version>0.5.1-SNAPSHOT</version>
+        <version>0.5.1</version>
         <artifactId>hth-parent</artifactId>
     </parent>
 
