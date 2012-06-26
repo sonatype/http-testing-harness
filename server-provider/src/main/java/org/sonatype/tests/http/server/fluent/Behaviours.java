@@ -41,6 +41,17 @@ public class Behaviours
         return Pause.pause( time );
     }
 
+    public static Content content( byte[] content )
+    {
+        return Content.content( content );
+    }
+
+    public static Content content( byte[] content, String type )
+    {
+        return Content.content( content, type );
+    }
+
+
     public static Content content( String content )
     {
         return Content.content( content );

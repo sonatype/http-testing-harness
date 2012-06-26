@@ -40,6 +40,19 @@ public class Content
 
     private File file;
 
+    private byte[] bytes;
+
+    public Content( final byte[] content )
+    {
+        this( content, "application/octet-stream" );
+    }
+
+    public Content( final byte[] content, String type )
+    {
+        this.bytes = content;
+        this.type = type;
+    }
+
     public Content( final File content )
     {
         this( content, "application/octet-stream" );
@@ -71,6 +84,15 @@ public class Content
         return new Content( content, type );
     }
 
+    public static Content content( byte[] content )
+    {
+        return new Content( content );
+    }
+
+    public static Content content( byte[] content, String type ) {
+        return new Content( content, type );
+    }
+
     public Content()
     {
         this.type = "text/plain";
@@ -92,7 +114,9 @@ public class Content
     {
         if ( "GET".equals( request.getMethod() ) )
         {
-            if ( file != null )
+            if ( bytes != null ) {
+                deliverBytes( response, bytes );
+            } else if ( file != null )
             {
                 deliverFile( request, response );
             }
@@ -111,9 +135,16 @@ public class Content
     private void deliverFile( final HttpServletRequest request, final HttpServletResponse response )
         throws IOException
     {
+
+        deliverBytes( response, Files.toByteArray( file ) );
+    }
+
+    private void deliverBytes( final HttpServletResponse response, final byte[] b )
+        throws IOException
+    {
         response.setContentType( type );
-        response.setContentLength( (int) file.length() );
-        response.getOutputStream().write( Files.toByteArray( file ) );
+        response.setContentLength( b.length );
+        response.getOutputStream().write( b );
     }
 
     private void deliverString( final HttpServletRequest request, final HttpServletResponse response,
