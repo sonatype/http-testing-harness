@@ -111,6 +111,11 @@ public class JettyServerProvider
         server = createServer();
     }
 
+    public boolean isStarted()
+    {
+        return server != null && server.isStarted();
+    }
+
     public void getServer()
         throws Exception
     {
@@ -603,4 +608,5 @@ public class JettyServerProvider
         }
 
     }
+
 }

@@ -32,7 +32,7 @@ public interface ServerProvider
         throws Exception;
 
     /**
-     * Set to -1 to auto-choose a free port.
+     * Set to 0 to auto-choose a free port.
      * 
      * @param port
      */
@@ -62,4 +62,10 @@ public interface ServerProvider
     void addUser( String user, Object password );
 
     // void addFilter( String pathSpec, Filter filter );
+
+    /*
+     * Returns true if the server is currently running, false otherwise.
+     * @since 0.6
+     */
+    boolean isStarted();
 }

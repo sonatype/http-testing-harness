@@ -77,4 +77,9 @@ class DummyProvider
 
     }
 
+    public boolean isStarted()
+    {
+        return true;
+    }
+
 }
