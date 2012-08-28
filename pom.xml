@@ -183,7 +183,7 @@
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
                     <configuration>
-                        <tagNameFormat>http-testing-harness-${version}</tagNameFormat>
+                        <tagNameFormat>http-testing-harness-${project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
                 <plugin>
