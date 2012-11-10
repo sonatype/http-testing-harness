@@ -8,8 +8,6 @@
     
     <artifactId>harness-runner</artifactId>
 
-    <name>Base for SuiteConfiguration test runners</name>
-
     <dependencies>
         <dependency>
             <groupId>org.sonatype.http-testing-harness</groupId>

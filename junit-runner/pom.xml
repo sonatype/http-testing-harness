@@ -8,24 +8,25 @@
 
     <artifactId>junit-runner</artifactId>
 
-    <name>JUnit 3/4 SuiteConfiguration Test Runner</name>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit-dep</artifactId>
-            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.sonatype.http-testing-harness</groupId>
             <artifactId>hth-api</artifactId>
         </dependency>
+
         <dependency>
-        	<groupId>org.sonatype.http-testing-harness</groupId>
-        	<artifactId>harness-runner</artifactId>
+            <groupId>org.sonatype.http-testing-harness</groupId>
+            <artifactId>harness-runner</artifactId>
         </dependency>
     </dependencies>
 
