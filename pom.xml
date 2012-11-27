@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.sonatype.forge</groupId>
         <artifactId>forge-parent</artifactId>
-        <version>12</version>
+        <version>22</version>
     </parent>
 
     <groupId>org.sonatype.http-testing-harness</groupId>
@@ -66,7 +66,7 @@
             <dependency>
                 <groupId>org.sonatype.sisu.litmus</groupId>
                 <artifactId>litmus-testsupport</artifactId>
-                <version>1.4</version>
+                <version>1.5.1</version>
             </dependency>
 
             <dependency>
