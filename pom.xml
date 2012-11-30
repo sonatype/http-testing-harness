@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.sonatype.forge</groupId>
         <artifactId>forge-parent</artifactId>
-        <version>22</version>
+        <version>23-SNAPSHOT</version>
     </parent>
 
     <groupId>org.sonatype.http-testing-harness</groupId>
@@ -14,33 +14,14 @@
     <artifactId>hth-parent</artifactId>
     <packaging>pom</packaging>
 
-    <url>http://sonatype.org</url>
-    <description>Parent and aggregator for the testing harness for HTTP clients.</description>
     <inceptionYear>2010</inceptionYear>
-
-    <organization>
-        <name>Sonatype, Inc.</name>
-        <url>http://www.sonatype.com</url>
-    </organization>
-
+    <url>http://github.com/sonatype/http-testing-harness</url>
+    
     <scm>
         <connection>scm:git:git@github.com:sonatype/http-testing-harness.git</connection>
         <developerConnection>scm:git:git@github.com:sonatype/http-testing-harness.git</developerConnection>
         <url>http://github.com/sonatype/http-testing-harness</url>
     </scm>
-
-    <ciManagement>
-        <system>Hudson</system>
-        <url>https://ci.sonatype.com/job/http-test-case/</url>
-    </ciManagement>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
 
     <modules>
         <module>server-provider</module>
@@ -49,11 +30,6 @@
         <module>harness-runner</module>
         <module>testng-runner</module>
     </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <forgeReleaseUrl>https://repository.sonatype.org/service/local/staging/deploy/maven2</forgeReleaseUrl>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -130,7 +106,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <configuration>
                         <links>
-                            <link>http://java.sun.com/javase/5/docs/api/</link>
+                            <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
                         </links>
                     </configuration>
                 </plugin>
@@ -143,7 +119,6 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>animal-sniffer-maven-plugin</artifactId>
-                    <version>1.6</version>
                     <configuration>
                         <signature>
                             <groupId>org.codehaus.mojo.signature</groupId>
@@ -168,22 +143,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <configuration>
-                    <signature>
-                        <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java15</artifactId>
-                        <version>1.0</version>
-                    </signature>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check-java-1.5-compat</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
