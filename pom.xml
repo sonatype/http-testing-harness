@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.sonatype.forge</groupId>
         <artifactId>forge-parent</artifactId>
-        <version>23-SNAPSHOT</version>
+        <version>24</version>
     </parent>
 
     <groupId>org.sonatype.http-testing-harness</groupId>
@@ -16,7 +16,7 @@
 
     <inceptionYear>2010</inceptionYear>
     <url>http://github.com/sonatype/http-testing-harness</url>
-    
+
     <scm>
         <connection>scm:git:git@github.com:sonatype/http-testing-harness.git</connection>
         <developerConnection>scm:git:git@github.com:sonatype/http-testing-harness.git</developerConnection>
@@ -37,7 +37,7 @@
                 <groupId>junit</groupId>
                 <artifactId>junit-dep</artifactId>
                 <version>4.10</version>
-            </dependency>
+	          </dependency>
 
             <dependency>
                 <groupId>org.sonatype.sisu.litmus</groupId>
@@ -88,9 +88,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <extensions>true</extensions>
-                    <configuration>
-                        <manifestLocation>META-INF</manifestLocation>
-                    </configuration>
                     <executions>
                         <execution>
                             <id>osgi-bundle</id>

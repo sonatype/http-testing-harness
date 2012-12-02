@@ -23,7 +23,6 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
-                    <manifestLocation>META-INF</manifestLocation>
                     <instructions>
                         <Bundle-Version>$(replace;$(project.version);-SNAPSHOT;.$(tstamp;yyyyMMdd-HHmm))</Bundle-Version>
                         <Import-Package>

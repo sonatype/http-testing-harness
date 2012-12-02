@@ -3,6 +3,5 @@ target/
 .classpath
 .settings/
 bin/
-*/META-INF
 build.properties
 test-output/
