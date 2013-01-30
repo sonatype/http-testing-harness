@@ -75,6 +75,12 @@ public class Server
         return this;
     }
 
+    public Server withKeystore(final String keystore, final String password)
+    {
+        serverProvider.setSSL( keystore, password );
+        return this;
+    }
+
     public ServeContext serve(String pattern)
     {
         return new ServeContext(serverProvider, pattern, this );
