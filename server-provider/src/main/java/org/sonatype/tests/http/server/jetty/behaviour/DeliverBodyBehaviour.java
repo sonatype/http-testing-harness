@@ -35,13 +35,6 @@ public class DeliverBodyBehaviour
 
     private final String body;
 
-    /**
-     * Constructor.
-     * 
-     * @param code
-     * @param bodyContentType
-     * @param body
-     */
     public DeliverBodyBehaviour( final int code, final String bodyContentType, final String body )
     {
         this.code = code;

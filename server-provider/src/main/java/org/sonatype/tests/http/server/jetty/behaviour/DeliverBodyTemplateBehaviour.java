@@ -37,13 +37,6 @@ public class DeliverBodyTemplateBehaviour
 
     private final FormatTemplate body;
 
-    /**
-     * Constructor.
-     * 
-     * @param code
-     * @param bodyContentType
-     * @param body
-     */
     public DeliverBodyTemplateBehaviour( final int code, final String bodyContentType, final FormatTemplate body )
     {
         this.code = code;
