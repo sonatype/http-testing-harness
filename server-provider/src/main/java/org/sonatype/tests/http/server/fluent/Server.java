@@ -81,6 +81,24 @@ public class Server
         return this;
     }
 
+    /**
+     * @since 0.8
+     */
+    public Server withTruststore( final String truststore, final String password )
+    {
+        serverProvider.setSSLTruststore( truststore, password );
+        return this;
+    }
+
+    /**
+     * @since 0.8
+     */
+    public Server requireClientAuth()
+    {
+        serverProvider.setSSLNeedClientAuth( true );
+        return this;
+    }
+
     public ServeContext serve(String pattern)
     {
         return new ServeContext(serverProvider, pattern, this );

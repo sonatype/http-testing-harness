@@ -80,4 +80,15 @@ public interface ServerProvider
      * @since 0.6
      */
     boolean isStarted();
+
+    /**
+     * @since 0.8
+     */
+    void setSSLTruststore( String truststore, String password );
+
+    /**
+     * @since 0.8
+     */
+    void setSSLNeedClientAuth( boolean needClientAuth );
+
 }

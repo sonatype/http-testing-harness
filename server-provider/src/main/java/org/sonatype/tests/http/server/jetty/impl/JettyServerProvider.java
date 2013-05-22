@@ -80,6 +80,12 @@ public class JettyServerProvider
 
     private String sslKeystore;
 
+    private String sslTruststore;
+
+    private String sslTruststorePassword;
+
+    private boolean sslNeedClientAuth;
+
     private ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 
     private HashLoginService loginService;
@@ -113,6 +119,23 @@ public class JettyServerProvider
     public boolean isStarted()
     {
         return server != null && server.isStarted();
+    }
+
+    /**
+     * @since 0.8
+     */
+    public void setSSLTruststore( final String truststore, final String password )
+    {
+        this.sslTruststore = truststore;
+        this.sslTruststorePassword = password;
+    }
+
+    /**
+     * @since 0.8
+     */
+    public void setSSLNeedClientAuth( final boolean needClientAuth )
+    {
+        this.sslNeedClientAuth = needClientAuth;
     }
 
     public void getServer()
@@ -449,6 +472,25 @@ public class JettyServerProvider
         connector.setKeystore( keystore );
         connector.setPassword( sslKeystorePassword );
         connector.setKeyPassword( sslKeystorePassword );
+
+        if ( sslTruststore != null )
+        {
+            String truststore;
+            try
+            {
+                truststore = resourceFile( sslTruststore );
+            }
+            catch ( Exception e )
+            {
+                truststore = sslTruststore;
+            }
+
+            connector.setTruststore( truststore );
+            connector.setTrustPassword( sslTruststorePassword );
+        }
+
+        connector.setNeedClientAuth( sslNeedClientAuth );
+
         return connector;
     }
 
