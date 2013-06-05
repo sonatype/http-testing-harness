@@ -12,7 +12,8 @@
  */
 package org.sonatype.tests.http.server.jetty.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,17 +28,24 @@ import java.net.Proxy.Type;
 import java.net.SocketAddress;
 import java.net.URL;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sonatype.tests.http.server.jetty.behaviour.Consumer;
 import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.Debug;
-import org.sonatype.tests.http.server.jetty.impl.JettyProxyProvider;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class ProxyServerTest
 {
+    @Before
+    public void clearJvmHttpAuthCaches()
+    {
+        // FIXME: this is circumvention got from here: http://stackoverflow.com/questions/480895/reset-the-authenticator-credentials
+        // Actual Java bug is this: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6626700
+        sun.net.www.protocol.http.AuthCacheValue.setAuthCache( new sun.net.www.protocol.http.AuthCacheImpl() );
+    }
 
     @Test
     public void testProxyGet()
