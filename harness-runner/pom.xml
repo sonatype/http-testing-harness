@@ -17,7 +17,7 @@
   <parent>
     <artifactId>hth-parent</artifactId>
     <groupId>org.sonatype.http-testing-harness</groupId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8</version>
   </parent>
 
   <artifactId>harness-runner</artifactId>
