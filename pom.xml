@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.sonatype.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>35</version>
+    <version>38</version>
   </parent>
 
   <groupId>org.sonatype.http-testing-harness</groupId>
@@ -51,11 +51,11 @@
         <artifactId>junit</artifactId>
         <version>4.11</version>
       </dependency>
-
+      
       <dependency>
         <groupId>org.sonatype.sisu.litmus</groupId>
         <artifactId>litmus-testsupport</artifactId>
-        <version>1.7-SNAPSHOT</version>
+        <version>1.7</version>
       </dependency>
 
       <dependency>
@@ -93,8 +93,7 @@
   </dependencyManagement>
 
   <build>
-    <defaultGoal>install</defaultGoal>
-
+  
     <pluginManagement>
       <plugins>
         <plugin>
@@ -116,7 +115,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <links>
-              <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+              <link>http://docs.oracle.com/javase/6/docs/api/</link>
             </links>
           </configuration>
         </plugin>
@@ -132,13 +131,13 @@
           <configuration>
             <signature>
               <groupId>org.codehaus.mojo.signature</groupId>
-              <artifactId>java15</artifactId>
+              <artifactId>java16</artifactId>
               <version>1.0</version>
             </signature>
           </configuration>
           <executions>
             <execution>
-              <id>check-java-1.5-compat</id>
+              <id>check-java-compat</id>
               <phase>process-classes</phase>
               <goals>
                 <goal>check</goal>
@@ -167,10 +166,10 @@
             <configuration>
               <rules>
                 <requireMavenVersion>
-                  <version>2.0.9</version>
+                  <version>[3.0.4,)</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>1.5</version>
+                  <version>[1.6,)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
