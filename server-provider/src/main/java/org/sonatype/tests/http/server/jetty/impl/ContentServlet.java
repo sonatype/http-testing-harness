@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.tests.http.server.jetty.impl;
 
 import java.io.IOException;
@@ -19,36 +20,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.TestServlet;
-
-
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class ContentServlet
     extends HttpServlet
-    implements TestServlet
 {
-    private static final long serialVersionUID = -7203178968027466655L;
+  private static final long serialVersionUID = -7203178968027466655L;
 
-    public String getPath()
-    {
-        return "/content/*";
-    }
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    // strip leading '/'
+    String content = req.getPathInfo().substring(1);
 
-    @Override
-    protected void doGet( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        // strip leading '/'
-        String content = req.getPathInfo().substring( 1 );
-
-        resp.setContentLength( content.length() );
-        resp.setContentType( "text/plain" );
-        resp.setCharacterEncoding( "UTF-8" );
-        resp.setStatus( HttpServletResponse.SC_OK );
-        resp.getWriter().write( content );
-    }
+    resp.setContentLength(content.length());
+    resp.setContentType("text/plain");
+    resp.setCharacterEncoding("UTF-8");
+    resp.setStatus(HttpServletResponse.SC_OK);
+    resp.getWriter().write(content);
+  }
 }

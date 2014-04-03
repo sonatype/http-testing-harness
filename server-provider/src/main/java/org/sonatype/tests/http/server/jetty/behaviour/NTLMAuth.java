@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.api.Behaviour;
 
 /**
  * Incomplete, last step is not validated.

@@ -109,7 +109,7 @@ public class JettyServerProviderTest
     public void testBehaviour()
         throws Exception
     {
-        provider.addBehaviour( "behave/*", new Pause( 550 ), new Content() );
+        provider.addBehaviour( "/behave/*", new Pause( 550 ), new Content() );
 
         long begin = System.currentTimeMillis();
         URL url = new URL( "http://localhost:" + provider.getPort() + "/behave/baby" );

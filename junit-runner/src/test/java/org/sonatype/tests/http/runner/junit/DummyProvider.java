@@ -10,14 +10,18 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.tests.http.runner.junit;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-import org.sonatype.tests.http.server.api.ServerProvider;
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
+
+import org.sonatype.tests.http.api.Behaviour;
+import org.sonatype.tests.http.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
@@ -25,76 +29,78 @@ import org.sonatype.tests.http.server.api.ServerProvider;
 class DummyProvider
     implements ServerProvider
 {
+  private boolean started;
 
-    public URL getUrl()
-        throws MalformedURLException
-    {
-        return URI.create( "dummy://url" ).toURL();
-    }
+  public URL getUrl()
+      throws MalformedURLException
+  {
+    return URI.create("dummy://url").toURL();
+  }
 
-    public void stop()
-        throws Exception
-    {
+  public void stop()
+      throws Exception
+  {
+    started = false;
+  }
 
-    }
+  public void addBehaviour(String pathspec, Behaviour... behaviour) {
+  }
 
-    public void addBehaviour( String pathspec, Behaviour... behaviour )
-    {
-    }
+  @Override
+  public void addServlet(final String pathSpec, final Servlet servlet) {
 
-    public void start()
-        throws Exception
-    {
+  }
 
-    }
+  @Override
+  public void addFilter(final String pathSpec, final Filter filter) {
 
-    public void initServer()
-        throws Exception
-    {
-    }
+  }
 
-    public void setPort( int port )
-    {
-    }
+  public void start()
+      throws Exception
+  {
+    started = true;
+  }
 
-    public int getPort()
-    {
-        return -1;
-    }
+  public void initServer()
+      throws Exception
+  {
+  }
 
-    public void setSSL( String keystore, String password )
-    {
-    }
+  public void setPort(int port) {
+  }
 
-    public void addAuthentication( String pathSpec, String authName )
-    {
+  public int getPort() {
+    return -1;
+  }
 
-    }
+  public void setSSL(String keystore, String password) {
+  }
 
-    public void addUser( String user, Object password )
-    {
+  public void addAuthentication(String pathSpec, String authName) {
 
-    }
+  }
 
-    public boolean isStarted()
-    {
-        return true;
-    }
+  public void addUser(String user, Object password) {
 
-    /**
-     * @since 0.8
-     */
-    public void setSSLTruststore( final String truststore, final String password )
-    {
+  }
 
-    }
+  public boolean isStarted() {
+    return started;
+  }
 
-    /**
-     * @since 0.8
-     */
-    public void setSSLNeedClientAuth( final boolean needClientAuth )
-    {
+  /**
+   * @since 0.8
+   */
+  public void setSSLTruststore(final String truststore, final String password) {
 
-    }
+  }
+
+  /**
+   * @since 0.8
+   */
+  public void setSSLNeedClientAuth(final boolean needClientAuth) {
+
+  }
 
 }

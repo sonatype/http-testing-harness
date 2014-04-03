@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.tests.http.server.jetty.impl;
 
 import java.io.IOException;
@@ -19,32 +20,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.TestServlet;
-
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class ErrorServlet
     extends HttpServlet
-    implements TestServlet
 {
-    private static final long serialVersionUID = 35957265254538010L;
+  private static final long serialVersionUID = 35957265254538010L;
 
-    public String getPath()
-    {
-        return "/error/*";
-    }
-
-    @Override
-    protected void doGet( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        String path = req.getPathInfo().substring( 1 );
-        String[] split = path.split( "/", 2 );
-        int sc = Integer.valueOf( split[0] );
-        String msg = split[1];
-        resp.sendError( sc, msg );
-    }
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    String path = req.getPathInfo().substring(1);
+    String[] split = path.split("/", 2);
+    int sc = Integer.valueOf(split[0]);
+    String msg = split[1];
+    resp.sendError(sc, msg);
+  }
 
 }

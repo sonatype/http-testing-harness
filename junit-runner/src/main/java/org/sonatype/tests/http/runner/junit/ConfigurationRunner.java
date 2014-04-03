@@ -20,8 +20,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.sonatype.tests.http.runner.ConfigurationHelper;
-import org.sonatype.tests.http.runner.api.SuiteConfiguration;
-import org.sonatype.tests.http.runner.api.SuiteConfigurator;
+import org.sonatype.tests.http.runner.SuiteConfiguration;
+import org.sonatype.tests.http.runner.SuiteConfigurator;
 
 /**
  * Junit4 test runner supporting multiple server configurations for the test class. This runner can only execute tests

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann

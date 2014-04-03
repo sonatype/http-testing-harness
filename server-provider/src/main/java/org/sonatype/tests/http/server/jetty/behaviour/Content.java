@@ -14,17 +14,13 @@ package org.sonatype.tests.http.server.jetty.behaviour;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Throwables;
 import com.google.common.io.Files;
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann

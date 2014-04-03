@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.api.Behaviour;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

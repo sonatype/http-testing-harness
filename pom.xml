@@ -13,7 +13,8 @@
     See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -39,38 +40,40 @@
   <modules>
     <module>server-provider</module>
     <module>junit-runner</module>
-    <module>hth-api</module>
-    <module>harness-runner</module>
-    <module>testng-runner</module>
   </modules>
+
+  <properties>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.6</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.sonatype.sisu.goodies</groupId>
+        <artifactId>goodies-common</artifactId>
+        <version>1.9</version>
+      </dependency>
+
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.11</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.sonatype.sisu.litmus</groupId>
         <artifactId>litmus-testsupport</artifactId>
-        <version>1.7</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.7.5</version>
+        <version>1.9</version>
       </dependency>
 
       <!-- INTERNAL -->
-
-      <dependency>
-        <groupId>org.sonatype.http-testing-harness</groupId>
-        <artifactId>hth-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
 
       <dependency>
         <groupId>org.sonatype.http-testing-harness</groupId>
@@ -83,17 +86,11 @@
         <artifactId>junit-runner</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>org.sonatype.http-testing-harness</groupId>
-        <artifactId>harness-runner</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
-  
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -131,7 +128,7 @@
           <configuration>
             <signature>
               <groupId>org.codehaus.mojo.signature</groupId>
-              <artifactId>java16</artifactId>
+              <artifactId>java17</artifactId>
               <version>1.0</version>
             </signature>
           </configuration>
@@ -169,7 +166,7 @@
                   <version>[3.0.4,)</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[1.6,)</version>
+                  <version>[1.7,)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
@@ -191,7 +188,7 @@
               <dependency>
                 <groupId>org.apache.apache.resources</groupId>
                 <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                <version>1.0.2</version>
+                <version>1.0.4</version>
               </dependency>
             </dependencies>
             <executions>
@@ -206,7 +203,6 @@
                   <descriptorRefs>
                     <descriptorRef>source-release</descriptorRef>
                   </descriptorRefs>
-                  <tarLongFileFormat>gnu</tarLongFileFormat>
                 </configuration>
               </execution>
             </executions>

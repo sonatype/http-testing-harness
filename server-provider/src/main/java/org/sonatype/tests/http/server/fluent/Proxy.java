@@ -12,9 +12,6 @@
  */
 package org.sonatype.tests.http.server.fluent;
 
-import java.util.jar.JarEntry;
-
-import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyProxyProvider;
 
 /**

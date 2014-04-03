@@ -14,7 +14,7 @@ package org.sonatype.tests.http.server.jetty.behaviour.filesystem;
 
 import java.io.File;
 
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.api.Behaviour;
 
 public abstract class FSBehaviour
     implements Behaviour
