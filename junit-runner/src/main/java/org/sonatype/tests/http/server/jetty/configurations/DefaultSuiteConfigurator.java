@@ -13,7 +13,7 @@
 
 package org.sonatype.tests.http.server.jetty.configurations;
 
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.runner.SuiteConfigurator;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 

@@ -75,13 +75,13 @@
             <Import-Package>
               !org.sonatype.tests.http.server.jetty.*,
               org.sonatype.tests.http.runner,
-              org.sonatype.tests.http.api,
-              org.sonatype.tests.http.api,
+              org.sonatype.tests.http.server.api,
+              org.sonatype.tests.http.server.api,
               org.eclipse.jetty.io,
               *
             </Import-Package>
             <Export-Package>
-              org.sonatype.tests.http.api,
+              org.sonatype.tests.http.server.api,
               org.sonatype.tests.http.server.fluent.*
               org.sonatype.tests.http.server.jetty.*
             </Export-Package>

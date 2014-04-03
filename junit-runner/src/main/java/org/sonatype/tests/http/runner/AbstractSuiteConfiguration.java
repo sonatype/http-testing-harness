@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

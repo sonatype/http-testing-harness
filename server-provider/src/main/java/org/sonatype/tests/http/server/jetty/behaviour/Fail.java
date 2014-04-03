@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.api.Behaviour;
+import org.sonatype.tests.http.server.api.Behaviour;
 
 
 

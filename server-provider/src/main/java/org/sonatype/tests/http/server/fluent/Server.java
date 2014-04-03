@@ -17,8 +17,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import org.sonatype.tests.http.api.Behaviour;
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 import com.google.common.collect.Lists;

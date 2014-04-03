@@ -29,8 +29,8 @@ import javax.net.ssl.X509TrustManager;
 
 import org.junit.Before;
 import org.sonatype.tests.http.runner.AbstractSuiteConfiguration;
-import org.sonatype.tests.http.api.Behaviour;
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

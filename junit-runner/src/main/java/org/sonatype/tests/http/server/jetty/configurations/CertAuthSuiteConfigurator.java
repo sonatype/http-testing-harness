@@ -13,7 +13,7 @@
 package org.sonatype.tests.http.server.jetty.configurations;
 
 import org.eclipse.jetty.util.security.Constraint;
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

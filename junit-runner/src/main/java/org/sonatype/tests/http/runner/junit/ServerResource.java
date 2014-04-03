@@ -13,7 +13,7 @@
 
 package org.sonatype.tests.http.runner.junit;
 
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProvider;
 
 import com.google.common.base.Throwables;
 import org.junit.rules.ExternalResource;

@@ -15,7 +15,7 @@ package org.sonatype.tests.http.server.jetty.behaviour;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.sonatype.tests.http.api.Behaviour;
+import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann

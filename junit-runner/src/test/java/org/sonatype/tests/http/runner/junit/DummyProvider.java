@@ -20,8 +20,8 @@ import java.net.URL;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 
-import org.sonatype.tests.http.api.Behaviour;
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann

@@ -21,7 +21,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.api.Behaviour;
+import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * {@link Behaviour} that generates random count of bytes as response.

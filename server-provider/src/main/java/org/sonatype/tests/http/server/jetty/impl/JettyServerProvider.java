@@ -38,8 +38,8 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 
-import org.sonatype.tests.http.api.Behaviour;
-import org.sonatype.tests.http.api.ServerProvider;
+import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;
 import org.sonatype.tests.http.server.jetty.behaviour.Redirect;
