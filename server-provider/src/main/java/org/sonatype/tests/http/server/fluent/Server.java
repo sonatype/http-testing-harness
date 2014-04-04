@@ -15,13 +15,13 @@ package org.sonatype.tests.http.server.fluent;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
-
-import com.google.common.collect.Lists;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -142,17 +142,26 @@ public class Server
 
     private final Server server;
 
-    private final List<Behaviour> behaviours;
-
     ServeContext(final Server server, final String pattern) {
       this.pattern = checkNotNull(pattern);
       this.server = checkNotNull(server);
-      this.behaviours = Lists.newArrayList();
     }
 
     public Server withBehaviours(Behaviour... behaviours) {
       checkNotNull(behaviours);
       server.getServerProvider().addBehaviour(pattern, behaviours);
+      return server;
+    }
+
+    public Server withServlet(Servlet servlet) {
+      checkNotNull(servlet);
+      server.getServerProvider().addServlet(pattern, servlet);
+      return server;
+    }
+
+    public Server withFilter(Filter filter) {
+      checkNotNull(filter);
+      server.getServerProvider().addFilter(pattern, filter);
       return server;
     }
   }
