@@ -37,7 +37,6 @@ public class Proxy
     }
 
     public static Server withPort( int port )
-        throws Exception
     {
         JettyProxyProvider provider = new JettyProxyProvider();
         provider.setPort( port );

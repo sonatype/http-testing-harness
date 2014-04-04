@@ -74,7 +74,6 @@ public class JettyProxyProvider
     private String user;
 
     public JettyProxyProvider()
-        throws Exception
     {
     }
 

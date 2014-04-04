@@ -62,7 +62,6 @@ public class Server
    * Start a server on the given port (0 for random).
    */
   public static Server withPort(int port)
-      throws Exception
   {
     JettyServerProvider jettyServerProvider = new JettyServerProvider();
     jettyServerProvider.setPort(port);

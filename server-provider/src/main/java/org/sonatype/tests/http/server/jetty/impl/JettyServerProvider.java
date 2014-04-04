@@ -99,7 +99,6 @@ public class JettyServerProvider
   private String authType;
 
   public JettyServerProvider()
-      throws Exception
   {
     super();
   }
