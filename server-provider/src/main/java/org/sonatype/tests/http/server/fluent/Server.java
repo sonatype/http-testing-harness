@@ -34,7 +34,6 @@ public class Server
   private final ServerProvider serverProvider;
 
   public Server()
-      throws Exception
   {
     this(new JettyServerProvider());
   }
@@ -53,7 +52,6 @@ public class Server
    * @since 0.6
    */
   public static Server server()
-      throws Exception
   {
     return new Server();
   }
