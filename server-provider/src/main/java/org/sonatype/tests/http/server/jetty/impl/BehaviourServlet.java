@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.tests.http.server.jetty.impl;
 
 import java.io.IOException;
@@ -22,112 +23,95 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
 import org.sonatype.tests.http.server.api.Behaviour;
-import org.sonatype.tests.http.server.api.TestServlet;
+
+import org.eclipse.jetty.util.log.Log;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class BehaviourServlet
     extends HttpServlet
-    implements TestServlet
 {
-    private static final long serialVersionUID = 5041671509085780121L;
+  private static final long serialVersionUID = 5041671509085780121L;
 
-    private String spec;
+  private final Behaviour[] behaviour;
 
-    private final Behaviour[] behaviour;
+  public BehaviourServlet(Behaviour[] behaviour) {
+    this.behaviour = checkNotNull(behaviour);
+  }
 
-    public BehaviourServlet( String pathspec, Behaviour[] behaviour )
-    {
-        this.spec = pathspec;
-        this.behaviour = behaviour;
-    }
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    public String getPath()
-    {
-        if ( !spec.startsWith( "/" ) )
-        {
-            spec = "/" + spec;
+
+  private void behave(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException
+  {
+    Log.debug("behaving: " + req.getRequestURI() + ", " + Arrays.toString(behaviour));
+    try {
+      Map<Object, Object> ctx = new HashMap<Object, Object>();
+      for (Behaviour b : behaviour) {
+        if (!b.execute(req, resp, ctx)) {
+          break;
         }
-        return spec;
+      }
     }
-
-    @Override
-    protected void doGet( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
+    catch (Exception e) {
+      throw new ServletException(e.getMessage(), e);
     }
+  }
 
+  @Override
+  protected void doHead(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    private void behave( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException
-    {
-        Log.debug( "behaving: " + req.getRequestURI() + ", " + Arrays.toString( behaviour ) );
-        try
-        {
-            Map<Object, Object> ctx = new HashMap<Object, Object>();
-            for ( Behaviour b : behaviour )
-            {
-                if ( !b.execute( req, resp, ctx ) )
-                {
-                    break;
-                }
-            }
-        }
-        catch ( Exception e )
-        {
-            throw new ServletException( e.getMessage(), e );
-        }
-    }
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    @Override
-    protected void doHead( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
+  @Override
+  protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    @Override
-    protected void doPost( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
+  @Override
+  protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    @Override
-    protected void doPut( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
+  @Override
+  protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    @Override
-    protected void doDelete( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
+  @Override
+  protected void doTrace(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException
+  {
+    behave(req, resp);
+  }
 
-    @Override
-    protected void doOptions( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
-
-    @Override
-    protected void doTrace( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        behave( req, resp );
-    }
-
-    @Override
-    public String toString()
-    {
-        return getClass().getSimpleName() + " " + Arrays.toString( behaviour );
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + " " + Arrays.toString(behaviour);
+  }
 }

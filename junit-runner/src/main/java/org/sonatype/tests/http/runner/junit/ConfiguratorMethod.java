@@ -15,7 +15,7 @@ package org.sonatype.tests.http.runner.junit;
 import java.lang.reflect.Method;
 
 import org.junit.runners.model.FrameworkMethod;
-import org.sonatype.tests.http.runner.api.SuiteConfigurator;
+import org.sonatype.tests.http.runner.SuiteConfigurator;
 
 /**
  * @author Benjamin Hanzelmann

@@ -22,24 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.TestServlet;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class ProxyTestServlet
     extends ProxyServlet
-    implements TestServlet
 {
 
     private String password = null;
 
     private String principal = null;
-
-    public String getPath()
-    {
-        return "/*";
-    }
 
     public ProxyTestServlet( String principal, String password )
     {

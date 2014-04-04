@@ -10,23 +10,25 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.tests.http.runner.junit;
 
-import org.sonatype.tests.http.runner.SuiteConfigurator;
-import org.sonatype.tests.http.server.api.ServerProvider;
+import org.junit.Rule;
+import org.junit.Test;
 
-public class DummyConfigurator
-    implements SuiteConfigurator
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
+public class ServerResourceTest
 {
+  @Rule
+  public ServerResource server = new ServerResource(new DummyProvider());
 
-    public ServerProvider provider()
-    {
-        return new DummyProvider();
-    }
-
-    public String getName()
-    {
-        return "Test";
-    }
+  @Test
+  public void succeed() throws Exception {
+    assertThat(server.getServerProvider().isStarted(), is(true));
+    server.getServerProvider().stop();
+    assertThat(server.getServerProvider().isStarted(), is(false));
+  }
 
 }

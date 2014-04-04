@@ -14,7 +14,63 @@
 -->
 # Testing Harness for http-based tests.
 
-The purpose of this harness is to be able to execute the same test code for
-many server configurations.  Instead of setting up a server fixture in every
-test method, the test methods can be executed multiple times with different server
-fixtures. 
+This library provides two main components:
+ * server-provider allows easy HTTP server and HTTP Proxy setups to be used in tests
+ * junit-runner makes JUnit able to execute same test code for
+   many server configurations, executing test methods multiple times
+   with different server fixtures.
+
+Supported test libraries:
+
+ * JUnit 4.11
+
+ServerProviders:
+
+ * Jetty 8.1.x
+
+# Usage as "test" HTTP server
+
+As stubbing/mocking HTTP server: just add following dependency to your POM:
+
+```
+  <dependency>
+    <groupId>org.sonatype.http-testing-harness</groupId>
+    <artifactId>server-provider</artifactId>
+    <version>...</version>
+  </dependncy>
+```
+
+And in your test you can either use `org.sonatype.tests.http.server.jetty.impl.JettyServerProvider` directly,
+or use "fluent" API using `org.sonatype.tests.http.server.fluent.Server`.
+
+# JUnit integration
+
+To have more tighter JUnit integration, add following dependency to your POM (it will pull in server-provider too):
+
+```
+  <dependency>
+    <groupId>org.sonatype.http-testing-harness</groupId>
+    <artifactId>junit-runner</artifactId>
+    <version>...</version>
+  </dependncy>
+```
+
+Using this module, you can use provided annotations to create tests that are running against combinations
+of server fixtures, and also it provides very simple JUnit Rules to manage Server lifecycle as JUnit
+`ExternalResource`.
+
+# Authors/contributors
+
+Original author:
+
+ * Benjamin Hanzelmann https://github.com/nabcos
+
+Contributor:
+
+ * Tamas Cservenak https://github.com/cstamas
+
+
+=====
+
+Have fun,
+~t~

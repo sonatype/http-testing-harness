@@ -10,23 +10,26 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.tests.http.runner.junit;
 
-import org.sonatype.tests.http.runner.SuiteConfigurator;
-import org.sonatype.tests.http.server.api.ServerProvider;
+package org.sonatype.tests.http.server.api;
 
-public class DummyConfigurator
-    implements SuiteConfigurator
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public interface Behaviour
 {
+  public enum Keys
+  {
+    CONTENT, STUTTER_MSGS, STUTTER_TIME, CONTENT_SIZE, TRUNCATE_MSG;
+  }
 
-    public ServerProvider provider()
-    {
-        return new DummyProvider();
-    }
-
-    public String getName()
-    {
-        return "Test";
-    }
-
+  /**
+   * Execute the Behaviour (e.g. send data, redirect, sleep, ...).
+   *
+   * @return <code>true</code> if execution of following behaviours should continue.
+   */
+  boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception;
 }

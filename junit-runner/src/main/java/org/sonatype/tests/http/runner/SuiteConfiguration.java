@@ -10,23 +10,15 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.tests.http.runner.junit;
 
-import org.sonatype.tests.http.runner.SuiteConfigurator;
-import org.sonatype.tests.http.server.api.ServerProvider;
+package org.sonatype.tests.http.runner;
 
-public class DummyConfigurator
-    implements SuiteConfigurator
+/**
+ * @author Benjamin Hanzelmann
+ */
+public interface SuiteConfiguration
 {
 
-    public ServerProvider provider()
-    {
-        return new DummyProvider();
-    }
-
-    public String getName()
-    {
-        return "Test";
-    }
+  void setConfigurator(SuiteConfigurator configurator);
 
 }

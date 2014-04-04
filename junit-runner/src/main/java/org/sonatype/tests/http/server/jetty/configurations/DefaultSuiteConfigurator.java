@@ -10,23 +10,32 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.tests.http.runner.junit;
 
-import org.sonatype.tests.http.runner.SuiteConfigurator;
+package org.sonatype.tests.http.server.jetty.configurations;
+
 import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.runner.SuiteConfigurator;
+import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
-public class DummyConfigurator
+/**
+ * @author Benjamin Hanzelmann
+ */
+public class DefaultSuiteConfigurator
     implements SuiteConfigurator
 {
 
-    public ServerProvider provider()
-    {
-        return new DummyProvider();
-    }
 
-    public String getName()
-    {
-        return "Test";
+  public ServerProvider provider() {
+    try {
+      return new JettyServerProvider();
     }
+    catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  public String getName() {
+    return "HTTP";
+  }
 
 }
