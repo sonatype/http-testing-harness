@@ -62,7 +62,7 @@ public class Get
 
       Log.debug("getting " + file.getAbsolutePath());
 
-      if (!file.canRead()) {
+      if (!file.isFile() || !file.canRead()) {
         Log.debug("Cannot read: " + file.getPath());
         response.sendError(404);
         return false;
