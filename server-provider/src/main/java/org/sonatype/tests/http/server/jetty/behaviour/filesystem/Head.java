@@ -13,7 +13,6 @@
 package org.sonatype.tests.http.server.jetty.behaviour.filesystem;
 
 import java.io.File;
-import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +44,7 @@ public class Head
         {
             Log.debug( fs( request.getPathInfo() ) + " exists, sending code " + code );
             response.setStatus( code );
-            response.setHeader( "Last-modified", new Date( fs( request.getPathInfo() ).lastModified() ).toString() );
+            response.setDateHeader("Last-modified", fs(request.getPathInfo()).lastModified());
         }
 
         return false;

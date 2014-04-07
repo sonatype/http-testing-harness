@@ -70,6 +70,7 @@ public class Get
 
       Log.debug("Delivering: " + file.getPath());
       response.setContentLength((int) file.length());
+      response.setDateHeader("Last-modified", file.lastModified());
 
       try (InputStream in = new FileInputStream(file); OutputStream out = response.getOutputStream()) {
         ByteStreams.copy(in, out);
