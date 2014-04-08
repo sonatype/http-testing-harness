@@ -22,13 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
+
+import org.sonatype.tests.http.server.fluent.Proxy;
 import org.sonatype.tests.http.server.jetty.behaviour.ProxyAuth;
 
 
 
 /**
+ * This is NOT a HTTP Proxy, it simply mimics it at connection and auth level, but it's still plain
+ * server provider. See {@link Proxy}.
+
  * @author Benjamin Hanzelmann
- *
  */
 public class JettyProxyProvider
     extends JettyServerProvider

@@ -25,7 +25,9 @@ import org.eclipse.jetty.util.log.Log;
 
 /**
  * @author Benjamin Hanzelmann
+ * @deprecated Use {@link MonitorableProxyServlet} or Jetty's own proxy servlet.
  */
+@Deprecated
 public class ProxyTestServlet
     extends ProxyServlet
 {

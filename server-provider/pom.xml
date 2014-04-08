@@ -45,6 +45,13 @@
       <version>${jetty.version}</version>
     </dependency>
 
+    <!-- Using ProxyServlet from it -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlets</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-security</artifactId>

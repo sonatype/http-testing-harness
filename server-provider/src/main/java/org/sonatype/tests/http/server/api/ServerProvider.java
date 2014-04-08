@@ -13,6 +13,7 @@
 
 package org.sonatype.tests.http.server.api;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -53,6 +54,10 @@ public interface ServerProvider
    */
   void addFilter(String pathSpec, Filter filter);
 
+  /**
+   * Mounts the given file context for the given pathspec.
+   */
+  void serveFiles(String pathSpec, FileContext fileContext);
 
   /**
    * Set to 0 to auto-choose a free port.
@@ -92,5 +97,32 @@ public interface ServerProvider
    * @since 0.8
    */
   void setSSLNeedClientAuth(boolean needClientAuth);
+
+  /**
+   * File serving context.
+   */
+  public static class FileContext
+  {
+    private final boolean collectionAllow;
+
+    private final File baseDir;
+
+    public FileContext(final File baseDir) {
+      this(baseDir, true);
+    }
+
+    public FileContext(final File baseDir, final boolean collectionAllow) {
+      this.collectionAllow = collectionAllow;
+      this.baseDir = baseDir;
+    }
+
+    public boolean isCollectionAllow() {
+      return collectionAllow;
+    }
+
+    public File getBaseDir() {
+      return baseDir;
+    }
+  }
 
 }

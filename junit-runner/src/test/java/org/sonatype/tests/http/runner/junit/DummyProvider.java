@@ -56,6 +56,11 @@ class DummyProvider
 
   }
 
+  @Override
+  public void serveFiles(final String pathSpec, final FileContext fileContext) {
+
+  }
+
   public void start()
       throws Exception
   {

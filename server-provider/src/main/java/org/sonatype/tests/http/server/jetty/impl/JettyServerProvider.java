@@ -58,6 +58,7 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.BlockingChannelConnector;
 import org.eclipse.jetty.server.ssl.SslConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -356,6 +357,23 @@ public class JettyServerProvider
         EnumSet.of(DispatcherType.REQUEST));
   }
 
+  @Override
+  public void serveFiles(final String pathSpec, final FileContext fileContext) {
+    if (webappContext == null) {
+      try {
+        initServer();
+      }
+      catch (Exception e) {
+        throw new IllegalStateException(e);
+      }
+    }
+    final ServletHolder servletHolder = new ServletHolder(new DefaultServlet());
+    servletHolder.setInitParameter("resourceBase", fileContext.getBaseDir().getAbsolutePath());
+    servletHolder.setInitParameter("dirAllowed", String.valueOf(fileContext.isCollectionAllow()));
+    servletHolder.setInitParameter("acceptRanges", Boolean.TRUE.toString());
+    webappContext.getServletHandler().addServletWithMapping(servletHolder, "/*");
+  }
+
   protected void initWebappContext(Server s)
       throws URISyntaxException
   {
@@ -584,7 +602,6 @@ public class JettyServerProvider
     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
       return new X509Certificate[0];
     }
-
   }
 
 }

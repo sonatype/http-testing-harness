@@ -13,6 +13,7 @@
 
 package org.sonatype.tests.http.server.fluent;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,6 +22,7 @@ import javax.servlet.Servlet;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProvider.FileContext;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -33,8 +35,7 @@ public class Server
 
   private final ServerProvider serverProvider;
 
-  public Server()
-  {
+  public Server() {
     this(new JettyServerProvider());
   }
 
@@ -51,16 +52,14 @@ public class Server
    *
    * @since 0.6
    */
-  public static Server server()
-  {
+  public static Server server() {
     return new Server();
   }
 
   /**
    * Start a server on the given port (0 for random).
    */
-  public static Server withPort(int port)
-  {
+  public static Server withPort(int port) {
     JettyServerProvider jettyServerProvider = new JettyServerProvider();
     jettyServerProvider.setPort(port);
     return new Server(jettyServerProvider);
@@ -159,6 +158,12 @@ public class Server
     public Server withFilter(Filter filter) {
       checkNotNull(filter);
       server.getServerProvider().addFilter(pattern, filter);
+      return server;
+    }
+
+    public Server fromDirectory(File directory) {
+      checkNotNull(directory);
+      server.getServerProvider().serveFiles(pattern, new FileContext(directory));
       return server;
     }
   }

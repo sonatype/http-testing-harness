@@ -53,7 +53,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author gregw
+ * @deprecated Use {@link MonitorableProxyServlet} or Jetty's own proxy servlet.
  */
+@Deprecated
 public class ProxyServlet
     implements Servlet
 {
