@@ -371,7 +371,9 @@ public class JettyServerProvider
     servletHolder.setInitParameter("resourceBase", fileContext.getBaseDir().getAbsolutePath());
     servletHolder.setInitParameter("dirAllowed", String.valueOf(fileContext.isCollectionAllow()));
     servletHolder.setInitParameter("acceptRanges", Boolean.TRUE.toString());
-    webappContext.getServletHandler().addServletWithMapping(servletHolder, "/*");
+    servletHolder.setInitParameter("pathInfoOnly", Boolean.TRUE.toString());
+
+    webappContext.getServletHandler().addServletWithMapping(servletHolder, pathSpec);
   }
 
   protected void initWebappContext(Server s)

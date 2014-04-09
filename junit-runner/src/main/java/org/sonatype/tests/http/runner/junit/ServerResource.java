@@ -14,6 +14,7 @@
 package org.sonatype.tests.http.runner.junit;
 
 import org.sonatype.tests.http.server.api.ServerProvider;
+import org.sonatype.tests.http.server.api.ServerProviderBuilder;
 
 import com.google.common.base.Throwables;
 import org.junit.rules.ExternalResource;
@@ -26,10 +27,23 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ServerResource
     extends ExternalResource
 {
-  private final ServerProvider serverProvider;
+  private final ServerProviderBuilder serverProviderBuilder;
+
+  private ServerProvider serverProvider;
 
   public ServerResource(final ServerProvider serverProvider) {
-    this.serverProvider = checkNotNull(serverProvider);
+    checkNotNull(serverProvider);
+    this.serverProviderBuilder = new ServerProviderBuilder()
+    {
+      @Override
+      public ServerProvider buildServerProvider() {
+        return serverProvider;
+      }
+    };
+  }
+
+  public ServerResource(final ServerProviderBuilder serverProviderBuilder) {
+    this.serverProviderBuilder = checkNotNull(serverProviderBuilder);
   }
 
   public ServerProvider getServerProvider() {
@@ -37,12 +51,14 @@ public class ServerResource
   }
 
   protected void before() throws Throwable {
-    getServerProvider().start();
+    serverProvider = serverProviderBuilder.buildServerProvider();
+    serverProvider.start();
   }
 
   protected void after() {
     try {
-      getServerProvider().stop();
+      serverProvider.stop();
+      serverProvider = null;
     }
     catch (Exception e) {
       Throwables.propagate(e);
