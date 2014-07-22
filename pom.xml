@@ -18,9 +18,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.sonatype.forge</groupId>
-    <artifactId>forge-parent</artifactId>
-    <version>38</version>
+    <groupId>org.sonatype.buildsupport</groupId>
+    <artifactId>public-parent</artifactId>
+    <version>6</version>
   </parent>
 
   <groupId>org.sonatype.http-testing-harness</groupId>
@@ -90,7 +90,6 @@
   </dependencyManagement>
 
   <build>
-
     <pluginManagement>
       <plugins>
         <plugin>
