@@ -18,66 +18,60 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
-
-
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class Fail
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private String message = null;
+  private String message = null;
 
-    private int code = -1;
+  private int code = -1;
 
-    private int count = 0;
+  private int count = 0;
 
-    private int numFailures = -1;
+  private int numFailures = -1;
 
-    private final AtomicInteger failed = new AtomicInteger( 0 );
+  private final AtomicInteger failed = new AtomicInteger(0);
 
-    public Fail( int count, int code, String message )
-    {
-        this.numFailures = count;
-        this.code = code;
-        this.message = message;
+  public Fail(int count, int code, String message)
+  {
+    this.numFailures = count;
+    this.code = code;
+    this.message = message;
+  }
+
+  public Fail(int code, String message)
+  {
+    this(-1, code, message);
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (numFailures == -1) {
+      failed.incrementAndGet();
+      log.debug("Always failing: {}", failed);
+      response.sendError(code, message);
+      return false;
     }
 
-    public Fail( int code, String message )
-    {
-        this( -1, code, message );
+    if (count++ < numFailures) {
+      failed.incrementAndGet();
+      log.debug("failing {} times: {}", count, failed);
+      response.sendError(code, message);
+      return false;
     }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( numFailures == -1 )
-        {
-            failed.incrementAndGet();
-            Log.debug( "Always failing: " + failed );
-            response.sendError( code, message );
-            return false;
-        }
+    count = 0;
+    return true;
+  }
 
-        if ( count++ < numFailures )
-        {
-            failed.incrementAndGet();
-            Log.debug( "failing " + count + " times: " + failed );
-            response.sendError( code, message );
-            return false;
-        }
-
-        count = 0;
-        return true;
-    }
-
-    public int getFailedCount()
-    {
-        return failed.get();
-    }
+  public int getFailedCount()
+  {
+    return failed.get();
+  }
 
 }

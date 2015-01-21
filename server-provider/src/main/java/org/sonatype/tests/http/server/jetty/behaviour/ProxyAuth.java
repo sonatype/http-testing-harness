@@ -20,75 +20,70 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class ProxyAuth
-    implements Behaviour
+    extends BehaviourSupport
 {
-    private boolean authorized = false;
+  private boolean authorized = false;
 
-    private boolean challenged = false;
+  private boolean challenged = false;
 
-    private final String user;
+  private final String user;
 
-    private final String password;
+  private final String password;
 
-    public ProxyAuth( String user, String password )
-    {
-        this.user = user;
-        this.password = password;
+  public ProxyAuth(String user, String password)
+  {
+    this.user = user;
+    this.password = password;
+  }
+
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    String headers = "";
+
+    @SuppressWarnings("unchecked")
+    Enumeration<String> names = request.getHeaderNames();
+    while (names.hasMoreElements()) {
+      String name = names.nextElement();
+      String value = request.getHeader(name);
+      headers += name + ": " + value + "\n";
     }
-
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        String headers = "";
-
-        @SuppressWarnings( "unchecked" )
-        Enumeration<String> names = request.getHeaderNames();
-        while ( names.hasMoreElements() )
-        {
-            String name = names.nextElement();
-            String value = request.getHeader( name );
-            headers += name + ": " + value + "\n";
-        }
-        Log.debug( headers );
-        String authHeader = request.getHeader( "Proxy-Authorization" );
-        if ( authHeader == null )
-        {
-            response.setContentType( "text/html" );
-            response.addHeader( "Proxy-Authenticate", "BASIC realm=\"Test Proxy\"" );
-            response.sendError( 407, "proxy auth required" );
-            challenged = true;
-            return false;
-        }
-        else
-        {
-            String expected = new String( B64Code.encode( ( user + ":" + password ).getBytes( "UTF-8" ) ) );
-            this.authorized = expected.equals( authHeader.split( " ", 2 )[1] );
-        }
-        return this.authorized;
+    log.debug("Headers: {}", headers);
+    String authHeader = request.getHeader("Proxy-Authorization");
+    if (authHeader == null) {
+      response.setContentType("text/html");
+      response.addHeader("Proxy-Authenticate", "BASIC realm=\"Test Proxy\"");
+      response.sendError(407, "proxy auth required");
+      challenged = true;
+      return false;
     }
-
-    public boolean isAuthorized()
-    {
-        return authorized;
+    else {
+      String expected = new String(B64Code.encode((user + ":" + password).getBytes("UTF-8")));
+      this.authorized = expected.equals(authHeader.split(" ", 2)[1]);
     }
+    return this.authorized;
+  }
 
-    public boolean isChallenged()
-    {
-        return challenged;
-    }
+  public boolean isAuthorized()
+  {
+    return authorized;
+  }
 
-    public void reset()
-    {
-        this.authorized = false;
-        this.challenged = false;
-    }
+  public boolean isChallenged()
+  {
+    return challenged;
+  }
+
+  public void reset()
+  {
+    this.authorized = false;
+    this.challenged = false;
+  }
 
 }

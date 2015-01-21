@@ -19,92 +19,85 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.security.ConstraintSecurityHandler;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
-
 import org.sonatype.tests.http.server.fluent.Proxy;
 import org.sonatype.tests.http.server.jetty.behaviour.ProxyAuth;
 
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
 
 
 /**
  * This is NOT a HTTP Proxy, it simply mimics it at connection and auth level, but it's still plain
  * server provider. See {@link Proxy}.
-
+ *
  * @author Benjamin Hanzelmann
  */
 public class JettyProxyProvider
     extends JettyServerProvider
 {
 
-    /**
-     * @author Benjamin Hanzelmann
-     */
-    public class ProxyAuthHandler
-        extends ConstraintSecurityHandler
+  /**
+   * @author Benjamin Hanzelmann
+   */
+  public class ProxyAuthHandler
+      extends ConstraintSecurityHandler
+  {
+    @Override
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException
     {
-        @Override
-        public void handle( String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response )
-            throws IOException, ServletException
-        {
-            try
-            {
-                boolean authenticated = true;
-                if ( user != null )
-                {
-                    authenticated = new ProxyAuth( user, password ).execute( request, response, null );
-                }
-
-                if ( authenticated )
-                {
-                    super.handle( target, baseRequest, request, response );
-                }
-                else
-                {
-                    baseRequest.setHandled( true );
-                }
-            }
-            catch ( Exception e )
-            {
-                throw new ServletException( e.getMessage(), e );
-            }
+      try {
+        boolean authenticated = true;
+        if (user != null) {
+          authenticated = new ProxyAuth(user, password).execute(request, response, null);
         }
 
-    }
-
-    private String password;
-
-    private String user;
-
-    public JettyProxyProvider()
-    {
-    }
-
-    public JettyProxyProvider( String user, String pw )
-        throws Exception
-    {
-        this.user = user;
-        this.password = pw;
-    }
-
-    @Override
-    public void addAuthentication( String pathSpec, String authName )
-    {
-        setSecurityHandler( new ProxyAuthHandler() );
-        super.addAuthentication( pathSpec, authName );
-    }
-
-    @Override
-    protected void initWebappContext( Server s )
-        throws URISyntaxException
-    {
-        super.initWebappContext( s );
-        if ( user != null )
-        {
-            ProxyAuthHandler pah = new ProxyAuthHandler();
-            getWebappContext().setSecurityHandler( pah );
+        if (authenticated) {
+          super.handle(target, baseRequest, request, response);
         }
+        else {
+          baseRequest.setHandled(true);
+        }
+      }
+      catch (Exception e) {
+        throw new ServletException(e.getMessage(), e);
+      }
     }
+
+  }
+
+  private String password;
+
+  private String user;
+
+  public JettyProxyProvider()
+  {
+  }
+
+  public JettyProxyProvider(String user, String pw)
+      throws Exception
+  {
+    this.user = user;
+    this.password = pw;
+  }
+
+  @Override
+  public void addAuthentication(String pathSpec, String authName)
+  {
+    setSecurityHandler(new ProxyAuthHandler());
+    super.addAuthentication(pathSpec, authName);
+  }
+
+  @Override
+  protected void initWebappContext(Server s)
+      throws URISyntaxException
+  {
+    super.initWebappContext(s);
+    if (user != null) {
+      ProxyAuthHandler pah = new ProxyAuthHandler();
+      getWebappContext().setSecurityHandler(pah);
+    }
+  }
 
 }

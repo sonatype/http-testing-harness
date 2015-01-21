@@ -22,69 +22,63 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class Expect
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private final Map<String, byte[]> expectations = new ConcurrentHashMap<String, byte[]>();
+  private final Map<String, byte[]> expectations = new ConcurrentHashMap<String, byte[]>();
 
-    private final Map<String, byte[]> seen = new ConcurrentHashMap<String, byte[]>();
+  private final Map<String, byte[]> seen = new ConcurrentHashMap<String, byte[]>();
 
-    public void addExpectation( String path, byte[] content )
-    {
-        expectations.put( path, content );
+  public void addExpectation(String path, byte[] content)
+  {
+    expectations.put(path, content);
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if ("PUT".equals(request.getMethod())) {
+      String path = request.getPathInfo().substring(1);
+      ServletInputStream in = request.getInputStream();
+
+      int count;
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      byte[] b = new byte[16000];
+      while ((count = in.read(b)) != -1) {
+        out.write(b, 0, count);
+      }
+
+      out.close();
+      byte[] ba = out.toByteArray();
+
+      seen.put(path, ba);
+
+      return false;
     }
+    return true;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( "PUT".equals( request.getMethod() ) )
-        {
-            String path = request.getPathInfo().substring( 1 );
-            ServletInputStream in = request.getInputStream();
+  public byte[] seenBytes(String path)
+  {
+    return seen.get(path);
+  }
 
-            int count;
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] b = new byte[16000];
-            while ( ( count = in.read( b ) ) != -1 )
-            {
-                out.write( b, 0, count );
-            }
-
-            out.close();
-            byte[] ba = out.toByteArray();
-
-            seen.put( path, ba );
-
-            return false;
-        }
-        return true;
+  public void assertExpectations()
+  {
+    for (Entry<String, byte[]> entry : expectations.entrySet()) {
+      String path = entry.getKey();
+      if (!Arrays.equals(entry.getValue(), seen.get(path))) {
+        String msg =
+            String.format("assertion failed for %s, expected: %s (%s), actual: %s (%s)", path,
+                Arrays.toString(entry.getValue()), new String(entry.getValue()),
+                Arrays.toString(seen.get(path)), new String(seen.get(path)));
+        throw new AssertionError(msg);
+      }
     }
-
-    public byte[] seenBytes( String path )
-    {
-        return seen.get( path );
-    }
-
-    public void assertExpectations()
-    {
-        for ( Entry<String, byte[]> entry : expectations.entrySet() )
-        {
-            String path = entry.getKey();
-            if ( !Arrays.equals( entry.getValue(), seen.get( path ) ) )
-            {
-                String msg =
-                    String.format( "assertion failed for %s, expected: %s (%s), actual: %s (%s)", path,
-                                   Arrays.toString( entry.getValue() ), new String( entry.getValue() ),
-                                   Arrays.toString( seen.get( path ) ), new String( seen.get( path ) ) );
-                throw new AssertionError( msg );
-            }
-        }
-    }
+  }
 
 }

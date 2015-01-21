@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.jetty.behaviour.BehaviourSupport;
 
 import com.google.common.collect.Maps;
 
@@ -25,7 +26,7 @@ import com.google.common.collect.Maps;
  * {@link Behaviour} emulating PGP SKS.
  */
 public class KeyBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
   private final Map<String, String> keys = Maps.newLinkedHashMap();
 

@@ -20,54 +20,47 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class Deliver
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private File file;
+  private File file;
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( file == null )
-        {
-            String path = BehaviourHelper.content( request.getPathInfo() );
-            file = new File( path );
-        }
-        ServletOutputStream out = response.getOutputStream();
-        FileInputStream in = null;
-        try
-        {
-            response.setContentLength( (int) file.length() );
-            in = new FileInputStream( file );
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (file == null) {
+      String path = pathAsContent(request.getPathInfo());
+      file = new File(path);
+    }
+    ServletOutputStream out = response.getOutputStream();
+    FileInputStream in = null;
+    try {
+      response.setContentLength((int) file.length());
+      in = new FileInputStream(file);
 
-            int read = -1;
-            byte[] buf = new byte[16000];
-            while ( ( read = in.read( buf ) ) != -1 )
-            {
-                out.write( buf, 0, read );
-            }
-        }
-        finally
-        {
-            if ( in != null )
-            {
-                in.close();
-            }
-            out.close();
-        }
-
-        return false;
+      int read = -1;
+      byte[] buf = new byte[16000];
+      while ((read = in.read(buf)) != -1) {
+        out.write(buf, 0, read);
+      }
+    }
+    finally {
+      if (in != null) {
+        in.close();
+      }
+      out.close();
     }
 
-    public Deliver( File file )
-    {
-        this.file = file;
-    }
+    return false;
+  }
+
+  public Deliver(File file)
+  {
+    this.file = file;
+  }
 
 }

@@ -18,54 +18,50 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.sisu.goodies.common.Time;
-import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class Pause
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private long pause = -1;
+  private long pause = -1;
 
-    public static Pause pause( Time time )
-    {
-        return new Pause( time.toMillis() );
-    }
+  public static Pause pause(Time time)
+  {
+    return new Pause(time.toMillis());
+  }
 
-    public Pause()
-    {
-        super();
-    }
+  public Pause()
+  {
+    super();
+  }
 
-    public Pause( long pause )
-    {
-        this.pause = pause;
-    }
+  public Pause(long pause)
+  {
+    this.pause = pause;
+  }
 
-    public Pause( int pause )
-    {
-        this.pause = pause;
-    }
+  public Pause(int pause)
+  {
+    this.pause = pause;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-    {
-        if ( pause == -1 )
-        {
-            String path = request.getPathInfo().substring( 1 );
-            String[] split = path.split( "/", 2 );
-            pause = Integer.valueOf( split[0] ).intValue();
-        }
-        try
-        {
-            Thread.sleep( pause );
-        }
-        catch ( InterruptedException e )
-        {
-            e.printStackTrace();
-        }
-        return true;
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+  {
+    if (pause == -1) {
+      String path = request.getPathInfo().substring(1);
+      String[] split = path.split("/", 2);
+      pause = Integer.valueOf(split[0]).intValue();
     }
+    try {
+      Thread.sleep(pause);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    return true;
+  }
 
 }

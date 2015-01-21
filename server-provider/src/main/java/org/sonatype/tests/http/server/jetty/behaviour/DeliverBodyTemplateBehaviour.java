@@ -21,37 +21,38 @@ import org.sonatype.sisu.goodies.common.FormatTemplate;
 import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
- * {@link Behaviour} that combines {@link ErrorBehaviour} and {@link Content} behaviours, by letting specifying response
+ * {@link Behaviour} that combines {@link ErrorBehaviour} and {@link Content} behaviours, by letting specifying
+ * response
  * error code and body, thus allowing to simulate error pages too. And it uses {@link FormatTemplate} for body, so body
  * template is evaluated per request.
- * 
+ *
  * @author cstamas
  * @since 0.8
  */
 public class DeliverBodyTemplateBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
-    private final int code;
+  private final int code;
 
-    private final String bodyContentType;
+  private final String bodyContentType;
 
-    private final FormatTemplate body;
+  private final FormatTemplate body;
 
-    public DeliverBodyTemplateBehaviour( final int code, final String bodyContentType, final FormatTemplate body )
-    {
-        this.code = code;
-        this.bodyContentType = bodyContentType;
-        this.body = body;
-    }
+  public DeliverBodyTemplateBehaviour(final int code, final String bodyContentType, final FormatTemplate body)
+  {
+    this.code = code;
+    this.bodyContentType = bodyContentType;
+    this.body = body;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        response.setStatus( code );
-        response.setContentType( bodyContentType );
-        final byte[] bodyPayload = body.evaluate().getBytes( "UTF-8" );
-        response.setContentLength( bodyPayload.length );
-        response.getOutputStream().write( bodyPayload );
-        return true;
-    }
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    response.setStatus(code);
+    response.setContentType(bodyContentType);
+    final byte[] bodyPayload = body.evaluate().getBytes("UTF-8");
+    response.setContentLength(bodyPayload.length);
+    response.getOutputStream().write(bodyPayload);
+    return true;
+  }
 }

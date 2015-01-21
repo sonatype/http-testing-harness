@@ -26,7 +26,7 @@ import org.sonatype.tests.http.server.api.Behaviour;
  * @author Benjamin Hanzelmann
  */
 public class Content
-    implements Behaviour
+    extends BehaviourSupport
 {
 
     private String content;

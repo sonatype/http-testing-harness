@@ -19,64 +19,56 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Provide
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private final Map<String, byte[]> db = new ConcurrentHashMap<String, byte[]>();
+  private final Map<String, byte[]> db = new ConcurrentHashMap<String, byte[]>();
 
-    private int latency = -1;
+  private int latency = -1;
 
-    public void addPath( String path, byte[] content )
-    {
-        this.db.put( path, content );
-    }
+  public void addPath(String path, byte[] content)
+  {
+    this.db.put(path, content);
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        String path = request.getPathInfo().substring( 1 );
-        Log.debug( request.getMethod() + " " + path );
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    String path = request.getPathInfo().substring(1);
+    log.debug("{} {}", request.getMethod(), path);
 
-        if ( "GET".equals( request.getMethod() ) )
-        {
-            byte[] ba = db.get( path );
-            if ( ba == null )
-            {
-                ba = new byte[0];
-            }
+    if ("GET".equals(request.getMethod())) {
+      byte[] ba = db.get(path);
+      if (ba == null) {
+        ba = new byte[0];
+      }
 
-            response.setContentType( "application/octet-stream" );
-            response.setContentLength( ba.length );
+      response.setContentType("application/octet-stream");
+      response.setContentLength(ba.length);
 
-            ServletOutputStream out = response.getOutputStream();
-            for ( int i = 0; i < ba.length; i++ )
-            {
-                out.write( ba[i] );
-                out.flush();
-                if ( latency != -1 )
-                {
-                    Thread.sleep( latency );
-                }
-            }
-            out.close();
-            return false;
+      ServletOutputStream out = response.getOutputStream();
+      for (int i = 0; i < ba.length; i++) {
+        out.write(ba[i]);
+        out.flush();
+        if (latency != -1) {
+          Thread.sleep(latency);
         }
-
-        return true;
+      }
+      out.close();
+      return false;
     }
 
-    public void setLatency( int i )
-    {
-        this.latency = i;
+    return true;
+  }
 
-    }
+  public void setLatency(int i)
+  {
+    this.latency = i;
+
+  }
 
 }

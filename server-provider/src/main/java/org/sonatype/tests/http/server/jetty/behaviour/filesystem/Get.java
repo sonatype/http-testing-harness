@@ -21,17 +21,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.jetty.behaviour.BehaviourSupport;
 
 import com.google.common.io.ByteStreams;
-import org.eclipse.jetty.util.log.Log;
 
 
 /**
  * @author Benjamin Hanzelmann
  */
 public class Get
-    implements Behaviour
+    extends BehaviourSupport
 {
 
   private String fpath = ".";
@@ -59,15 +58,15 @@ public class Get
       String path = request.getPathInfo();
       File file = new File(fpath, path);
 
-      Log.debug("getting " + file.getAbsolutePath());
+      log.debug("GETting {}", file.getAbsolutePath());
 
       if (!file.isFile() || !file.canRead()) {
-        Log.debug("Cannot read: " + file.getPath());
+        log.debug("Cannot read: {}", file.getPath());
         response.sendError(404);
         return false;
       }
 
-      Log.debug("Delivering: " + file.getPath());
+      log.debug("Delivering: {}", file.getPath());
       response.setContentLength((int) file.length());
       response.setDateHeader("Last-modified", file.lastModified());
 

@@ -26,7 +26,7 @@ import org.sonatype.tests.http.server.api.Behaviour;
  *
  */
 public class BasicAuth
-    implements Behaviour
+    extends BehaviourSupport
 {
 
     private final String password;

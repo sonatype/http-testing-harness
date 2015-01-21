@@ -12,127 +12,117 @@
  */
 package org.sonatype.tests.http.server.jetty.behaviour;
 
-import static org.sonatype.tests.http.server.jetty.behaviour.BehaviourHelper.*;
-
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class Redirect
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private int count = -1;
+  private int count = -1;
 
-    private final AtomicInteger redirectCount = new AtomicInteger( 0 );
+  private final AtomicInteger redirectCount = new AtomicInteger(0);
 
-    private String content;
+  private String content;
 
-    private String target;
+  private String target;
 
-    private String pattern;
+  private String pattern;
 
-    private String replace;
+  private String replace;
 
-    private int status = -1;
+  private int status = -1;
 
-    public static Redirect redirect( String url )
-    {
-        return new Redirect( url );
+  public static Redirect redirect(String url)
+  {
+    return new Redirect(url);
+  }
+
+  public static Redirect redirect(String url, int status)
+  {
+    return new Redirect(url, status);
+  }
+
+  public Redirect(String pattern, String replace)
+  {
+    this.pattern = pattern;
+    this.replace = replace;
+  }
+
+  public Redirect()
+  {
+    super();
+  }
+
+  public Redirect(int count)
+  {
+    this.count = count;
+  }
+
+  public Redirect(String url)
+  {
+    this.target = url;
+  }
+
+  public Redirect(String url, int status)
+  {
+    this.target = url;
+    this.status = status;
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (target != null && status != -1) {
+      response.setContentLength(0);
+      response.setStatus(status);
+      response.setHeader("Location", target);
+      return false;
+    }
+    else if (target != null) {
+      response.setContentLength(0);
+      response.sendRedirect(target);
+      return false;
     }
 
-    public static Redirect redirect( String url, int status )
-    {
-        return new Redirect( url, status );
+    if (pattern != null) {
+      String path = request.getPathInfo();
+      path = path.replaceAll(pattern, replace);
+
+      response.sendRedirect(path);
+
+      return false;
     }
 
-    public Redirect( String pattern, String replace )
-    {
-        this.pattern = pattern;
-        this.replace = replace;
+    if (count == -1) {
+      count = Integer.valueOf(firstPart(request.getPathInfo()));
+      // save original content for last redirect
+      content = pathAsContent(request.getPathInfo());
+    }
+    else if (content == null) {
+      content = request.getPathInfo();
     }
 
-    public Redirect()
-    {
-        super();
+    if (redirectCount.get() < count) {
+      System.err.println("Redirecting... " + redirectCount);
+      response.setContentLength(0);
+      response.sendRedirect(String.valueOf(redirectCount.incrementAndGet()));
+      return false;
     }
 
-    public Redirect( int count )
-    {
-        this.count = count;
-    }
+    setContent(content, ctx);
 
-    public Redirect( String url )
-    {
-        this.target = url;
-    }
+    count = -1;
+    redirectCount.set(0);
+    content = null;
 
-    public Redirect( String url, int status )
-    {
-        this.target = url;
-        this.status = status;
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( target != null && status != -1 )
-        {
-            response.setContentLength( 0 );
-            response.setStatus( status );
-            response.setHeader("Location", target);
-            return false;
-        }
-        else if ( target != null )
-        {
-            response.setContentLength( 0 );
-            response.sendRedirect( target );
-            return false;
-        }
-
-        if ( pattern != null )
-        {
-            String path = request.getPathInfo();
-            path = path.replaceAll( pattern, replace );
-
-            response.sendRedirect( path );
-
-            return false;
-        }
-
-        if ( count == -1 )
-        {
-            count = Integer.valueOf( firstPart( request.getPathInfo() ) );
-            // save original content for last redirect
-            content = content( request.getPathInfo() );
-        }
-        else if ( content == null )
-        {
-            content = request.getPathInfo();
-        }
-
-        if ( redirectCount.get() < count )
-        {
-            System.err.println( "Redirecting... " + redirectCount );
-            response.setContentLength( 0 );
-            response.sendRedirect( String.valueOf( redirectCount.incrementAndGet() ) );
-            return false;
-        }
-
-        setContent( content, ctx );
-
-        count = -1;
-        redirectCount.set( 0 );
-        content = null;
-
-        return true;
-    }
+    return true;
+  }
 
 }

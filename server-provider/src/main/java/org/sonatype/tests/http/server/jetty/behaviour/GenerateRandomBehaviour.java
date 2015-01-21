@@ -12,8 +12,6 @@
  */
 package org.sonatype.tests.http.server.jetty.behaviour;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import java.util.Map;
 import java.util.Random;
 
@@ -23,53 +21,53 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * {@link Behaviour} that generates random count of bytes as response.
- * 
+ *
  * @author cstamas
  * @since 0.8
  */
 public class GenerateRandomBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
-    private final Random random = new Random();
+  private final Random random = new Random();
 
-    private static final byte[] bytes = new byte[1024];
+  private static final byte[] bytes = new byte[1024];
 
-    private final int length;
+  private final int length;
 
-    /**
-     * Constructor.
-     * 
-     * @param length the length of the response in bytes.
-     */
-    public GenerateRandomBehaviour( final int length )
-    {
-        checkArgument( length > 0, "Length must be greater than zero!" );
-        this.length = length;
+  /**
+   * Constructor.
+   *
+   * @param length the length of the response in bytes.
+   */
+  public GenerateRandomBehaviour(final int length)
+  {
+    checkArgument(length > 0, "Length must be greater than zero!");
+    this.length = length;
+  }
+
+  public boolean execute(final HttpServletRequest request, final HttpServletResponse response,
+                         final Map<Object, Object> ctx)
+      throws Exception
+  {
+    if ("GET".equals(request.getMethod())) {
+      response.setContentType("application/octet-stream");
+      response.setContentLength(length);
+
+      ServletOutputStream out = response.getOutputStream();
+      for (int i = length; i > 0; ) {
+        random.nextBytes(bytes);
+        int n = Math.min(i, bytes.length);
+        i -= n;
+        out.write(bytes, 0, n);
+      }
+      out.close();
+      return false;
     }
 
-    public boolean execute( final HttpServletRequest request, final HttpServletResponse response,
-                            final Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( "GET".equals( request.getMethod() ) )
-        {
-            response.setContentType( "application/octet-stream" );
-            response.setContentLength( length );
-
-            ServletOutputStream out = response.getOutputStream();
-            for ( int i = length; i > 0; )
-            {
-                random.nextBytes( bytes );
-                int n = Math.min( i, bytes.length );
-                i -= n;
-                out.write( bytes, 0, n );
-            }
-            out.close();
-            return false;
-        }
-
-        return true;
-    }
+    return true;
+  }
 }

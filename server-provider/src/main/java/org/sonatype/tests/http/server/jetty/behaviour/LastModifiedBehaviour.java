@@ -23,33 +23,32 @@ import org.sonatype.tests.http.server.api.Behaviour;
 /**
  * {@link Behaviour} implementation that overrides the Last-Modified response header, depending on the value
  * this instance has set.
- * 
+ *
  * @author cstamas
  * @since 0.8
  */
 public class LastModifiedBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
-    private Date lastModified;
+  private Date lastModified;
 
-    public LastModifiedBehaviour( final Date date )
-    {
-        setLastModified( date );
-    }
+  public LastModifiedBehaviour(final Date date)
+  {
+    setLastModified(date);
+  }
 
-    public void setLastModified( final Date when )
-    {
-        lastModified = when;
-    }
+  public void setLastModified(final Date when)
+  {
+    lastModified = when;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( lastModified != null )
-        {
-            response.setDateHeader( "last-modified", lastModified.getTime() );
-        }
-        return true;
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (lastModified != null) {
+      response.setDateHeader("last-modified", lastModified.getTime());
     }
+    return true;
+  }
 
 }

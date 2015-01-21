@@ -17,49 +17,44 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class Truncate
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private int count = -1;
+  private int count = -1;
 
-    public Truncate()
-    {
-        super();
+  public Truncate()
+  {
+    super();
+  }
+
+  public Truncate(int count)
+  {
+    this.count = count;
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    String path = request.getPathInfo().substring(1);
+    String msg = null;
+    if (count == -1) {
+      String[] split = path.split("/", 2);
+      count = Integer.valueOf(split[0]).intValue();
+      msg = split[1].substring(0, count);
     }
 
-    public Truncate( int count )
-    {
-        this.count = count;
+    response.setContentLength(path.getBytes("UTF-8").length);
+    if (msg != null) {
+      response.getWriter().write(msg);
     }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        String path = request.getPathInfo().substring( 1 );
-        String msg = null;
-        if ( count == -1 )
-        {
-            String[] split = path.split( "/", 2 );
-            count = Integer.valueOf( split[0] ).intValue();
-            msg = split[1].substring( 0, count );
-        }
-
-        response.setContentLength( path.getBytes( "UTF-8" ).length );
-        if ( msg != null )
-        {
-            response.getWriter().write( msg );
-        }
-        else
-        {
-            response.getWriter().write( request.getPathInfo().substring( 1, count + 1 ) );
-        }
-        return false;
+    else {
+      response.getWriter().write(request.getPathInfo().substring(1, count + 1));
     }
+    return false;
+  }
 
 }

@@ -25,7 +25,7 @@
   <artifactId>server-provider</artifactId>
 
   <properties>
-    <jetty.version>8.1.14.v20131031</jetty.version>
+    <jetty.version>9.2.7.v20150116</jetty.version>
   </properties>
 
   <dependencies>
@@ -48,7 +48,7 @@
     <!-- Using ProxyServlet from it -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlets</artifactId>
+      <artifactId>jetty-proxy</artifactId>
       <version>${jetty.version}</version>
     </dependency>
 
@@ -64,9 +64,16 @@
       <version>${jetty.version}</version>
     </dependency>
 
+    <!-- Test -->
     <dependency>
-      <groupId>org.sonatype.sisu.litmus</groupId>
-      <artifactId>litmus-testsupport</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonatype.sisu.goodies</groupId>
+      <artifactId>goodies-testsupport</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

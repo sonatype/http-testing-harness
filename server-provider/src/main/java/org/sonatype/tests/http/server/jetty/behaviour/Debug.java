@@ -18,32 +18,26 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Debug
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        Log.debug( "context path " + request.getContextPath() );
-        Log.debug( "path info " + request.getPathInfo() );
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    log.debug("context path {}", request.getContextPath());
+    log.debug("path info {}", request.getPathInfo());
 
-        @SuppressWarnings( "rawtypes" )
-        Enumeration headerNames = request.getHeaderNames();
-        while ( headerNames.hasMoreElements() )
-        {
-            String element = headerNames.nextElement().toString();
-            Log.debug( element + ": " + request.getHeader( element ) );
-        }
-
-        return true;
+    Enumeration headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+      String element = headerNames.nextElement().toString();
+      log.debug("{}: {}", element, request.getHeader(element));
     }
+
+    return true;
+  }
 
 }

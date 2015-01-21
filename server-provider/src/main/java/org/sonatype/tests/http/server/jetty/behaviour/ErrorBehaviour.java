@@ -17,64 +17,58 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class ErrorBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private String msg;
+  private String msg;
 
-    private int error = -1;
+  private int error = -1;
 
-    public static ErrorBehaviour error( int code )
-    {
-        return new ErrorBehaviour( code, "error" );
+  public static ErrorBehaviour error(int code)
+  {
+    return new ErrorBehaviour(code, "error");
+  }
+
+  public static ErrorBehaviour error(int code, String msg)
+  {
+    return new ErrorBehaviour(code, msg);
+  }
+
+  public ErrorBehaviour()
+  {
+  }
+
+  public ErrorBehaviour(int error, String msg)
+  {
+    this.error = error;
+    this.msg = msg;
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (error == -1) {
+      String path = request.getPathInfo().substring(1);
+      String[] split = path.split("/", 2);
+      int sc = Integer.valueOf(split[0]);
+      if (split.length > 1) {
+        msg = split[1];
+      }
+      else {
+        msg = "errormsg";
+      }
+      response.sendError(sc, msg);
+    }
+    else {
+      response.sendError(error, msg);
     }
 
-    public static ErrorBehaviour error( int code, String msg )
-    {
-        return new ErrorBehaviour( code, msg );
-    }
+    return false;
 
-    public ErrorBehaviour()
-    {
-    }
-
-    public ErrorBehaviour( int error, String msg )
-    {
-        this.error = error;
-        this.msg = msg;
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( error == -1 )
-        {
-            String path = request.getPathInfo().substring( 1 );
-            String[] split = path.split( "/", 2 );
-            int sc = Integer.valueOf( split[0] );
-            if ( split.length > 1 )
-            {
-                msg = split[1];
-            }
-            else
-            {
-                msg = "errormsg";
-            }
-            response.sendError( sc, msg );
-        }
-        else
-        {
-            response.sendError( error, msg );
-        }
-
-        return false;
-
-    }
+  }
 
 }

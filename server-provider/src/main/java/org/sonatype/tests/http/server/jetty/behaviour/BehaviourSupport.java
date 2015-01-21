@@ -17,34 +17,35 @@ import java.util.Map;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 
-/**
- * @author Benjamin Hanzelmann
- *
- */
-public abstract class BehaviourHelper
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public abstract class BehaviourSupport
+    implements Behaviour
 {
-    
-    public static String firstPart( String path )
-    {
-        return path.substring( 1 ).split( "/", 2 )[0];
-    }
-    
-    public static String lastPart( String path )
-    {
-        String[] split = path.substring( 1 ).split( "/" );
-        return split[split.length - 1];
-    }
+  protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    public static String content( String path )
-    {
-        return path.substring( 1 ).replaceFirst( "[^/]*/", "" );
-    }
+  public static String firstPart( String path )
+  {
+    return path.substring( 1 ).split( "/", 2 )[0];
+  }
 
-    public static void setContent( String content, Map<Object, Object> ctx )
-        throws UnsupportedEncodingException
-    {
-        ctx.put( Behaviour.Keys.CONTENT, content );
-        ctx.put( Behaviour.Keys.CONTENT_SIZE, content.getBytes( "UTF-8" ).length );
-    }
+  public static String lastPart( String path )
+  {
+    String[] split = path.substring( 1 ).split( "/" );
+    return split[split.length - 1];
+  }
+
+  public static String pathAsContent( String path )
+  {
+    return path.substring( 1 ).replaceFirst( "[^/]*/", "" );
+  }
+
+  public static void setContent( String content, Map<Object, Object> ctx )
+      throws UnsupportedEncodingException
+  {
+    ctx.put( Behaviour.Keys.CONTENT, content );
+    ctx.put( Behaviour.Keys.CONTENT_SIZE, content.getBytes( "UTF-8" ).length );
+  }
 
 }

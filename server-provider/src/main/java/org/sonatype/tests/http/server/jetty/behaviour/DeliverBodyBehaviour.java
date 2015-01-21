@@ -20,36 +20,37 @@ import javax.servlet.http.HttpServletResponse;
 import org.sonatype.tests.http.server.api.Behaviour;
 
 /**
- * {@link Behaviour} that combines {@link ErrorBehaviour} and {@link Content} behaviours, by letting specifying response
+ * {@link Behaviour} that combines {@link ErrorBehaviour} and {@link Content} behaviours, by letting specifying
+ * response
  * error code along with body, thus allowing to simulate error pages too.
- * 
+ *
  * @author cstamas
  * @since 0.8
  */
 public class DeliverBodyBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
-    private final int code;
+  private final int code;
 
-    private final String bodyContentType;
+  private final String bodyContentType;
 
-    private final String body;
+  private final String body;
 
-    public DeliverBodyBehaviour( final int code, final String bodyContentType, final String body )
-    {
-        this.code = code;
-        this.bodyContentType = bodyContentType;
-        this.body = body;
-    }
+  public DeliverBodyBehaviour(final int code, final String bodyContentType, final String body)
+  {
+    this.code = code;
+    this.bodyContentType = bodyContentType;
+    this.body = body;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        response.setStatus( code );
-        response.setContentType( bodyContentType );
-        final byte[] bodyPayload = body.getBytes( "UTF-8" );
-        response.setContentLength( bodyPayload.length );
-        response.getOutputStream().write( bodyPayload );
-        return true;
-    }
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    response.setStatus(code);
+    response.setContentType(bodyContentType);
+    final byte[] bodyPayload = body.getBytes("UTF-8");
+    response.setContentLength(bodyPayload.length);
+    response.getOutputStream().write(bodyPayload);
+    return true;
+  }
 }
