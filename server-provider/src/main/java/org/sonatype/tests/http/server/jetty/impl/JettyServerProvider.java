@@ -62,6 +62,8 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.ServletMapping;
+import org.eclipse.jetty.util.ArrayUtil;
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
@@ -331,6 +333,20 @@ public class JettyServerProvider
       catch (Exception e) {
         throw new IllegalStateException(e);
       }
+    }
+    // Jetty 9.2 is sensitive to overlapping mappings, so remove it pathSpec already exists
+    if (webappContext.getServletHandler().getServletMapping(pathSpec) != null) {
+      final ServletMapping[] servletMappings = webappContext.getServletHandler().getServletMappings();
+      final String oldServletName = webappContext.getServletHandler().getServletMapping(pathSpec).getServletName();
+      ServletMapping oldServletMapping = null;
+      for (ServletMapping servletMapping : servletMappings) {
+        if (servletMapping.getServletName().equals(oldServletName)) {
+          oldServletMapping = servletMapping;
+          break;
+        }
+      }
+      final ServletMapping[] servletMappingsOldRemoved = ArrayUtil.removeFromArray(servletMappings, oldServletMapping);
+      webappContext.getServletHandler().setServletMappings(servletMappingsOldRemoved);
     }
     webappContext.getServletHandler().addServletWithMapping(new ServletHolder(servlet), pathSpec);
   }
