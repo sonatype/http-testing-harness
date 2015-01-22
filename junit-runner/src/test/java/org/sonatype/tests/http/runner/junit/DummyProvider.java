@@ -22,6 +22,8 @@ import javax.servlet.Servlet;
 import org.sonatype.tests.http.server.api.Behaviour;
 import org.sonatype.tests.http.server.api.ServerProvider;
 
+import com.google.common.base.Throwables;
+
 /**
  * @author Benjamin Hanzelmann
  */
@@ -31,9 +33,13 @@ class DummyProvider
   private boolean started;
 
   public URL getUrl()
-      throws MalformedURLException
   {
-    return URI.create("dummy://url").toURL();
+    try {
+      return URI.create("dummy://url").toURL();
+    }
+    catch (MalformedURLException e) {
+      throw Throwables.propagate(e);
+    }
   }
 
   public void stop()
