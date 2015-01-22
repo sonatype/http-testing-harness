@@ -15,13 +15,14 @@ package org.sonatype.tests.http.runner.junit;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.sonatype.tests.http.runner.ConfigurationHelper;
+import org.sonatype.tests.http.runner.SuiteConfiguration;
+import org.sonatype.tests.http.runner.SuiteConfigurator;
+
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
-import org.sonatype.tests.http.runner.ConfigurationHelper;
-import org.sonatype.tests.http.runner.SuiteConfiguration;
-import org.sonatype.tests.http.runner.SuiteConfigurator;
 
 /**
  * Junit4 test runner supporting multiple server configurations for the test class. This runner can only execute tests
@@ -37,7 +38,7 @@ import org.sonatype.tests.http.runner.SuiteConfigurator;
  * <p>
  * If none of the annotations are present, the runner tries to load a default list (
  * <code>DefaultSuiteConfigurators.list</code>).
- * 
+ *
  * @author Benjamin Hanzelmann
  * @see SuiteConfigurator
  * @see DefaultSuiteConfiguration
@@ -46,73 +47,68 @@ public class ConfigurationRunner
     extends BlockJUnit4ClassRunner
 {
 
-    private List<Class<? extends SuiteConfigurator>> defaultConfiguratorClasses;
+  private List<Class<? extends SuiteConfigurator>> defaultConfiguratorClasses;
 
-    private List<SuiteConfigurator> configurators = new LinkedList<SuiteConfigurator>();
+  private List<SuiteConfigurator> configurators = new LinkedList<SuiteConfigurator>();
 
-    public ConfigurationRunner( Class<?> klass )
-        throws InitializationError
-    {
-        super( klass );
-        if ( !SuiteConfiguration.class.isAssignableFrom( klass ) )
-        {
-            IllegalArgumentException error =
-                new IllegalArgumentException( "Can only run tests inheriting from SuiteConfiguration." );
-            throw new InitializationError( error );
-        }
+  public ConfigurationRunner(Class<?> klass)
+      throws InitializationError
+  {
+    super(klass);
+    if (!SuiteConfiguration.class.isAssignableFrom(klass)) {
+      IllegalArgumentException error =
+          new IllegalArgumentException("Can only run tests inheriting from SuiteConfiguration.");
+      throw new InitializationError(error);
     }
+  }
 
-    @Override
-    protected List<FrameworkMethod> computeTestMethods()
-    {
-        if ( defaultConfiguratorClasses == null )
-        {
-            initDefaultConfiguratorClasses();
-        }
-        Class<?> testClass = getTestClass().getJavaClass();
-        configurators = ConfigurationHelper.computeConfigurators( testClass );
-
-        List<FrameworkMethod> methods = super.computeTestMethods();
-
-        List<FrameworkMethod> cfgMethods = new LinkedList<FrameworkMethod>();
-        for ( FrameworkMethod method : methods )
-        {
-            for ( SuiteConfigurator cfg : configurators )
-            {
-                cfgMethods.add( new ConfiguratorMethod( method.getMethod(), cfg ) );
-            }
-        }
-        return cfgMethods;
+  @Override
+  protected List<FrameworkMethod> computeTestMethods()
+  {
+    if (defaultConfiguratorClasses == null) {
+      initDefaultConfiguratorClasses();
     }
+    Class<?> testClass = getTestClass().getJavaClass();
+    configurators = ConfigurationHelper.computeConfigurators(testClass);
 
-    /**
-     * Load list of configurators from all resources named "SuiteConfigurator.list". (One full class name per line.)
-     */
-    private void initDefaultConfiguratorClasses()
-    {
-        defaultConfiguratorClasses = ConfigurationHelper.getDefaultConfiguratorClasses();
+    List<FrameworkMethod> methods = super.computeTestMethods();
+
+    List<FrameworkMethod> cfgMethods = new LinkedList<FrameworkMethod>();
+    for (FrameworkMethod method : methods) {
+      for (SuiteConfigurator cfg : configurators) {
+        cfgMethods.add(new ConfiguratorMethod(method.getMethod(), cfg));
+      }
     }
+    return cfgMethods;
+  }
 
-    @SuppressWarnings( "deprecation" )
-    @Override
-    protected void validateInstanceMethods( List<Throwable> errors )
-    {
-        if ( computeTestMethods().isEmpty() && configurators != null && configurators.isEmpty() )
-        {
-            String msg = "No SuiteConfigurator found to run the tests with.";
-            errors.add( new Exception( msg ) );
-        }
-        super.validateInstanceMethods( errors );
+  /**
+   * Load list of configurators from all resources named "SuiteConfigurator.list". (One full class name per line.)
+   */
+  private void initDefaultConfiguratorClasses()
+  {
+    defaultConfiguratorClasses = ConfigurationHelper.getDefaultConfiguratorClasses();
+  }
+
+  @SuppressWarnings("deprecation")
+  @Override
+  protected void validateInstanceMethods(List<Throwable> errors)
+  {
+    if (computeTestMethods().isEmpty() && configurators != null && configurators.isEmpty()) {
+      String msg = "No SuiteConfigurator found to run the tests with.";
+      errors.add(new Exception(msg));
     }
+    super.validateInstanceMethods(errors);
+  }
 
-    @Override
-    protected Statement methodInvoker( FrameworkMethod method, Object test )
-    {
-        SuiteConfiguration cfg = SuiteConfiguration.class.cast( test );
-        ConfiguratorMethod cfgMethod = ConfiguratorMethod.class.cast( method );
-        cfg.setConfigurator( cfgMethod.getConfigurator() );
+  @Override
+  protected Statement methodInvoker(FrameworkMethod method, Object test)
+  {
+    SuiteConfiguration cfg = SuiteConfiguration.class.cast(test);
+    ConfiguratorMethod cfgMethod = ConfiguratorMethod.class.cast(method);
+    cfg.setConfigurator(cfgMethod.getConfigurator());
 
-        return super.methodInvoker( method, test );
-    }
+    return super.methodInvoker(method, test);
+  }
 
 }

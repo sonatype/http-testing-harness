@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.Principal;
-import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -46,17 +45,19 @@ import org.sonatype.tests.http.server.jetty.behaviour.Stutter;
 import org.sonatype.tests.http.server.jetty.behaviour.Truncate;
 import org.sonatype.tests.http.server.jetty.util.FileUtil;
 
+import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.nio.BlockingChannelConnector;
-import org.eclipse.jetty.server.ssl.SslConnector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -64,6 +65,9 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author Benjamin Hanzelmann
@@ -81,6 +85,8 @@ public class JettyServerProvider
   private final String host = "localhost"; // InetAddress.getLocalHost().getCanonicalHostName();
 
   private ServletContextHandler webappContext;
+
+  private SslContextFactory sslContextFactory;
 
   private String sslKeystorePassword;
 
@@ -151,15 +157,15 @@ public class JettyServerProvider
   {
     Server s = new Server();
 
-    Connector connector;
+    ServerConnector connector;
     if (ssl) {
-      connector = sslConnector();
+      connector = sslConnector(s);
     }
     else {
-      connector = connector();
+      connector = connector(s);
     }
 
-    s.setConnectors(new Connector[]{connector});
+    s.setConnectors(new ServerConnector[]{connector});
 
     initWebappContext(s);
 
@@ -169,13 +175,19 @@ public class JettyServerProvider
   }
 
   public void addAuthentication(String pathSpec, String authName) {
+    final boolean needClientAuth = authName.endsWith("CERT");
     if (server == null) {
       try {
+        setSSLNeedClientAuth(needClientAuth);
         initServer();
       }
       catch (Exception e) {
         throw new IllegalStateException(e);
       }
+    }
+    else {
+      checkArgument(needClientAuth == this.sslNeedClientAuth,
+          "Server already created w/o CERT auth! Change configuration ordering");
     }
     initAuthentication(pathSpec, authName);
   }
@@ -197,20 +209,6 @@ public class JettyServerProvider
 
     securityHandler.setRealmName("Test Server");
     securityHandler.setAuthMethod(authName);
-    securityHandler.setStrict(true);
-
-    if (authName.endsWith("CERT")) {
-      Connector[] connectors = server.getConnectors();
-      for (Connector c : connectors) {
-        if (c instanceof SslConnector) {
-          SslConnector sslConnector = (SslConnector) c;
-          sslConnector.setNeedClientAuth(true);
-        }
-        else {
-          throw new UnsupportedOperationException("Cannot use Client Side Certificate Auth without SSL.");
-        }
-      }
-    }
 
     securityHandler.setConstraintMappings(new ConstraintMapping[]{cm});
     loginService = new HashLoginService("Test Server");
@@ -256,65 +254,60 @@ public class JettyServerProvider
   public void addCertificate(String alias, CertificateHolder certHolder)
       throws Exception
   {
-    Connector[] connectors = server.getConnectors();
-    for (Connector connector : connectors) {
-      if (connector instanceof SslConnector) {
-        SslConnector sslConnector = (SslConnector) connector;
+    checkArgument(sslContextFactory != null, "Cannot add user CERT w/o SSL configured!");
 
-        KeyManagerFactory keyManagerFactory =
-            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        InputStream in = null;
-        try {
-          try {
-            in = new FileInputStream(resourceFile(sslKeystore));
-          }
-          catch (Exception e) {
-            in = new FileInputStream(sslKeystore);
-          }
-          KeyStore keystore = KeyStore.getInstance("JKS");
-          keystore.load(in, sslKeystorePassword == null ? null
-              : sslKeystorePassword.toString().toCharArray());
-          keystore.setCertificateEntry(alias, certHolder.getCertificate());
+    KeyManagerFactory keyManagerFactory =
+        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+    InputStream in = null;
+    try {
+      try {
+        in = new FileInputStream(resourceFile(sslKeystore));
+      }
+      catch (Exception e) {
+        in = new FileInputStream(sslKeystore);
+      }
+      KeyStore keystore = KeyStore.getInstance("JKS");
+      keystore.load(in, sslKeystorePassword == null ? null
+          : sslKeystorePassword.toString().toCharArray());
+      keystore.setCertificateEntry(alias, certHolder.getCertificate());
 
-          Certificate[] chain = certHolder.getChain();
-          for (int i = 1; i < chain.length; i++) {
-            keystore.setCertificateEntry(alias + "chain" + i, chain[i]);
-          }
+      Certificate[] chain = certHolder.getChain();
+      for (int i = 1; i < chain.length; i++) {
+        keystore.setCertificateEntry(alias + "chain" + i, chain[i]);
+      }
 
-          // PrivateKey key = certHolder.getKey();
-          // Certificate[] chain = new Certificate[] { certHolder.getCertificate() };
-          // keystore.setEntry( alias, new PrivateKeyEntry( key, chain ),
-          // new PasswordProtection( sslKeystorePassword.toCharArray() ) );
-          keyManagerFactory.init(keystore, sslKeystorePassword == null ? null
-              : sslKeystorePassword.toString().toCharArray());
-          KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+      // PrivateKey key = certHolder.getKey();
+      // Certificate[] chain = new Certificate[] { certHolder.getCertificate() };
+      // keystore.setEntry( alias, new PrivateKeyEntry( key, chain ),
+      // new PasswordProtection( sslKeystorePassword.toCharArray() ) );
+      keyManagerFactory.init(keystore, sslKeystorePassword == null ? null
+          : sslKeystorePassword.toString().toCharArray());
+      KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 
-          SSLContext context = SSLContext.getInstance("TLS");
-          context.init(keyManagers, new TrustManager[]{new CustomTrustManager()}, null);
-          sslConnector.setSslContext(context);
+      SSLContext context = SSLContext.getInstance("TLS");
+      context.init(keyManagers, new TrustManager[]{new CustomTrustManager()}, null);
+      sslContextFactory.setSslContext(context);
 
-          if (certHolder.getCertificate() instanceof X509Certificate) {
-            X509Certificate x509cert = (X509Certificate) certHolder.getCertificate();
-            Principal principal = x509cert.getSubjectDN();
-            if (principal == null) {
-              principal = x509cert.getIssuerDN();
-            }
-            final String username = principal == null ? "clientcert" : principal.getName();
-
-            final char[] credential = B64Code.encode(x509cert.getSignature());
-
-            addUser(username, String.valueOf(credential));
-          }
-          else {
-            throw new IllegalArgumentException("Unsupported Certificate Type (need X509Certificate): "
-                + certHolder.getCertificate().getClass());
-          }
+      if (certHolder.getCertificate() instanceof X509Certificate) {
+        X509Certificate x509cert = (X509Certificate) certHolder.getCertificate();
+        Principal principal = x509cert.getSubjectDN();
+        if (principal == null) {
+          principal = x509cert.getIssuerDN();
         }
-        finally {
-          if (in != null) {
-            in.close();
-          }
-        }
+        final String username = principal == null ? "clientcert" : principal.getName();
+
+        final char[] credential = B64Code.encode(x509cert.getSignature());
+
+        addUser(username, String.valueOf(credential));
+      }
+      else {
+        throw new IllegalArgumentException("Unsupported Certificate Type (need X509Certificate): "
+            + certHolder.getCertificate().getClass());
+      }
+    }
+    finally {
+      if (in != null) {
+        in.close();
       }
     }
   }
@@ -424,17 +417,25 @@ public class JettyServerProvider
     }
   }
 
-  protected Connector connector() {
-    Connector connector = new BlockingChannelConnector();
-    connector.setHost(host);
-    if (port != -1) {
-      connector.setPort(port);
-    }
-    return connector;
+  private HttpConfiguration createConnectorConfiguration() {
+    HttpConfiguration httpConfig = new HttpConfiguration();
+    httpConfig.setOutputBufferSize(32768);
+    return httpConfig;
   }
 
-  protected Connector sslConnector() {
-    SslSocketConnector connector = new SslSocketConnector();
+  protected ServerConnector connector(final Server server) {
+    final HttpConfiguration httpConfig = createConnectorConfiguration();
+    final ServerConnector serverConnector = new ServerConnector(server, new HttpConnectionFactory(httpConfig));
+    serverConnector.setIdleTimeout(30000);
+    serverConnector.setHost(host);
+    if (port != -1) {
+      serverConnector.setPort(port);
+    }
+    return serverConnector;
+  }
+
+  protected ServerConnector sslConnector(final Server server) {
+    sslContextFactory = new SslContextFactory();
     String keystore;
     try {
       keystore = resourceFile(sslKeystore);
@@ -442,16 +443,9 @@ public class JettyServerProvider
     catch (Exception e) {
       keystore = sslKeystore;
     }
-
-    connector.setHost(host);
-    if (port != -1) {
-      connector.setPort(port);
-    }
-
-    connector.setKeystore(keystore);
-    connector.setPassword(sslKeystorePassword);
-    connector.setKeyPassword(sslKeystorePassword);
-
+    sslContextFactory.setKeyStorePath(keystore);
+    sslContextFactory.setKeyStorePassword(sslKeystorePassword);
+    sslContextFactory.setKeyManagerPassword(sslKeystorePassword);
     if (sslTruststore != null) {
       String truststore;
       try {
@@ -461,13 +455,22 @@ public class JettyServerProvider
         truststore = sslTruststore;
       }
 
-      connector.setTruststore(truststore);
-      connector.setTrustPassword(sslTruststorePassword);
+      sslContextFactory.setTrustStorePath(truststore);
+      sslContextFactory.setTrustStorePassword(sslTruststorePassword);
+      sslContextFactory.setNeedClientAuth(sslNeedClientAuth);
     }
 
-    connector.setNeedClientAuth(sslNeedClientAuth);
-
-    return connector;
+    final HttpConfiguration httpConfig = createConnectorConfiguration();
+    httpConfig.addCustomizer(new SecureRequestCustomizer());
+    final ServerConnector serverConnector = new ServerConnector(server,
+        new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
+        new HttpConnectionFactory(httpConfig));
+    serverConnector.setIdleTimeout(30000);
+    serverConnector.setHost(host);
+    if (port != -1) {
+      serverConnector.setPort(port);
+    }
+    return serverConnector;
   }
 
   public void start()
@@ -493,7 +496,7 @@ public class JettyServerProvider
       throw new IllegalStateException("Server didn't start in: " + total + "ms.");
     }
 
-    port = server.getConnectors()[0].getLocalPort();
+    port = ((ServerConnector) server.getConnectors()[0]).getLocalPort();
   }
 
   public void addBehaviour(String pathspec, Behaviour... behaviour) {
@@ -556,9 +559,6 @@ public class JettyServerProvider
    */
   public static class CertificateHolder
   {
-
-    private PrivateKey key;
-
     private Certificate[] chain;
 
     public Certificate getCertificate() {
@@ -569,40 +569,30 @@ public class JettyServerProvider
       return chain;
     }
 
-    @Deprecated
-    public CertificateHolder(PrivateKey key, Certificate certificate) {
-      this.key = key;
-      this.chain = new Certificate[]{certificate};
-    }
 
     public CertificateHolder(Certificate[] chain) {
       this.chain = chain;
     }
-
-    @Deprecated
-    public PrivateKey getKey() {
-      return key;
-    }
-
   }
 
   public static final class CustomTrustManager
       implements X509TrustManager
   {
-
+    @Override
     public void checkClientTrusted(X509Certificate[] arg0, String arg1)
         throws CertificateException
     {
     }
 
+    @Override
     public void checkServerTrusted(X509Certificate[] arg0, String arg1)
         throws CertificateException
     {
     }
 
+    @Override
     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
       return new X509Certificate[0];
     }
   }
-
 }

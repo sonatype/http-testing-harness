@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 
-import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

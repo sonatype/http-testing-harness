@@ -14,8 +14,9 @@ package org.sonatype.tests.http.runner.junit;
 
 import java.lang.reflect.Method;
 
-import org.junit.runners.model.FrameworkMethod;
 import org.sonatype.tests.http.runner.SuiteConfigurator;
+
+import org.junit.runners.model.FrameworkMethod;
 
 /**
  * @author Benjamin Hanzelmann
@@ -24,68 +25,62 @@ public class ConfiguratorMethod
     extends FrameworkMethod
 {
 
-    private SuiteConfigurator configurator;
+  private SuiteConfigurator configurator;
 
-    public ConfiguratorMethod( Method method, SuiteConfigurator cfg )
-    {
-        super( method );
-        this.configurator = cfg;
-    }
+  public ConfiguratorMethod(Method method, SuiteConfigurator cfg)
+  {
+    super(method);
+    this.configurator = cfg;
+  }
 
-    public SuiteConfigurator getConfigurator()
-    {
-        return configurator;
-    }
+  public SuiteConfigurator getConfigurator()
+  {
+    return configurator;
+  }
 
-    @Override
-    public String getName()
-    {
-        return String.format( "%s %s", super.getName(), configurator.getName() );
-    }
+  @Override
+  public String getName()
+  {
+    return String.format("%s %s", super.getName(), configurator.getName());
+  }
 
-    @Override
-    public String toString()
-    {
-        return getName();
-    }
+  @Override
+  public String toString()
+  {
+    return getName();
+  }
 
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ( ( configurator == null ) ? 0 : configurator.hashCode() );
-        return result;
-    }
+  @Override
+  public int hashCode()
+  {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((configurator == null) ? 0 : configurator.hashCode());
+    return result;
+  }
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
-        {
-            return true;
-        }
-        if ( !super.equals( obj ) )
-        {
-            return false;
-        }
-        if ( getClass() != obj.getClass() )
-        {
-            return false;
-        }
-        ConfiguratorMethod other = (ConfiguratorMethod) obj;
-        if ( configurator == null )
-        {
-            if ( other.configurator != null )
-            {
-                return false;
-            }
-        }
-        else if ( !configurator.equals( other.configurator ) )
-        {
-            return false;
-        }
-        return true;
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj) {
+      return true;
     }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    ConfiguratorMethod other = (ConfiguratorMethod) obj;
+    if (configurator == null) {
+      if (other.configurator != null) {
+        return false;
+      }
+    }
+    else if (!configurator.equals(other.configurator)) {
+      return false;
+    }
+    return true;
+  }
 
 }

@@ -22,14 +22,14 @@ import org.sonatype.tests.http.runner.SuiteConfigurator;
 
 /**
  * The annotation to set used configurators directly.
- * 
+ *
  * @author Benjamin Hanzelmann
  * @see SuiteConfigurator
  */
-@Retention( RetentionPolicy.RUNTIME )
-@Target( ElementType.TYPE )
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 @Inherited
 public @interface Configurators
 {
-    public Class<? extends SuiteConfigurator>[] value();
+  public Class<? extends SuiteConfigurator>[] value();
 }

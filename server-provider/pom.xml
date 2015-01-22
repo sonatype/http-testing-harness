@@ -18,8 +18,8 @@
 
   <parent>
     <groupId>org.sonatype.http-testing-harness</groupId>
-    <version>0.10-SNAPSHOT</version>
     <artifactId>hth-parent</artifactId>
+    <version>0.10-SNAPSHOT</version>
   </parent>
 
   <artifactId>server-provider</artifactId>
@@ -40,15 +40,14 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlet</artifactId>
-      <version>${jetty.version}</version>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
 
-    <!-- Using ProxyServlet from it -->
+    <!-- Jetty -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-proxy</artifactId>
+      <artifactId>jetty-servlet</artifactId>
       <version>${jetty.version}</version>
     </dependency>
 
@@ -61,6 +60,13 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+
+    <!-- Using ProxyServlet from it -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-proxy</artifactId>
       <version>${jetty.version}</version>
     </dependency>
 

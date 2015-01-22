@@ -17,8 +17,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>hth-parent</artifactId>
     <groupId>org.sonatype.http-testing-harness</groupId>
+    <artifactId>hth-parent</artifactId>
     <version>0.10-SNAPSHOT</version>
   </parent>
 
