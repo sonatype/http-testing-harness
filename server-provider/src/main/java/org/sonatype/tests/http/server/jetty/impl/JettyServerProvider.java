@@ -538,7 +538,6 @@ public class JettyServerProvider
   }
 
   public URL getUrl()
-      throws MalformedURLException
   {
     String protocol;
     if (ssl) {
@@ -548,7 +547,14 @@ public class JettyServerProvider
       protocol = "http";
     }
 
-    return new URL(protocol, host, port, "");
+    try {
+      return new URL(protocol, host, port, "");
+    }
+    catch (MalformedURLException e) {
+      // URL ctor throws this for invalid port or protocol.
+      // Might happen if URL asked before server with unset port started
+      throw Throwables.propagate(e);
+    }
   }
 
   public ServletContextHandler getWebappContext() {
