@@ -91,7 +91,6 @@ public class JettyProxyProvider
 
   @Override
   protected void initWebappContext(Server s)
-      throws URISyntaxException
   {
     super.initWebappContext(s);
     if (user != null) {

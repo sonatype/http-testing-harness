@@ -87,6 +87,8 @@ public class JettyServerProvider
 
   private final String host = "localhost"; // InetAddress.getLocalHost().getCanonicalHostName();
 
+  private HandlerCollection handlerCollection;
+
   private ServletContextHandler webappContext;
 
   private SslContextFactory sslContextFactory;
@@ -123,7 +125,6 @@ public class JettyServerProvider
   }
 
   public void initServer()
-      throws Exception
   {
     server = createServer();
   }
@@ -148,7 +149,6 @@ public class JettyServerProvider
   }
 
   public Server getServer()
-      throws Exception
   {
     if (server != null) {
       initServer();
@@ -157,7 +157,6 @@ public class JettyServerProvider
   }
 
   public Server createServer()
-      throws URISyntaxException
   {
     Server s = new Server();
 
@@ -170,10 +169,10 @@ public class JettyServerProvider
     }
 
     s.setConnectors(new ServerConnector[]{connector});
+    handlerCollection = new HandlerCollection();
+    s.setHandler(handlerCollection);
 
     initWebappContext(s);
-
-    // addDefaultServices();
 
     return s;
   }
@@ -327,6 +326,10 @@ public class JettyServerProvider
 
   @Override
   public void addServlet(String pathSpec, Servlet servlet) {
+    addServlet(pathSpec, new ServletHolder(servlet));
+  }
+
+  public void addServlet(String pathSpec, ServletHolder servletHolder) {
     if (webappContext == null) {
       try {
         initServer();
@@ -349,7 +352,7 @@ public class JettyServerProvider
       final ServletMapping[] servletMappingsOldRemoved = ArrayUtil.removeFromArray(servletMappings, oldServletMapping);
       webappContext.getServletHandler().setServletMappings(servletMappingsOldRemoved);
     }
-    webappContext.getServletHandler().addServletWithMapping(new ServletHolder(servlet), pathSpec);
+    webappContext.getServletHandler().addServletWithMapping(servletHolder, pathSpec);
   }
 
   @Override
@@ -386,7 +389,6 @@ public class JettyServerProvider
   }
 
   protected void initWebappContext(Server s)
-      throws URISyntaxException
   {
     this.webappContext = new ServletContextHandler();
     // webappContext.setConfigurations( new Configuration[] { new WebXmlConfiguration(). } );
@@ -394,9 +396,8 @@ public class JettyServerProvider
     // webappContext.setWar( "resources" );
     // webappContext.setServletHandler( new ServletHandler() );
     webappContext.setContextPath("/");
-    HandlerCollection handlers = new HandlerCollection();
-    handlers.setHandlers(new Handler[]{webappContext, new DefaultHandler()});
-    s.setHandler(handlers);
+    handlerCollection.addHandler(webappContext);
+    handlerCollection.addHandler(new DefaultHandler());
   }
 
   private String resourceFile(String resource)
