@@ -147,12 +147,13 @@ public class JettyServerProvider
     this.sslNeedClientAuth = needClientAuth;
   }
 
-  public void getServer()
+  public Server getServer()
       throws Exception
   {
     if (server != null) {
       initServer();
     }
+    return server;
   }
 
   public Server createServer()
