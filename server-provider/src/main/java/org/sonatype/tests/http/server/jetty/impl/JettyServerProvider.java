@@ -45,6 +45,7 @@ import org.sonatype.tests.http.server.jetty.behaviour.Stutter;
 import org.sonatype.tests.http.server.jetty.behaviour.Truncate;
 import org.sonatype.tests.http.server.jetty.util.FileUtil;
 
+import com.google.common.base.Throwables;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -239,7 +240,7 @@ public class JettyServerProvider
         addCertificate(user, (CertificateHolder) password);
       }
       catch (Exception e) {
-        throw new IllegalStateException(e.getMessage(), e);
+        throw Throwables.propagate(e);
       }
     }
     else {
@@ -289,6 +290,7 @@ public class JettyServerProvider
       SSLContext context = SSLContext.getInstance("TLS");
       context.init(keyManagers, new TrustManager[]{new CustomTrustManager()}, null);
       sslContextFactory.setSslContext(context);
+      sslContextFactory.setNeedClientAuth(true);
 
       if (certHolder.getCertificate() instanceof X509Certificate) {
         X509Certificate x509cert = (X509Certificate) certHolder.getCertificate();
@@ -297,9 +299,7 @@ public class JettyServerProvider
           principal = x509cert.getIssuerDN();
         }
         final String username = principal == null ? "clientcert" : principal.getName();
-
         final char[] credential = B64Code.encode(x509cert.getSignature());
-
         addUser(username, String.valueOf(credential));
       }
       else {

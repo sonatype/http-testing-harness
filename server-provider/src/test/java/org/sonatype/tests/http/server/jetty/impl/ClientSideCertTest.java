@@ -56,7 +56,6 @@ import static org.junit.Assert.fail;
 public class ClientSideCertTest
     extends TestSupport
 {
-
   private File clientKeystore;
 
   @Before
