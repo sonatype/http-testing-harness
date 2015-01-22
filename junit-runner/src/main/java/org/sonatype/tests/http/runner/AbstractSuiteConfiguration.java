@@ -13,7 +13,6 @@
 package org.sonatype.tests.http.runner;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import org.sonatype.tests.http.server.api.ServerProvider;
@@ -59,12 +58,7 @@ public class AbstractSuiteConfiguration
 
   public String url()
   {
-    try {
-      return provider.get().getUrl().toExternalForm();
-    }
-    catch (MalformedURLException e) {
-      throw new IllegalArgumentException("Provider was set up with wrong url", e);
-    }
+    return provider.get().getUrl().toExternalForm();
   }
 
   public ServerProvider provider()
