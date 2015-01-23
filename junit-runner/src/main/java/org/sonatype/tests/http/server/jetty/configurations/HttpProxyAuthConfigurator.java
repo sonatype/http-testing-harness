@@ -22,24 +22,22 @@ public class HttpProxyAuthConfigurator
     extends DefaultSuiteConfigurator
 {
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " AUTHPROXY ";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " AUTHPROXY ";
+  }
 
 
-    @Override
-    public ServerProvider provider()
-    {
-        try
-        {
-            return new JettyProxyProvider( "puser", "password" );
-        }
-        catch ( Exception e )
-        {
-            throw new IllegalStateException( e.getMessage(), e );
-        }
+  @Override
+  public ServerProvider provider()
+  {
+    try {
+      return new JettyProxyProvider("puser", "password");
     }
+    catch (Exception e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
+  }
 
 }

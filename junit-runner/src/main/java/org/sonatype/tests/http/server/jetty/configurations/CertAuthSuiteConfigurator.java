@@ -12,29 +12,29 @@
  */
 package org.sonatype.tests.http.server.jetty.configurations;
 
-import org.eclipse.jetty.util.security.Constraint;
 import org.sonatype.tests.http.server.api.ServerProvider;
+
+import org.eclipse.jetty.util.security.Constraint;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class CertAuthSuiteConfigurator
     extends SslSuiteConfigurator
 {
 
-    @Override
-    public ServerProvider provider()
-    {
-        ServerProvider p = super.provider();
-        p.addAuthentication( "/*", Constraint.__CERT_AUTH2 );
-        return p;
-    }
+  @Override
+  public ServerProvider provider()
+  {
+    ServerProvider p = super.provider();
+    p.addAuthentication("/*", Constraint.__CERT_AUTH2);
+    return p;
+  }
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " CERT-AUTH";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " CERT-AUTH";
+  }
 
 }

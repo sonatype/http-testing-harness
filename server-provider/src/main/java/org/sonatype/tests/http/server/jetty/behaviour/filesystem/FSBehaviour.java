@@ -14,27 +14,27 @@ package org.sonatype.tests.http.server.jetty.behaviour.filesystem;
 
 import java.io.File;
 
-import org.sonatype.tests.http.server.api.Behaviour;
+import org.sonatype.tests.http.server.jetty.behaviour.BehaviourSupport;
 
 public abstract class FSBehaviour
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    protected final File fPath;
+  protected final File fPath;
 
-    public FSBehaviour( String path )
-    {
-        this( new File( path ) );
-    }
+  public FSBehaviour(String path)
+  {
+    this(new File(path));
+  }
 
-    public FSBehaviour( File file )
-    {
-        this.fPath = file;
-    }
+  public FSBehaviour(File file)
+  {
+    this.fPath = file;
+  }
 
-    protected File fs( String path )
-    {
-        return new File( fPath, path );
-    }
+  protected File fs(String path)
+  {
+    return new File(fPath, path);
+  }
 
 }

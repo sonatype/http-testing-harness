@@ -14,23 +14,22 @@ package org.sonatype.tests.http.server.jetty.configurations;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class DigestAuthSslSuiteConfigurator
     extends AuthSslSuiteConfigurator
 {
 
-    /**
-     * @param authName
-     */
-    public DigestAuthSslSuiteConfigurator()
-    {
-        super( "DIGEST" );
-    }
+  /**
+   * @param authName
+   */
+  public DigestAuthSslSuiteConfigurator()
+  {
+    super("DIGEST");
+  }
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " DIGEST";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " DIGEST";
+  }
 }

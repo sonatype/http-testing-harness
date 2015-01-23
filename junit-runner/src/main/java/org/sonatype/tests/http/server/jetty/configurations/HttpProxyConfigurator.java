@@ -21,23 +21,21 @@ import org.sonatype.tests.http.server.jetty.impl.JettyProxyProvider;
 public class HttpProxyConfigurator
     extends DefaultSuiteConfigurator
 {
-    @Override
-    public String getName()
-    {
-        return super.getName() + " PROXY ";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " PROXY ";
+  }
 
-    @Override
-    public ServerProvider provider()
-    {
-        try
-        {
-            return new JettyProxyProvider();
-        }
-        catch ( Exception e )
-        {
-            throw new IllegalStateException( e );
-        }
+  @Override
+  public ServerProvider provider()
+  {
+    try {
+      return new JettyProxyProvider();
     }
+    catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
 
 }

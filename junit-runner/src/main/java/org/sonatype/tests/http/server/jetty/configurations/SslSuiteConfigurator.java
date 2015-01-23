@@ -16,34 +16,33 @@ import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class SslSuiteConfigurator
     extends DefaultSuiteConfigurator
 {
 
-    @Override
-    public ServerProvider provider()
-    {
-        ServerProvider p = super.provider();
-        p.setSSL( keystore(), password() );
-        return p;
-    }
+  @Override
+  public ServerProvider provider()
+  {
+    ServerProvider p = super.provider();
+    p.setSSL(keystore(), password());
+    return p;
+  }
 
-    protected String keystore()
-    {
-        return "keystore";
-    }
+  protected String keystore()
+  {
+    return "keystore";
+  }
 
-    protected String password()
-    {
-        return "password";
-    }
+  protected String password()
+  {
+    return "password";
+  }
 
-    @Override
-    public String getName()
-    {
-        return "HTTPS";
-    }
+  @Override
+  public String getName()
+  {
+    return "HTTPS";
+  }
 
 }

@@ -24,77 +24,70 @@ import org.sonatype.tests.http.server.api.Behaviour;
  * @author Benjamin Hanzelmann
  */
 public class Stutter
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private int wait = -1;
+  private int wait = -1;
 
-    private byte[] content;
+  private byte[] content;
 
-    public Stutter()
-    {
-        super();
+  public Stutter()
+  {
+    super();
+  }
+
+  public Stutter(int i, byte[] content)
+  {
+    this.wait = i;
+    this.content = content;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see org.sonatype.tests.jetty.server.api.Behaviour#execute(javax.servlet.http.HttpServletRequest,
+   * javax.servlet.http.HttpServletResponse, java.util.Map)
+   */
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (wait != -1) {
+      response.setContentLength(content.length);
+      ServletOutputStream out = response.getOutputStream();
+      for (int i = 0; i < content.length; i++) {
+        out.write(content[i]);
+        out.flush();
+        Thread.sleep(wait);
+      }
+      return false;
     }
+    else {
+      String path = request.getPathInfo().substring(1);
+      String[] split = path.split("/", 2);
+      Integer time = Integer.valueOf(split[0]);
 
-    public Stutter( int i, byte[] content )
-    {
-        this.wait = i;
-        this.content = content;
-    }
+      String[] msgs = split[1].split("/");
+      ctx.put(Behaviour.Keys.STUTTER_MSGS, msgs);
 
-    /*
-     * (non-Javadoc)
-     * @see org.sonatype.tests.jetty.server.api.Behaviour#execute(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse, java.util.Map)
-     */
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( wait != -1 )
-        {
-            response.setContentLength( content.length );
-            ServletOutputStream out = response.getOutputStream();
-            for ( int i = 0; i < content.length; i++ )
-            {
-                out.write( content[i] );
-                out.flush();
-                Thread.sleep( wait );
-            }
-            return false;
+      int size = 0;
+      for (String string : msgs) {
+        size += string.getBytes("UTF-8").length;
+      }
+      response.setContentLength(size);
+
+      for (String msg : msgs) {
+        try {
+          Thread.sleep(time);
+          response.getWriter().write(msg);
+          response.getWriter().flush();
+          response.flushBuffer();
         }
-        else
-        {
-            String path = request.getPathInfo().substring( 1 );
-            String[] split = path.split( "/", 2 );
-            Integer time = Integer.valueOf( split[0] );
-
-            String[] msgs = split[1].split( "/" );
-            ctx.put( Behaviour.Keys.STUTTER_MSGS, msgs );
-
-            int size = 0;
-            for ( String string : msgs )
-            {
-                size += string.getBytes( "UTF-8" ).length;
-            }
-            response.setContentLength( size );
-
-            for ( String msg : msgs )
-            {
-                try
-                {
-                    Thread.sleep( time );
-                    response.getWriter().write( msg );
-                    response.getWriter().flush();
-                    response.flushBuffer();
-                }
-                catch ( Exception e )
-                {
-                    e.printStackTrace();
-                    throw new IllegalStateException( "Stutter Behaviour failing: " + e.getMessage(), e );
-                }
-            }
-            return true;
+        catch (Exception e) {
+          e.printStackTrace();
+          throw new IllegalStateException("Stutter Behaviour failing: " + e.getMessage(), e);
         }
+      }
+      return true;
     }
+  }
 
 }

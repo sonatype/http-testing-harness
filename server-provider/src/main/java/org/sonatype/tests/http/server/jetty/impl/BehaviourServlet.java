@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.tests.http.server.api.Behaviour;
 
-import org.eclipse.jetty.util.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,6 +36,8 @@ public class BehaviourServlet
     extends HttpServlet
 {
   private static final long serialVersionUID = 5041671509085780121L;
+
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   private final Behaviour[] behaviour;
 
@@ -53,7 +56,7 @@ public class BehaviourServlet
   private void behave(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException
   {
-    Log.debug("behaving: " + req.getRequestURI() + ", " + Arrays.toString(behaviour));
+    log.debug("behaving: {} - {}", req.getRequestURI(), Arrays.toString(behaviour));
     try {
       Map<Object, Object> ctx = new HashMap<Object, Object>();
       for (Behaviour b : behaviour) {

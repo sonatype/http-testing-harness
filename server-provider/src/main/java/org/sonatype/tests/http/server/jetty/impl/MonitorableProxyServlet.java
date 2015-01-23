@@ -29,11 +29,11 @@ import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
 
 /**
- * Unlike {@link ProxyServlet} (in this same package), this one is a real HTTP proxy servlet with ability to gather
+ * A real HTTP proxy servlet with ability to gather
  * accessed URIs accessed via this proxy.
  */
 public class MonitorableProxyServlet
-    extends org.eclipse.jetty.servlets.ProxyServlet
+    extends org.eclipse.jetty.proxy.ProxyServlet
 {
   private final List<String> accessedUris;
 

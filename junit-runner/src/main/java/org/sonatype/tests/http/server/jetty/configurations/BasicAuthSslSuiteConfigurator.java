@@ -14,23 +14,22 @@ package org.sonatype.tests.http.server.jetty.configurations;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class BasicAuthSslSuiteConfigurator
     extends AuthSslSuiteConfigurator
 {
 
-    /**
-     * @param authName
-     */
-    public BasicAuthSslSuiteConfigurator()
-    {
-        super( "BASIC" );
-    }
+  /**
+   * @param authName
+   */
+  public BasicAuthSslSuiteConfigurator()
+  {
+    super("BASIC");
+  }
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " BASIC";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " BASIC";
+  }
 }

@@ -13,7 +13,6 @@
 package org.sonatype.tests.http.server.api;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.Filter;
@@ -33,8 +32,7 @@ public interface ServerProvider
   /**
    * The URL of the server.
    */
-  URL getUrl()
-      throws MalformedURLException;
+  URL getUrl();
 
   /**
    * Add the given chain of Behaviour to execute for the given pathspec.

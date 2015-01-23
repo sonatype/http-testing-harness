@@ -18,49 +18,44 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Retry
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private final AtomicInteger counter = new AtomicInteger( 0 );
+  private final AtomicInteger counter = new AtomicInteger(0);
 
-    private int retry = -1;
+  private int retry = -1;
 
-    private int error = 404;
+  private int error = 404;
 
-    public Retry( int error )
-    {
-        this.error = error;
+  public Retry(int error)
+  {
+    this.error = error;
+  }
+
+  public Retry(int error, int retry)
+  {
+    this(error);
+    this.retry = retry;
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if (retry == -1) {
+      String path = request.getPathInfo().substring(1);
+      String[] split = path.split("/", 2);
+      retry = Integer.valueOf(split[0]).intValue();
+    }
+    if (counter.incrementAndGet() < retry) {
+      response.sendError(error);
+      return false;
     }
 
-    public Retry( int error, int retry )
-    {
-        this( error );
-        this.retry = retry;
-    }
-
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( retry == -1 )
-        {
-            String path = request.getPathInfo().substring( 1 );
-            String[] split = path.split( "/", 2 );
-            retry = Integer.valueOf( split[0] ).intValue();
-        }
-        if ( counter.incrementAndGet() < retry )
-        {
-            response.sendError( error );
-            return false;
-        }
-
-        return true;
-    }
+    return true;
+  }
 
 }

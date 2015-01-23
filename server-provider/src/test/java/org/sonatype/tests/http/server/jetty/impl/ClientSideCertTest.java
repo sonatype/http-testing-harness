@@ -26,7 +26,6 @@ import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.DSAPrivateKey;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -57,7 +56,6 @@ import static org.junit.Assert.fail;
 public class ClientSideCertTest
     extends TestSupport
 {
-
   private File clientKeystore;
 
   @Before
@@ -88,7 +86,7 @@ public class ClientSideCertTest
       fail("expected exception");
     }
     catch (Exception e) {
-      // expected
+      e.printStackTrace();
     }
     finally {
       if (is != null) {
@@ -170,20 +168,18 @@ public class ClientSideCertTest
   {
     FileInputStream is = null;
     Certificate cert = null;
-    DSAPrivateKey key;
     try {
       is = new FileInputStream(new File(keystorePath));
       KeyStore keystore = KeyStore.getInstance("JKS");
       keystore.load(is, keystorePass == null ? null : keystorePass.toString().toCharArray());
       cert = keystore.getCertificate(alias);
-      key = (DSAPrivateKey) keystore.getKey(alias, keystorePass.toCharArray());
     }
     finally {
       if (is != null) {
         is.close();
       }
     }
-    return new CertificateHolder(key, cert);
+    return new CertificateHolder(new Certificate[]{cert});
   }
 
   private static SSLSocketFactory getFactory(File pKeyFile, String pKeyPassword, String certAlias)

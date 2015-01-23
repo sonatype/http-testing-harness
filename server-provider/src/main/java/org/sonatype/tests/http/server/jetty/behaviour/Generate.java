@@ -13,64 +13,56 @@
 package org.sonatype.tests.http.server.jetty.behaviour;
 
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.sonatype.tests.http.server.api.Behaviour;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * A behavior that writes a sequence of fixed length to the client upon a GET request.
  */
 public class Generate
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private static final byte[] bytes = new byte[1024];
+  private static final byte[] bytes = new byte[1024];
 
-    private final Map<String, Long> lengths = new ConcurrentHashMap<String, Long>();
+  private final Map<String, Long> lengths = new ConcurrentHashMap<String, Long>();
 
-    public void addContent( String path, long length )
-    {
-        if ( !path.startsWith( "/" ) )
-        {
-            path = '/' + path;
+  public void addContent(String path, long length)
+  {
+    if (!path.startsWith("/")) {
+      path = '/' + path;
+    }
+    lengths.put(path, Long.valueOf(length));
+  }
+
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    if ("GET".equals(request.getMethod())) {
+      String path = request.getPathInfo();
+
+      Long length = lengths.get(path);
+
+      if (length != null) {
+        response.setContentType("application/octet-stream");
+        response.setContentLength(length.intValue());
+
+        ServletOutputStream out = response.getOutputStream();
+        for (int i = length.intValue(); i > 0; ) {
+          int n = Math.min(i, bytes.length);
+          i -= n;
+          out.write(bytes, 0, n);
         }
-        lengths.put( path, Long.valueOf( length ) );
+        out.close();
+
+        return false;
+      }
     }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        if ( "GET".equals( request.getMethod() ) )
-        {
-            String path = request.getPathInfo();
-
-            Long length = lengths.get( path );
-
-            if ( length != null )
-            {
-                response.setContentType( "application/octet-stream" );
-                response.setContentLength( length.intValue() );
-
-                ServletOutputStream out = response.getOutputStream();
-                for ( int i = length.intValue(); i > 0; )
-                {
-                    int n = Math.min( i, bytes.length );
-                    i -= n;
-                    out.write( bytes, 0, n );
-                }
-                out.close();
-
-                return false;
-            }
-        }
-
-        return true;
-    }
+    return true;
+  }
 
 }

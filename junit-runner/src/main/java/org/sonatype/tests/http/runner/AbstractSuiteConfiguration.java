@@ -13,7 +13,6 @@
 package org.sonatype.tests.http.runner;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import org.sonatype.tests.http.server.api.ServerProvider;
@@ -25,81 +24,69 @@ public class AbstractSuiteConfiguration
     implements SuiteConfiguration
 {
 
-    private SuiteConfigurator configurator;
+  private SuiteConfigurator configurator;
 
-    private ThreadLocal<ServerProvider> provider = new ThreadLocal<ServerProvider>();
+  private ThreadLocal<ServerProvider> provider = new ThreadLocal<ServerProvider>();
 
-    public void setConfigurator( SuiteConfigurator configurator )
-    {
-        this.configurator = configurator;
+  public void setConfigurator(SuiteConfigurator configurator)
+  {
+    this.configurator = configurator;
+  }
+
+  public void before()
+      throws Exception
+  {
+    provider.set(configurator().provider());
+    if (provider.get() == null) {
+      throw new IllegalArgumentException("Configurator failed, provider is null.");
     }
+    configureProvider(provider.get());
+    provider.get().start();
+  }
 
-    public void before()
-        throws Exception
-    {
-        provider.set( configurator().provider() );
-        if ( provider.get() == null )
-        {
-            throw new IllegalArgumentException( "Configurator failed, provider is null." );
-        }
-        configureProvider( provider.get() );
-        provider.get().start();
+  public void configureProvider(ServerProvider provider)
+  {
+  }
+
+  public void after()
+      throws Exception
+  {
+    if (provider.get() != null) {
+      provider.get().stop();
     }
+  }
 
-    public void configureProvider( ServerProvider provider )
-    {
+  public String url()
+  {
+    return provider.get().getUrl().toExternalForm();
+  }
+
+  public ServerProvider provider()
+  {
+    return provider.get();
+  }
+
+  public String url(String path, String... parts)
+  {
+    try {
+      String url = url() + "/" + path;
+      for (String part : parts) {
+        part = URLEncoder.encode(part, "UTF-8");
+        url += "/" + part;
+      }
+
+      // logger.debug( "returning url... " + url );
+
+      return url;
     }
-
-    public void after()
-        throws Exception
-    {
-        if ( provider.get() != null )
-        {
-            provider.get().stop();
-        }
+    catch (UnsupportedEncodingException e) {
+      throw new IllegalArgumentException(e);
     }
+  }
 
-    public String url()
-    {
-        try
-        {
-            return provider.get().getUrl().toExternalForm();
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new IllegalArgumentException( "Provider was set up with wrong url", e );
-        }
-    }
-
-    public ServerProvider provider()
-    {
-        return provider.get();
-    }
-
-    public String url( String path, String... parts )
-    {
-        try
-        {
-            String url = url() + "/" + path;
-            for ( String part : parts )
-            {
-                part = URLEncoder.encode( part, "UTF-8" );
-                url += "/" + part;
-            }
-
-            // logger.debug( "returning url... " + url );
-
-            return url;
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            throw new IllegalArgumentException( e );
-        }
-    }
-
-    public SuiteConfigurator configurator()
-    {
-        return configurator;
-    }
+  public SuiteConfigurator configurator()
+  {
+    return configurator;
+  }
 
 }

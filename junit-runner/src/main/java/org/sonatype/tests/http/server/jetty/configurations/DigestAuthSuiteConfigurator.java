@@ -14,24 +14,23 @@ package org.sonatype.tests.http.server.jetty.configurations;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class DigestAuthSuiteConfigurator
     extends AuthSuiteConfigurator
 {
 
-    /**
-     * @param authName
-     */
-    public DigestAuthSuiteConfigurator()
-    {
-        super( "DIGEST" );
-    }
+  /**
+   * @param authName
+   */
+  public DigestAuthSuiteConfigurator()
+  {
+    super("DIGEST");
+  }
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " DIGEST";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " DIGEST";
+  }
 
 }

@@ -16,32 +16,31 @@ import org.sonatype.tests.http.server.api.ServerProvider;
 
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public abstract class AuthSuiteConfigurator
     extends DefaultSuiteConfigurator
 {
 
-    private String authName;
+  private String authName;
 
-    public AuthSuiteConfigurator( String authName )
-    {
-        this.authName = authName;
-    }
+  public AuthSuiteConfigurator(String authName)
+  {
+    this.authName = authName;
+  }
 
-    @Override
-    public ServerProvider provider()
-    {
-        ServerProvider p = super.provider();
-        p.addAuthentication( "/*", authName );
-        p.addUser( "user", "password" );
-        return p;
-    }
+  @Override
+  public ServerProvider provider()
+  {
+    ServerProvider p = super.provider();
+    p.addAuthentication("/*", authName);
+    p.addUser("user", "password");
+    return p;
+  }
 
-    @Override
-    public String getName()
-    {
-        return super.getName() + " Authentication";
-    }
+  @Override
+  public String getName()
+  {
+    return super.getName() + " Authentication";
+  }
 
 }

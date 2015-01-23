@@ -18,42 +18,37 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
  */
 public class Consumer
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private int total;
+  private int total;
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        int length = request.getContentLength();
-        Log.debug( "Consumer#execute: " + length );
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    int length = request.getContentLength();
+    log.debug("Consumer#execute: {}", length);
 
-        ServletInputStream in = request.getInputStream();
-        int count;
-        byte[] b = new byte[8092];
-        while ( ( count = in.read( b ) ) != -1 )
-        {
-            total += count;
-            Log.debug( String.format( "read %s (expecting %s)", total, length ) );
-        }
-        Log.debug( String.format( "read total %s (expecting %s)", total, length ) );
-
-        return true;
+    ServletInputStream in = request.getInputStream();
+    int count;
+    byte[] b = new byte[8092];
+    while ((count = in.read(b)) != -1) {
+      total += count;
+      log.debug("read {} (expecting {})", total, length);
     }
+    log.debug("read total {} (expecting {})", total, length);
+    return true;
+  }
 
-    public int getTotal()
-    {
-        int ret = total;
-        total = 0;
-        return ret;
-    }
+  public int getTotal()
+  {
+    int ret = total;
+    total = 0;
+    return ret;
+  }
 
 }

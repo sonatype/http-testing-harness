@@ -18,64 +18,59 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.log.Log;
-
 public class Delete
     extends FSBehaviour
 {
 
-    private boolean really = false;
+  private boolean really = false;
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        Log.warn( "delete method: " + request.getMethod() );
-        if ( !"DELETE".equals( request.getMethod() ) )
-        {
-            return true;
-        }
-
-        int code = 200;
-
-        File file = fs( request.getPathInfo() );
-        if ( ! file.exists() )
-        {
-            Log.debug( "Delete: File does not exist: " + file.getAbsolutePath() );
-            response.setStatus( HttpServletResponse.SC_NOT_FOUND );
-            return false;
-        }
-
-        if ( really && ( !file.delete() ) )
-        {
-            response.setStatus( HttpServletResponse.SC_METHOD_NOT_ALLOWED );
-            return false;
-        }
-
-        response.setStatus( code );
-
-        return false;
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    log.warn("delete method: {}", request.getMethod());
+    if (!"DELETE".equals(request.getMethod())) {
+      return true;
     }
 
-    public Delete( File file )
-    {
-        super( file );
+    int code = 200;
+
+    File file = fs(request.getPathInfo());
+    if (!file.exists()) {
+      log.debug("Delete: File does not exist: {}", file.getAbsolutePath());
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return false;
     }
 
-    public Delete( String path )
-    {
-        super( path );
+    if (really && (!file.delete())) {
+      response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+      return false;
     }
 
-    public Delete( File file, boolean reallyDelete )
-    {
-        super( file );
-        this.really = reallyDelete;
-    }
+    response.setStatus(code);
 
-    public Delete( String path, boolean reallyDelete )
-    {
-        super( path );
-        this.really = reallyDelete;
-    }
+    return false;
+  }
+
+  public Delete(File file)
+  {
+    super(file);
+  }
+
+  public Delete(String path)
+  {
+    super(path);
+  }
+
+  public Delete(File file, boolean reallyDelete)
+  {
+    super(file);
+    this.really = reallyDelete;
+  }
+
+  public Delete(String path, boolean reallyDelete)
+  {
+    super(path);
+    this.really = reallyDelete;
+  }
 
 }

@@ -17,28 +17,25 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.tests.http.server.api.Behaviour;
-
 /**
  * @author Benjamin Hanzelmann
- *
  */
 public class Realm
-    implements Behaviour
+    extends BehaviourSupport
 {
 
-    private String realm;
+  private String realm;
 
-    public Realm( String realm )
-    {
-        this.realm = realm;
-    }
+  public Realm(String realm)
+  {
+    this.realm = realm;
+  }
 
-    public boolean execute( HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx )
-        throws Exception
-    {
-        response.addHeader( "WWW-Authenticate", "Basic realm=\"" + realm + "\"");
-        return true;
-    }
+  public boolean execute(HttpServletRequest request, HttpServletResponse response, Map<Object, Object> ctx)
+      throws Exception
+  {
+    response.addHeader("WWW-Authenticate", "Basic realm=\"" + realm + "\"");
+    return true;
+  }
 
 }
