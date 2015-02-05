@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.sonatype.http-testing-harness</groupId>
     <artifactId>hth-parent</artifactId>
-    <version>0.10-SNAPSHOT</version>
+    <version>0.10</version>
   </parent>
 
   <artifactId>server-provider</artifactId>
