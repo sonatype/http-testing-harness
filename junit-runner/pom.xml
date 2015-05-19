@@ -23,6 +23,7 @@
   </parent>
 
   <artifactId>junit-runner</artifactId>
+  <packaging>bundle</packaging>
 
   <dependencies>
     <dependency>
@@ -40,29 +41,5 @@
       <artifactId>server-provider</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Bundle-Version>$(replace;$(project.version);-SNAPSHOT;.$(tstamp;yyyyMMdd-HHmm))</Bundle-Version>
-            <Import-Package>
-              !org.sonatype.tests.http.runner,
-              !org.sonatype.tests.http.runner.junit,
-              *
-            </Import-Package>
-            <Export-Package>
-              org.sonatype.tests.http.runner,
-              org.sonatype.tests.http.runner.annotations,
-              org.sonatype.tests.http.runner.junit
-            </Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

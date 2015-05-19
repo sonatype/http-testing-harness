@@ -23,6 +23,7 @@
   </parent>
 
   <artifactId>server-provider</artifactId>
+  <packaging>bundle</packaging>
 
   <properties>
     <jetty.version>9.2.7.v20150116</jetty.version>
@@ -83,32 +84,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Bundle-Version>$(replace;$(project.version);-SNAPSHOT;.$(tstamp;yyyyMMdd-HHmm))</Bundle-Version>
-            <Import-Package>
-              !org.sonatype.tests.http.server.jetty.*,
-              org.sonatype.tests.http.runner,
-              org.sonatype.tests.http.server.api,
-              org.sonatype.tests.http.server.api,
-              org.eclipse.jetty.io,
-              *
-            </Import-Package>
-            <Export-Package>
-              org.sonatype.tests.http.server.api,
-              org.sonatype.tests.http.server.fluent.*
-              org.sonatype.tests.http.server.jetty.*
-            </Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

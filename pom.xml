@@ -98,20 +98,6 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <extensions>true</extensions>
-          <executions>
-            <execution>
-              <id>osgi-bundle</id>
-              <phase>package</phase>
-              <goals>
-                <goal>bundle</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
@@ -176,6 +162,22 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <!-- relax range to account for guava versioning -->
+            <_consumer-policy>$(version;==)</_consumer-policy>
+            <!-- include all content in the output directory -->
+            <Include-Resource>
+              /=${project.build.outputDirectory},{maven-resources}
+            </Include-Resource>
+          </instructions>
+        </configuration>
       </plugin>
     </plugins>
   </build>
