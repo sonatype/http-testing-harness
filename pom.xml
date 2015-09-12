@@ -24,7 +24,7 @@
   </parent>
 
   <groupId>org.sonatype.http-testing-harness</groupId>
-  <version>0.12-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <artifactId>hth-parent</artifactId>
   <packaging>pom</packaging>
 
@@ -56,9 +56,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.sonatype.sisu.goodies</groupId>
+        <groupId>org.sonatype.goodies</groupId>
         <artifactId>goodies-common</artifactId>
-        <version>1.11</version>
+        <version>2.0.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
@@ -74,9 +74,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.sonatype.sisu.goodies</groupId>
+        <groupId>org.sonatype.goodies</groupId>
         <artifactId>goodies-testsupport</artifactId>
-        <version>1.11</version>
+        <version>2.0.0-SNAPSHOT</version>
       </dependency>
 
       <!-- INTERNAL -->
@@ -122,6 +122,14 @@
               <version>1.0</version>
             </signature>
           </configuration>
+          <dependencies>
+            <!-- TODO: MANIMALSNIFFER-51, fixed in 1.14 but found some NPE so still on 1.13 for now -->
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm-all</artifactId>
+              <version>5.0.3</version>
+            </dependency>
+          </dependencies>
           <executions>
             <execution>
               <id>check-java-compat</id>

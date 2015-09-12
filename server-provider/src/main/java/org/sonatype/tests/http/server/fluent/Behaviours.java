@@ -14,7 +14,7 @@ package org.sonatype.tests.http.server.fluent;
 
 import java.io.File;
 
-import org.sonatype.sisu.goodies.common.Time;
+import org.sonatype.goodies.common.Time;
 import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.ErrorBehaviour;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;

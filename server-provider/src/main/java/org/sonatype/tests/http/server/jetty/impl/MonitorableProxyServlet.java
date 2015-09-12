@@ -84,7 +84,7 @@ public class MonitorableProxyServlet
         }
       }
     }
-    String uri = ((Request) req).getUri().toString();
+    String uri = ((Request) req).getHttpURI().toString();
     getAccessedUris().add(uri);
     super.service(req, res);
   }

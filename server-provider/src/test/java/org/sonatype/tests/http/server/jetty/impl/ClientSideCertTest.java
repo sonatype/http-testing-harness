@@ -38,7 +38,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.sonatype.sisu.litmus.testsupport.TestSupport;
+import org.sonatype.goodies.testsupport.TestSupport;
 import org.sonatype.tests.http.server.api.ServerProvider;
 import org.sonatype.tests.http.server.jetty.impl.JettyServerProvider.CertificateHolder;
 
