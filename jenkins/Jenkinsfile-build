@@ -1,5 +1,5 @@
 library('private-pipeline-library')
-library('jenkins-shared@quick-sonar-fix')
+library('jenkins-shared')
 
 mavenSnapshotPipeline(
     onSuccess: { build, env ->
