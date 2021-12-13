@@ -13,8 +13,8 @@
 package org.sonatype.tests.http.server.fluent;
 
 import java.io.File;
+import java.time.Duration;
 
-import org.sonatype.goodies.common.Time;
 import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.ErrorBehaviour;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;
@@ -48,7 +48,7 @@ public class Behaviours
         return ErrorBehaviour.error( code, msg );
     }
 
-    public static Pause pause( Time time )
+    public static Pause pause( Duration time )
     {
         return Pause.pause( time );
     }

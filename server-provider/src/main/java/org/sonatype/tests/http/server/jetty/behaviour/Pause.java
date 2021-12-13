@@ -12,12 +12,11 @@
  */
 package org.sonatype.tests.http.server.jetty.behaviour;
 
+import java.time.Duration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.sonatype.goodies.common.Time;
 
 /**
  * @author Benjamin Hanzelmann
@@ -28,7 +27,7 @@ public class Pause
 
   private long pause = -1;
 
-  public static Pause pause(Time time)
+  public static Pause pause(Duration time)
   {
     return new Pause(time.toMillis());
   }
