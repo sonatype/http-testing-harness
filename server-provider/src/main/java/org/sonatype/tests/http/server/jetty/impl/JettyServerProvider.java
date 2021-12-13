@@ -49,6 +49,7 @@ import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
@@ -89,7 +90,7 @@ public class JettyServerProvider
 
   private ServletContextHandler webappContext;
 
-  private SslContextFactory sslContextFactory;
+  private SslContextFactory.Server sslContextFactory;
 
   private String sslKeystorePassword;
 
@@ -104,6 +105,8 @@ public class JettyServerProvider
   private ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 
   private HashLoginService loginService;
+
+  private UserStore userStore = new UserStore();
 
   private String authType;
 
@@ -213,6 +216,7 @@ public class JettyServerProvider
 
     securityHandler.setConstraintMappings(new ConstraintMapping[]{cm});
     loginService = new HashLoginService("Test Server");
+    loginService.setUserStore(userStore);
     securityHandler.setLoginService(loginService);
 
     webappContext.setSecurityHandler(securityHandler);
@@ -242,7 +246,7 @@ public class JettyServerProvider
       }
     }
     else {
-      loginService.putUser(user, new Password(password.toString()), new String[]{"users"});
+      userStore.addUser(user, new Password(password.toString()), new String[]{"users"});
     }
   }
 
@@ -317,7 +321,6 @@ public class JettyServerProvider
     addBehaviour("/content/*", new Content());
     addBehaviour("/stutter/*", new Stutter());
     addBehaviour("/pause/*", new Pause(), new Content());
-    addBehaviour("/truncate/*", new Truncate());
     addBehaviour("/timeout/*", new Pause());
     addBehaviour("/redirect/*", new Redirect(), new Content());
   }
@@ -451,7 +454,7 @@ public class JettyServerProvider
   }
 
   protected ServerConnector sslConnector(final Server server) {
-    sslContextFactory = new SslContextFactory();
+    SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
     String keystore;
     try {
       keystore = resourceFile(sslKeystore);
@@ -462,6 +465,7 @@ public class JettyServerProvider
     sslContextFactory.setKeyStorePath(keystore);
     sslContextFactory.setKeyStorePassword(sslKeystorePassword);
     sslContextFactory.setKeyManagerPassword(sslKeystorePassword);
+    sslContextFactory.setExcludeCipherSuites();
     if (sslTruststore != null) {
       String truststore;
       try {
@@ -486,6 +490,7 @@ public class JettyServerProvider
     if (port != -1) {
       serverConnector.setPort(port);
     }
+    this.sslContextFactory = sslContextFactory;
     return serverConnector;
   }
 

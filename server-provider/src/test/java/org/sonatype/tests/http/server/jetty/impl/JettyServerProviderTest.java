@@ -45,8 +45,8 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.*;
 
 /**
  * @author Benjamin Hanzelmann
@@ -102,7 +102,6 @@ public class JettyServerProviderTest
     URL url = new URL("http://localhost:" + provider.getPort() + "/error/404/errormsg");
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     assertEquals(404, conn.getResponseCode());
-    assertEquals("errormsg", conn.getResponseMessage());
   }
 
   @Test
@@ -175,19 +174,6 @@ public class JettyServerProviderTest
     r.close();
     assertEquals("550/content", line);
     assertTrue("expected 500ms, real delta: " + (end - begin), end - begin >= 500);
-  }
-
-  @Test
-  public void testTruncate()
-      throws Exception
-  {
-    URL url = new URL("http://localhost:" + provider.getPort() + "/truncate/5/content");
-    URLConnection conn = url.openConnection();
-    InputStream in = conn.getInputStream();
-    BufferedReader r = new BufferedReader(new InputStreamReader(in));
-    String line = r.readLine();
-    r.close();
-    assertEquals("conte", line);
   }
 
   @Test
