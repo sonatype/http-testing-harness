@@ -24,6 +24,7 @@ import java.security.Principal;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.EnumSet;
 
 import javax.net.ssl.KeyManager;
@@ -41,7 +42,6 @@ import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;
 import org.sonatype.tests.http.server.jetty.behaviour.Redirect;
 import org.sonatype.tests.http.server.jetty.behaviour.Stutter;
-import org.sonatype.tests.http.server.jetty.behaviour.Truncate;
 import org.sonatype.tests.http.server.jetty.util.FileUtil;
 
 import com.google.common.base.Throwables;
@@ -49,6 +49,7 @@ import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
@@ -63,7 +64,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlet.ServletMapping;
 import org.eclipse.jetty.util.ArrayUtil;
-import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -89,7 +89,7 @@ public class JettyServerProvider
 
   private ServletContextHandler webappContext;
 
-  private SslContextFactory sslContextFactory;
+  private SslContextFactory.Server sslContextFactory;
 
   private String sslKeystorePassword;
 
@@ -104,6 +104,8 @@ public class JettyServerProvider
   private ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 
   private HashLoginService loginService;
+
+  private UserStore userStore = new UserStore();
 
   private String authType;
 
@@ -213,6 +215,7 @@ public class JettyServerProvider
 
     securityHandler.setConstraintMappings(new ConstraintMapping[]{cm});
     loginService = new HashLoginService("Test Server");
+    loginService.setUserStore(userStore);
     securityHandler.setLoginService(loginService);
 
     webappContext.setSecurityHandler(securityHandler);
@@ -238,11 +241,11 @@ public class JettyServerProvider
         addCertificate(user, (CertificateHolder) password);
       }
       catch (Exception e) {
-        throw Throwables.propagate(e);
+        throw propagate(e);
       }
     }
     else {
-      loginService.putUser(user, new Password(password.toString()), new String[]{"users"});
+      userStore.addUser(user, new Password(password.toString()), new String[]{"users"});
     }
   }
 
@@ -297,7 +300,7 @@ public class JettyServerProvider
           principal = x509cert.getIssuerDN();
         }
         final String username = principal == null ? "clientcert" : principal.getName();
-        final char[] credential = B64Code.encode(x509cert.getSignature());
+        final char[] credential = Base64.getEncoder().encodeToString(x509cert.getSignature()).toCharArray();
         addUser(username, String.valueOf(credential));
       }
       else {
@@ -317,7 +320,6 @@ public class JettyServerProvider
     addBehaviour("/content/*", new Content());
     addBehaviour("/stutter/*", new Stutter());
     addBehaviour("/pause/*", new Pause(), new Content());
-    addBehaviour("/truncate/*", new Truncate());
     addBehaviour("/timeout/*", new Pause());
     addBehaviour("/redirect/*", new Redirect(), new Content());
   }
@@ -451,7 +453,7 @@ public class JettyServerProvider
   }
 
   protected ServerConnector sslConnector(final Server server) {
-    sslContextFactory = new SslContextFactory();
+    SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
     String keystore;
     try {
       keystore = resourceFile(sslKeystore);
@@ -462,6 +464,7 @@ public class JettyServerProvider
     sslContextFactory.setKeyStorePath(keystore);
     sslContextFactory.setKeyStorePassword(sslKeystorePassword);
     sslContextFactory.setKeyManagerPassword(sslKeystorePassword);
+    sslContextFactory.setExcludeCipherSuites();
     if (sslTruststore != null) {
       String truststore;
       try {
@@ -486,6 +489,7 @@ public class JettyServerProvider
     if (port != -1) {
       serverConnector.setPort(port);
     }
+    this.sslContextFactory = sslContextFactory;
     return serverConnector;
   }
 
@@ -552,7 +556,7 @@ public class JettyServerProvider
     catch (MalformedURLException e) {
       // URL ctor throws this for invalid port or protocol.
       // Might happen if URL asked before server with unset port started
-      throw Throwables.propagate(e);
+      throw propagate(e);
     }
   }
 
@@ -574,6 +578,11 @@ public class JettyServerProvider
 
   public void setSecurityHandler(ConstraintSecurityHandler securityHandler) {
     this.securityHandler = securityHandler;
+  }
+
+  private static RuntimeException propagate(Throwable throwable) {
+    Throwables.throwIfUnchecked(throwable);
+    throw new RuntimeException(throwable);
   }
 
   /**

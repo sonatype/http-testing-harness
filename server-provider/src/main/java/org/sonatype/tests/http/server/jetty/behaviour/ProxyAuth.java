@@ -12,14 +12,12 @@
  */
 package org.sonatype.tests.http.server.jetty.behaviour;
 
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.util.B64Code;
-import org.eclipse.jetty.util.log.Log;
 
 /**
  * @author Benjamin Hanzelmann
@@ -47,7 +45,6 @@ public class ProxyAuth
   {
     String headers = "";
 
-    @SuppressWarnings("unchecked")
     Enumeration<String> names = request.getHeaderNames();
     while (names.hasMoreElements()) {
       String name = names.nextElement();
@@ -64,7 +61,7 @@ public class ProxyAuth
       return false;
     }
     else {
-      String expected = new String(B64Code.encode((user + ":" + password).getBytes("UTF-8")));
+      String expected = Base64.getEncoder().encodeToString((user + ":" + password).getBytes("UTF-8"));
       this.authorized = expected.equals(authHeader.split(" ", 2)[1]);
     }
     return this.authorized;
