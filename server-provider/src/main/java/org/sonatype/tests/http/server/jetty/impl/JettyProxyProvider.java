@@ -13,7 +13,6 @@
 package org.sonatype.tests.http.server.jetty.impl;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

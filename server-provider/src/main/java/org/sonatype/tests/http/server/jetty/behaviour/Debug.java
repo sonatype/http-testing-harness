@@ -31,7 +31,7 @@ public class Debug
     log.debug("context path {}", request.getContextPath());
     log.debug("path info {}", request.getPathInfo());
 
-    Enumeration headerNames = request.getHeaderNames();
+    Enumeration<String> headerNames = request.getHeaderNames();
     while (headerNames.hasMoreElements()) {
       String element = headerNames.nextElement().toString();
       log.debug("{}: {}", element, request.getHeader(element));

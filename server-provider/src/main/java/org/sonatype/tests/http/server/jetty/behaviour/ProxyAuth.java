@@ -45,7 +45,6 @@ public class ProxyAuth
   {
     String headers = "";
 
-    @SuppressWarnings("unchecked")
     Enumeration<String> names = request.getHeaderNames();
     while (names.hasMoreElements()) {
       String name = names.nextElement();
