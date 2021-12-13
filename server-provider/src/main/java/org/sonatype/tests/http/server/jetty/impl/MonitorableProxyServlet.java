@@ -70,7 +70,7 @@ public class MonitorableProxyServlet
       String proxyAuthorization = request.getHeader("Proxy-Authorization");
       if (proxyAuthorization != null && proxyAuthorization.startsWith("Basic ")) {
         String proxyAuth = proxyAuthorization.substring(6);
-        String authorization = new String(Base64.getDecoder().decode(proxyAuth.getBytes()), StringUtil.__ISO_8859_1);
+        String authorization = new String(Base64.getDecoder().decode(proxyAuth), StringUtil.__ISO_8859_1);
         String[] authTokens = authorization.split(":");
         String user = authTokens[0];
         String password = authTokens[1];
