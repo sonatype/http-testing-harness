@@ -42,7 +42,6 @@ import org.sonatype.tests.http.server.jetty.behaviour.Content;
 import org.sonatype.tests.http.server.jetty.behaviour.Pause;
 import org.sonatype.tests.http.server.jetty.behaviour.Redirect;
 import org.sonatype.tests.http.server.jetty.behaviour.Stutter;
-import org.sonatype.tests.http.server.jetty.behaviour.Truncate;
 import org.sonatype.tests.http.server.jetty.util.FileUtil;
 
 import com.google.common.base.Throwables;
@@ -242,7 +241,7 @@ public class JettyServerProvider
         addCertificate(user, (CertificateHolder) password);
       }
       catch (Exception e) {
-        throw Throwables.propagate(e);
+        throw propagate(e);
       }
     }
     else {
@@ -557,7 +556,7 @@ public class JettyServerProvider
     catch (MalformedURLException e) {
       // URL ctor throws this for invalid port or protocol.
       // Might happen if URL asked before server with unset port started
-      throw Throwables.propagate(e);
+      throw propagate(e);
     }
   }
 
@@ -579,6 +578,11 @@ public class JettyServerProvider
 
   public void setSecurityHandler(ConstraintSecurityHandler securityHandler) {
     this.securityHandler = securityHandler;
+  }
+
+  private static RuntimeException propagate(Throwable throwable) {
+    Throwables.throwIfUnchecked(throwable);
+    throw new RuntimeException(throwable);
   }
 
   /**
