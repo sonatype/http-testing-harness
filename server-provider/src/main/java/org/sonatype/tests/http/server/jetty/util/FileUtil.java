@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -58,7 +59,7 @@ public class FileUtil
         throws IOException
     {
         mkdirs( TMP );
-        File tmpFile = File.createTempFile( "tmpfile-", ".data", TMP );
+        File tmpFile = Files.createTempFile(TMP.toPath(), "tmpfile-", ".data").toFile();
         write( pattern, repeat, tmpFile );
 
         return tmpFile;
